@@ -6,6 +6,7 @@ var orders = require('../lib/orders');
 var sec = require('../lib/security');
 var auth = require('../lib/auth');
 var contact = require('../lib/contact');
+var adminLib = require('../lib/admin');
 var { payLog, payError } = require('../lib/pay-log');
 
 module.exports = async function handler(req, res) {
@@ -25,14 +26,13 @@ module.exports = async function handler(req, res) {
 
   try {
     var body = await sec.readJson(req);
-    var sum = Math.round(Number(body.sum || body.total || 0));
-    // TEMP тест: минимум Unicorn = 30 ₸. Вернуть: удалить блок / поставить null.
-    var TEST_PAY_SUM = 30;
-    if (TEST_PAY_SUM != null) sum = TEST_PAY_SUM;
     var phone = contact.normalizePhone(body.phone || '');
     var tgUser = contact.parseTelegramUsername(body.contact || body.telegram || '');
     var product = String(body.product || 'Разбор').slice(0, 60);
     var ip = sec.clientIp(req);
+    var addons = Array.isArray(body.addons) ? body.addons : [];
+    var charged = await adminLib.resolveChargeAmount(product, addons, body.sum || body.total || 0);
+    var sum = charged.amount;
 
     payLog('create_payment.request', {
       sum: sum,
@@ -41,13 +41,14 @@ module.exports = async function handler(req, res) {
       telegram: tgUser ? '@' + tgUser : null,
       name: body.name || null,
       ip: ip,
-      hasAddons: Array.isArray(body.addons) && body.addons.length > 0,
-      testPay: TEST_PAY_SUM != null
+      hasAddons: addons.length > 0,
+      chargeSource: charged.source,
+      testMode: !!charged.testMode
     });
 
-    if (!sum || sum < 1) {
+    if (!sum || sum < 30) {
       payLog('create_payment.reject', { reason: 'bad_sum', sum: sum });
-      sec.json(res, 400, { ok: false, error: 'Некорректная сумма' });
+      sec.json(res, 400, { ok: false, error: 'Некорректная сумма (мин. 30 ₸)' });
       return;
     }
 
@@ -69,7 +70,6 @@ module.exports = async function handler(req, res) {
       body.orderId ||
       'veluna-' + Date.now() + '-' + Math.floor(Math.random() * 1e6);
 
-    var addons = Array.isArray(body.addons) ? body.addons : [];
     var addonsText = addons.join(', ');
     var meta = body.meta || {};
     var desc = ('YourVeluna · ' + product + (addonsText ? ' + ' + addonsText : '')).slice(0, 120);

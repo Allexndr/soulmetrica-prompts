@@ -85,7 +85,7 @@ async function getSessionUser(req) {
   }
   var { data: user } = await db
     .from('users')
-    .select('id, email, display_name, telegram_id, telegram_username, created_at')
+    .select('id, email, display_name, telegram_id, telegram_username, phone, role, is_blocked, notes, created_at')
     .eq('id', session.user_id)
     .maybeSingle();
   return user || null;
@@ -99,10 +99,20 @@ async function destroySession(req) {
   await db.from('sessions').delete().eq('token_hash', sec.hashToken(token));
 }
 
+async function destroyAllSessionsForUser(userId) {
+  if (!userId) return;
+  var db = getDb();
+  await db.from('sessions').delete().eq('user_id', userId);
+}
+
 async function requireUser(req, res) {
   var user = await getSessionUser(req);
   if (!user) {
     sec.json(res, 401, { ok: false, error: 'Требуется вход' });
+    return null;
+  }
+  if (user.is_blocked) {
+    sec.json(res, 403, { ok: false, error: 'Аккаунт заблокирован' });
     return null;
   }
   return user;
@@ -114,6 +124,7 @@ module.exports = {
   createSession,
   getSessionUser,
   destroySession,
+  destroyAllSessionsForUser,
   requireUser,
   setSessionCookie,
   clearSessionCookie,

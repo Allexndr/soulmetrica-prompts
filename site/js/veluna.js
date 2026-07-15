@@ -228,10 +228,9 @@
   var orderTotalEl = document.getElementById('orderTotal');
   var orderCart = document.getElementById('orderCart');
   var currentProduct = '';
-  // TEMP тест оплаты: минимум Unicorn = 30 ₸. Вернуть — поставить null.
-  var TEST_PAY_SUM = 30;
-  var basePrice = TEST_PAY_SUM != null ? TEST_PAY_SUM : 15000;
+  var basePrice = 15000;
   var addons = {};
+  var forceTestSum = null;
 
   var PRODUCT_PRICES = {
     'Ты — целиком': 15000,
@@ -250,7 +249,7 @@
   }
 
   function resolveBasePrice(name) {
-    if (TEST_PAY_SUM != null) return TEST_PAY_SUM;
+    if (forceTestSum != null) return forceTestSum;
     if (PRODUCT_PRICES[name] != null) return PRODUCT_PRICES[name];
     if (/целиком|полный/i.test(name)) return 15000;
     if (/совместим/i.test(name)) return 3990;
@@ -258,6 +257,34 @@
     if (/денежн|любв|прогноз/i.test(name)) return 3990;
     return 15000;
   }
+
+  function applyCatalog(prices, checkout) {
+    forceTestSum =
+      checkout && checkout.force_test_sum != null && checkout.force_test_sum >= 30
+        ? Math.round(Number(checkout.force_test_sum))
+        : null;
+    (prices || []).forEach(function (p) {
+      if (!p || !p.active) return;
+      PRODUCT_PRICES[p.name] = p.amount_tenge;
+      if (p.product_key === 'full') {
+        PRODUCT_PRICES['Ты — целиком'] = p.amount_tenge;
+        PRODUCT_PRICES['Полный разбор'] = p.amount_tenge;
+      }
+    });
+  }
+
+  fetch('/api/admin/prices?public=1')
+    .then(function (r) {
+      return r.json();
+    })
+    .then(function (j) {
+      if (j && j.ok) applyCatalog(j.prices, j.checkout);
+      if (currentProduct) {
+        basePrice = resolveBasePrice(currentProduct);
+        updateOrderTotal();
+      }
+    })
+    .catch(function () {});
 
   function renderAddons() {
     if (!orderCart) return;
@@ -288,9 +315,9 @@
   function updateOrderTotal() {
     var addonSum = 0;
     Object.keys(addons).forEach(function (k) { addonSum += addons[k]; });
-    var total = TEST_PAY_SUM != null ? TEST_PAY_SUM : basePrice + addonSum;
-    var was = (TEST_PAY_SUM != null ? TEST_PAY_SUM : basePrice) * 3 + (TEST_PAY_SUM != null ? 0 : addonSum);
-    if (orderBasePriceEl) orderBasePriceEl.textContent = formatTenge(TEST_PAY_SUM != null ? TEST_PAY_SUM : basePrice);
+    var total = forceTestSum != null ? forceTestSum : basePrice + addonSum;
+    var was = (forceTestSum != null ? forceTestSum : basePrice) * 3 + (forceTestSum != null ? 0 : addonSum);
+    if (orderBasePriceEl) orderBasePriceEl.textContent = formatTenge(forceTestSum != null ? forceTestSum : basePrice);
     if (orderTotalEl) orderTotalEl.textContent = formatTenge(total);
     if (orderOldPriceEl) {
       orderOldPriceEl.textContent = formatTenge(was);
@@ -812,7 +839,7 @@
       e.preventDefault();
       var total = basePrice;
       Object.keys(addons).forEach(function (k) { total += addons[k]; });
-      if (TEST_PAY_SUM != null) total = TEST_PAY_SUM;
+      if (forceTestSum != null) total = forceTestSum;
       var data = {
         product: currentProduct,
         addons: Object.keys(addons),

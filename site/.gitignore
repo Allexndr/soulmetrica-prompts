@@ -7,3 +7,4 @@ certs/
 *.pem
 **/point_*.p12
 .env*
+.admin-credentials.local.json

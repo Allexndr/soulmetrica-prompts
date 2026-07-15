@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Admin · YourVeluna</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0e0c14;--panel:#16131f;--line:rgba(255,255,255,.1);--ink:#f4eef8;--muted:rgba(244,238,248,.62);--faint:rgba(244,238,248,.4);--accent:#c9a227;--ok:#5dcca0;--bad:#f07178;--side:250px;--font:'IBM Plex Sans',system-ui,sans-serif}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);min-height:100vh}
+    button,input,select,textarea{font:inherit;color:inherit}
+    a{color:inherit;text-decoration:none}
+    .hidden{display:none!important}
+    .boot{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .login{width:min(420px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px}
+    .login h1{font-family:Marcellus,serif;font-size:1.6rem;margin-bottom:8px}
+    .login p{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+    .field{display:grid;gap:6px;margin-bottom:12px}
+    .field span{font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+    .field input,.field textarea,select,.cell-input{
+      min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.04)
+    }
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);cursor:pointer;font-weight:600}
+    .btn--solid{background:linear-gradient(180deg,#f0d78a,#c9a227);color:#1a1408;border:0}
+    .btn--danger{background:rgba(240,113,120,.15);border-color:rgba(240,113,120,.35);color:#ffb4b8}
+    .btn--ok{background:rgba(93,204,160,.15);border-color:rgba(93,204,160,.35);color:var(--ok)}
+    .msg{min-height:1.2em;margin-top:10px;font-size:.86rem;color:var(--muted)}
+    .msg.is-error{color:#ffb4b8}
+    .shell{display:grid;grid-template-columns:var(--side) 1fr;min-height:100vh}
+    .side{border-right:1px solid var(--line);background:#12101a;padding:16px 12px;display:flex;flex-direction:column;gap:8px}
+    .brand{font-family:Marcellus,serif;color:var(--accent);padding:8px 10px 14px;letter-spacing:.04em}
+    .nav-btn{text-align:left;padding:10px 12px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer;font-weight:600}
+    .nav-btn.is-on{background:rgba(201,162,39,.16);color:#fff}
+    .side__foot{margin-top:auto;padding:10px;border-top:1px solid var(--line);font-size:.8rem;color:var(--faint)}
+    .main{padding:18px 20px 40px;overflow:auto}
+    .top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+    .top h1{font-family:Marcellus,serif;font-size:1.5rem;font-weight:400}
+    .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .card b{display:block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+    .card strong{font-size:1.5rem;color:var(--accent)}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px}
+    .panel__h{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+    .panel__b{padding:12px 14px}
+    table{width:100%;border-collapse:collapse;font-size:.88rem}
+    th,td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;vertical-align:top}
+    th{color:var(--faint);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+    .badge{display:inline-flex;padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.08);color:var(--muted)}
+    .badge--ok{background:rgba(93,204,160,.16);color:var(--ok)}
+    .badge--wait{background:rgba(201,162,39,.16);color:var(--accent)}
+    .badge--bad{background:rgba(240,113,120,.16);color:#ffb4b8}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .toolbar input,.toolbar select{min-height:38px}
+    .split{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;word-break:break-all}
+    .view{display:none}.view.is-on{display:block}
+    @media(max-width:980px){.shell{grid-template-columns:1fr}.side{position:sticky;top:0;z-index:5;flex-direction:row;flex-wrap:wrap;align-items:center}.cards{grid-template-columns:1fr 1fr}.split{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div id="loginStage" class="boot">
+    <form class="login" id="loginForm">
+      <h1>Admin OS</h1>
+      <p>Супер-админка YourVeluna. Только для роли admin.</p>
+      <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="username"></label>
+      <label class="field"><span>Пароль</span><input type="password" name="password" required autocomplete="current-password" minlength="10"></label>
+      <button class="btn btn--solid" type="submit" style="width:100%">Войти</button>
+      <p class="msg" id="loginMsg"></p>
+    </form>
+  </div>
+
+  <div id="appStage" class="shell hidden">
+    <aside class="side">
+      <div class="brand">YourVeluna Admin</div>
+      <button type="button" class="nav-btn is-on" data-view="home">Обзор</button>
+      <button type="button" class="nav-btn" data-view="orders">Платежи</button>
+      <button type="button" class="nav-btn" data-view="prices">Цены</button>
+      <button type="button" class="nav-btn" data-view="users">Клиенты</button>
+      <button type="button" class="nav-btn" data-view="readings">Разборы</button>
+      <button type="button" class="nav-btn" data-view="settings">Настройки</button>
+      <button type="button" class="nav-btn" data-view="audit">Аудит</button>
+      <div class="side__foot">
+        <div id="adminName">—</div>
+        <button type="button" class="btn" id="logoutBtn" style="margin-top:8px;width:100%">Выйти</button>
+      </div>
+    </aside>
+    <main class="main">
+      <section class="view is-on" id="view-home">
+        <div class="top"><h1>Панель управления</h1></div>
+        <div class="cards">
+          <div class="card"><b>Выручка (paid)</b><strong id="statRevenue">0</strong></div>
+          <div class="card"><b>Заказы</b><strong id="statOrders">0</strong></div>
+          <div class="card"><b>Клиенты</b><strong id="statUsers">0</strong></div>
+          <div class="card"><b>Ready разборы</b><strong id="statReady">0</strong></div>
+        </div>
+        <div class="panel"><div class="panel__h"><h2>Последние заказы</h2></div><div class="panel__b" id="homeOrders"></div></div>
+      </section>
+
+      <section class="view" id="view-orders">
+        <div class="top"><h1>Платежи и заказы</h1>
+          <div class="toolbar">
+            <select id="orderStatusFilter"><option value="">Все статусы</option><option>pending</option><option>paid</option><option>cancelled</option><option>failed</option></select>
+            <button type="button" class="btn" id="reloadOrders">Обновить</button>
+          </div>
+        </div>
+        <div class="split">
+          <div class="panel"><div class="panel__h"><h2>Список</h2></div><div class="panel__b" id="ordersList"></div></div>
+          <div class="panel"><div class="panel__h"><h2>Карточка заказа</h2></div><div class="panel__b" id="orderDetail"><p class="msg">Выбери заказ слева</p></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-prices">
+        <div class="top"><h1>Цены услуг</h1><button type="button" class="btn" id="reloadPrices">Обновить</button></div>
+        <div class="panel"><div class="panel__b" id="pricesList"></div></div>
+      </section>
+
+      <section class="view" id="view-users">
+        <div class="top"><h1>Клиенты</h1>
+          <div class="toolbar">
+            <input id="userQuery" placeholder="Поиск email / @tg / телефон" style="min-width:220px">
+            <button type="button" class="btn" id="reloadUsers">Найти</button>
+          </div>
+        </div>
+        <div class="split">
+          <div class="panel"><div class="panel__b" id="usersList"></div></div>
+          <div class="panel"><div class="panel__h"><h2>Профиль</h2></div><div class="panel__b" id="userDetail"><p class="msg">Выбери клиента</p></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-readings">
+        <div class="top"><h1>Разборы</h1>
+          <div class="toolbar">
+            <select id="readingStatusFilter"><option value="">Все</option><option>ready</option><option>generating</option><option>queued</option><option>failed</option></select>
+            <button type="button" class="btn" id="reloadReadings">Обновить</button>
+          </div>
+        </div>
+        <div class="panel"><div class="panel__b" id="readingsList"></div></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="top"><h1>Настройки оплаты</h1></div>
+        <div class="panel"><div class="panel__b">
+          <label class="field"><span>Test mode</span>
+            <select id="setTestMode"><option value="true">Включён</option><option value="false">Выключен</option></select>
+          </label>
+          <label class="field"><span>Force test sum (₸), пусто = каталог</span>
+            <input id="setForceSum" type="number" min="30" step="1" placeholder="например 30">
+          </label>
+          <button type="button" class="btn btn--solid" id="saveSettings">Сохранить</button>
+          <p class="msg" id="settingsMsg"></p>
+        </div></div>
+      </section>
+
+      <section class="view" id="view-audit">
+        <div class="top"><h1>Аудит действий</h1><button type="button" class="btn" id="reloadAudit">Обновить</button></div>
+        <div class="panel"><div class="panel__b" id="auditList"></div></div>
+      </section>
+      <p class="msg" id="appMsg"></p>
+    </main>
+  </div>
+  <script src="/js/admin.js?v=1"></script>
+</body>
+</html>
