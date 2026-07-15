@@ -1,0 +1,9 @@
+.vercel
+.env
+.env.*
+!.env.example
+certs/
+*.p12
+*.pem
+**/point_*.p12
+.env*

@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/readings/process",
+      "schedule": "* * * * *"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "payment=(), geolocation=()" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/pay-success.html", "destination": "/api/pay-success" },
+    { "source": "/pay-fail.html", "destination": "/api/pay-fail" },
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ]
+}

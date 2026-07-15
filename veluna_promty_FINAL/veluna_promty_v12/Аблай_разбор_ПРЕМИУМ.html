@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Полный разбор личности и жизни — Аблай · Veluna</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Marcellus&family=Manrope:wght@200;300;400;500;600&display=swap');
+
+  :root{
+    --bg:#0c1030; --bg2:#141a44; --card:#151a41; --card2:#1b2150;
+    --ink:#efe9dd; --ink-soft:#c3bdd6; --ink-faint:#8f8ab0;
+    --gold:#e2ba75; --gold-2:#f4d79a; --gold-soft:#8f7846;
+    --purple:#9a7ff0; --purple-2:#c4a9ff;
+    --line:rgba(226,186,117,.22); --line-2:rgba(226,186,117,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope',system-ui,sans-serif;font-weight:300;
+    font-size:19px;line-height:1.9;-webkit-font-smoothing:antialiased;
+    position:relative;overflow-x:hidden;
+  }
+  /* ── звёздное поле ── */
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1.4px 1.4px at 20% 30%, #fff9 40%, transparent),
+      radial-gradient(1.4px 1.4px at 75% 15%, #fff8 40%, transparent),
+      radial-gradient(1.2px 1.2px at 40% 70%, #ffe9c880 40%, transparent),
+      radial-gradient(1.6px 1.6px at 85% 55%, #fff7 40%, transparent),
+      radial-gradient(1px 1px at 60% 40%, #fff6 40%, transparent),
+      radial-gradient(1.3px 1.3px at 12% 80%, #fff7 40%, transparent),
+      radial-gradient(1.1px 1.1px at 90% 85%, #ffe9c870 40%, transparent),
+      radial-gradient(1.2px 1.2px at 30% 12%, #fff6 40%, transparent),
+      radial-gradient(1400px 700px at 50% -10%, #24205a55, transparent),
+      radial-gradient(1200px 900px at 90% 20%, #3a2b6033, transparent),
+      linear-gradient(180deg,#0c1030 0%,#0e1236 50%,#0b0e2a 100%);
+    background-repeat:no-repeat;
+  }
+  .stars::after{content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(1px 1px at 55% 22%, #fff, transparent),
+      radial-gradient(1px 1px at 25% 55%, #fff, transparent),
+      radial-gradient(1px 1px at 80% 38%, #fff, transparent),
+      radial-gradient(1px 1px at 15% 35%, #fff, transparent),
+      radial-gradient(1px 1px at 68% 75%, #fff, transparent);
+    opacity:.5;animation:tw 5s ease-in-out infinite alternate}
+  @keyframes tw{from{opacity:.25}to{opacity:.7}}
+
+  .wrap{position:relative;z-index:1}
+  .page{max-width:770px;margin:0 auto;padding:96px 56px}
+
+  /* ── ОБЛОЖКА ── */
+  .cover{position:relative;min-height:100vh;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;text-align:center;padding:60px 28px;overflow:hidden}
+  .mandala{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+    width:min(680px,116vw);opacity:.9;z-index:0}
+  .mandala .spin{transform-origin:290px 290px;animation:spin 120s linear infinite}
+  .mandala .spin-r{transform-origin:290px 290px;animation:spin 90s linear infinite reverse}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .cover-inner{position:relative;z-index:2}
+  .cover .mark{font-family:'Marcellus',serif;font-size:13px;letter-spacing:.5em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:40px}
+  .cover .mark::before,.cover .mark::after{content:"✦";color:var(--gold-soft);margin:0 14px;font-size:9px;vertical-align:middle}
+  .cover h1{font-family:'Marcellus',serif;font-weight:400;
+    font-size:clamp(40px,7vw,68px);line-height:1.12;letter-spacing:.01em;
+    margin-bottom:26px;
+    background:linear-gradient(180deg,#f7e6c2,#e2ba75 55%,#b98f4f);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    text-shadow:0 0 40px rgba(226,186,117,.25)}
+  .cover .who{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;
+    color:var(--purple-2);margin-bottom:40px;text-shadow:0 0 24px rgba(154,127,240,.4)}
+  .cover .sub{max-width:540px;font-size:18px;line-height:1.8;color:var(--ink-soft);margin:0 auto 46px}
+  .cover .epi{max-width:520px;font-family:'Cormorant Garamond',serif;font-size:26px;
+    font-style:italic;line-height:1.6;color:var(--gold-2);padding-top:38px;
+    border-top:1px solid var(--line);margin:0 auto}
+  .scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
+    color:var(--ink-faint);font-size:12px;letter-spacing:.3em;text-transform:uppercase;z-index:2}
+
+  /* ── ГЛАВЫ ── */
+  .chapter{padding-top:30px;margin-bottom:20px}
+  .eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:16px;color:var(--gold);
+    font-family:'Manrope';font-size:12px;letter-spacing:.32em;text-transform:uppercase}
+  .eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .num{font-family:'Marcellus',serif;font-size:15px;letter-spacing:.2em;color:var(--gold-soft)}
+  h2{font-family:'Marcellus',serif;font-weight:400;font-size:clamp(30px,4.4vw,42px);
+    line-height:1.2;margin-bottom:44px;padding-bottom:24px;position:relative;color:var(--gold-2)}
+  h2::after{content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;
+    background:linear-gradient(90deg,var(--gold),var(--line-2) 60%,transparent)}
+  p{margin-bottom:24px;color:var(--ink)}
+  p.lead{font-family:'Cormorant Garamond',serif;font-size:26px;line-height:1.6;
+    color:var(--gold-2);font-style:italic;margin-bottom:30px}
+  strong{font-weight:500;color:var(--gold-2)}
+  em{font-style:italic;color:var(--purple-2)}
+
+  .anchor{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;
+    line-height:1.55;color:var(--gold-2);text-align:center;margin:48px 0;padding:38px 30px;
+    background:radial-gradient(120% 140% at 50% 0%, rgba(154,127,240,.10), transparent 70%);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .anchor::before{content:"“";display:block;font-size:46px;color:var(--gold-soft);line-height:.2;margin-bottom:10px}
+  .bridge{color:var(--ink-faint);font-size:17px;font-style:italic;margin-top:40px;
+    padding-top:22px;border-top:1px dashed var(--line-2)}
+  .end{text-align:center;padding:110px 40px 80px;color:var(--gold-soft);
+    font-family:'Marcellus',serif;font-size:14px;letter-spacing:.35em;text-transform:uppercase}
+  .end::before{content:"✦ ✦ ✦";display:block;color:var(--gold-soft);letter-spacing:.5em;margin-bottom:22px;font-size:10px}
+
+  /* ── диаграммы ── */
+  .figure{margin:46px 0;padding:40px 30px 30px;border-radius:14px;position:relative;
+    background:linear-gradient(165deg, rgba(30,34,78,.75), rgba(16,20,52,.85));
+    border:1px solid var(--line);
+    box-shadow:0 20px 60px -30px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.04)}
+  .figure .cap-top{font-family:'Manrope';font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--gold);text-align:center;margin-bottom:26px}
+  .d-cap{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;
+    color:var(--gold-2);text-align:center;margin-top:22px;line-height:1.5}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .lbl{font-family:'Manrope';font-size:13px;fill:var(--ink-soft)}
+  .lbl-s{font-family:'Manrope';font-size:11px;letter-spacing:.14em;text-transform:uppercase;fill:var(--ink-faint)}
+  .lbl-serif{font-family:'Cormorant Garamond',serif;font-style:italic}
+  .stroke{fill:none;stroke:var(--gold);stroke-width:1.4}
+  .stroke-soft{fill:none;stroke:var(--purple);stroke-width:1.2;opacity:.7}
+  .hair{fill:none;stroke:var(--line);stroke-width:1}
+  .dot{fill:var(--gold);filter:url(#glow)}
+  .dot-o{fill:var(--card);stroke:var(--gold);stroke-width:1.4}
+  .bar-track{fill:rgba(255,255,255,.05)}
+  .bar-fill{fill:url(#goldgrad)}
+  .bar-fill.soft{fill:var(--gold-soft)}
+  .bar-lbl{font-family:'Manrope';font-size:14px;fill:var(--ink)}
+  .bar-sub{font-family:'Manrope';font-size:12px;fill:var(--ink-faint)}
+
+  @media (max-width:640px){
+    body{font-size:17px}
+    .page{padding:64px 22px}
+    .anchor{font-size:23px;padding:28px 16px}
+    .figure{padding:26px 14px 20px}
+    .cover .who{font-size:26px}
+  }
+  @media print{
+    @page{size:A4;margin:16mm}
+    body{background:#0c1030 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .stars{position:absolute}
+    .cover{min-height:auto;height:262mm;page-break-after:always}
+    .chapter{page-break-before:always;padding-top:0}
+    .page{padding:0;max-width:100%}
+    h2{page-break-after:avoid}
+    .anchor,.figure{page-break-inside:avoid}
+    .scroll-cue{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<!-- SVG defs (глобальные фильтры/градиенты) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowbig" x="-90%" y="-90%" width="280%" height="280%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="goldgrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b98f4f"/><stop offset=".5" stop-color="#e2ba75"/><stop offset="1" stop-color="#f4d79a"/>
+    </linearGradient>
+    <radialGradient id="radarfill" cx="50%" cy="50%" r="60%">
+      <stop offset="0" stop-color="#c4a9ff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#7a5fd0" stop-opacity=".22"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff3d8"/><stop offset=".5" stop-color="#e2ba75"/><stop offset="1" stop-color="#8f7846" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<!-- ══════════ ОБЛОЖКА ══════════ -->
+<section class="cover">
+  <svg class="mandala" viewBox="0 0 580 580" aria-hidden="true">
+    <g fill="none" stroke="#e2ba75">
+      <circle class="spin" cx="290" cy="290" r="270" stroke-width="1" stroke-opacity=".18" stroke-dasharray="2 10"/>
+      <circle cx="290" cy="290" r="232" stroke-width="1" stroke-opacity=".22"/>
+      <circle class="spin-r" cx="290" cy="290" r="216" stroke-width="1" stroke-opacity=".16" stroke-dasharray="1 7"/>
+      <circle cx="290" cy="290" r="150" stroke-width="1" stroke-opacity=".3"/>
+      <circle cx="290" cy="290" r="120" stroke-width="1" stroke-opacity=".18"/>
+    </g>
+    <!-- 12 лучей -->
+    <g class="spin" stroke="#e2ba75" stroke-opacity=".28" stroke-width="1">
+      <g id="ray"><line x1="290" y1="58" x2="290" y2="120"/></g>
+      <use href="#ray" transform="rotate(30 290 290)"/><use href="#ray" transform="rotate(60 290 290)"/>
+      <use href="#ray" transform="rotate(90 290 290)"/><use href="#ray" transform="rotate(120 290 290)"/>
+      <use href="#ray" transform="rotate(150 290 290)"/><use href="#ray" transform="rotate(180 290 290)"/>
+      <use href="#ray" transform="rotate(210 290 290)"/><use href="#ray" transform="rotate(240 290 290)"/>
+      <use href="#ray" transform="rotate(270 290 290)"/><use href="#ray" transform="rotate(300 290 290)"/>
+      <use href="#ray" transform="rotate(330 290 290)"/>
+    </g>
+    <!-- звёзды на кольце -->
+    <g fill="#f4d79a" class="spin-r">
+      <circle cx="290" cy="74" r="2.4"/><circle cx="474" cy="182" r="1.8"/><circle cx="474" cy="398" r="1.8"/>
+      <circle cx="290" cy="506" r="2.4"/><circle cx="106" cy="398" r="1.8"/><circle cx="106" cy="182" r="1.8"/>
+    </g>
+    <!-- ядро -->
+    <circle cx="290" cy="290" r="96" fill="url(#core)" opacity=".55"/>
+    <g fill="none" stroke="#f4d79a" stroke-width="1.4" filter="url(#glowbig)">
+      <path d="M290 232 C318 268 318 312 290 348 C262 312 262 268 290 232Z" stroke-opacity=".85"/>
+      <path d="M232 290 C268 262 312 262 348 290 C312 318 268 318 232 290Z" stroke-opacity=".85"/>
+      <circle cx="290" cy="290" r="7" fill="#f4d79a" stroke="none"/>
+    </g>
+  </svg>
+
+  <div class="cover-inner">
+    <div class="mark">Veluna</div>
+    <h1>Полный разбор<br>личности и жизни</h1>
+    <div class="who">для Аблая</div>
+    <p class="sub">Карта из двенадцати слоёв твоей жизни — характер, талант, деньги, любовь, блоки, циклы, миссия — и то, как они держат друг друга.</p>
+    <p class="epi">«Ты не боишься начинать.<br>Ты боишься остаться там, где начал.»</p>
+  </div>
+  <div class="scroll-cue">листай вниз ↓</div>
+</section>
+
+<div class="page">
+
+<!-- I · ВВЕДЕНИЕ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава I</span></div>
+  <h2>Введение</h2>
+
+  <p>Аблай, есть в тебе одна вещь, которую замечают почти все и почти никто не называет вслух: ты появляешься — и пространство сдвигается к тебе. Не потому что давишь. Ты просто занимаешь центр так спокойно, будто он всегда был твой, а между тобой и людьми всегда чуть-чуть воздуха. Ты рядом — и одновременно немного над. И это не поза. Это твой естественный способ дышать.</p>
+
+  <p>А потом наступает момент, когда все расходятся, и ты остаёшься один — и вот эти сорок минут тишины единственные за день, когда тебе по-настоящему легко. Снаружи — лёгкость и вес. Внутри — быстрый холодный ум, который ни на секунду не выключается: что я сказал, зачем согласился, почему это уже неинтересно. Никто не видит второго слоя. Это не скрытность — это просто скорость, с которой ты живёшь у себя внутри.</p>
+
+  <p>И есть ощущение, которое не уходит уже годами: <strong>ты сделал очень много и при этом будто не сделал ничего.</strong> Список начатого длиннее списка завершённого. Есть проекты, брошенные на восьмидесяти процентах — ровно там, где оставалось скучное и обязательное. Есть люди, от которых ты уходил в ту минуту, когда они начинали на тебя рассчитывать. Ты объяснял это по-разному: не то время, не те люди, не тот рынок. Причина каждый раз оказывалась снаружи. Это удобно — и почти всегда неправда.</p>
+
+  <p>Здесь мы назовём то, что повторяется. У тебя есть паттерн в деньгах, паттерн в близости, паттерн в деле — и это <strong>не три разных паттерна</strong>. Это один, надевший три костюма. Пока он без имени, он работает автоматически и всегда «случайно». Названный — начинает сбоить. В этом весь смысл разбора.</p>
+
+  <p>Аблай, это не предсказание и не мистика. Здесь нет ничего про звёзды и судьбу. Это карта: двенадцать слоёв твоей жизни, сведённых в одну структуру. Каждый слой видит свой кусок. Ни один не видит целого. Целое живёт в стыках, и почти всё важное про тебя лежит именно там.</p>
+
+  <p class="lead">Читай медленно. Особенно там, где захочется пролистнуть или поспорить. Именно там — самое точное.</p>
+
+  <div class="figure">
+    <div class="cap-top">Путь разбора · три фазы</div>
+    <svg viewBox="0 0 680 220" role="img" aria-label="Дуга разбора из 12 блоков в трёх фазах">
+      <rect x="40" y="30" width="200" height="150" fill="#9a7ff0" opacity=".07"/>
+      <rect x="240" y="30" width="200" height="150" fill="#9a7ff0" opacity=".14"/>
+      <rect x="440" y="30" width="200" height="150" fill="#9a7ff0" opacity=".07"/>
+      <text x="140" y="22" text-anchor="middle" class="lbl-s">Узнавание</text>
+      <text x="340" y="22" text-anchor="middle" class="lbl-s">Дискомфорт</text>
+      <text x="540" y="22" text-anchor="middle" class="lbl-s">Энергия действия</text>
+      <path class="stroke" d="M40,150 C200,150 210,70 340,70 C470,70 480,40 640,40" filter="url(#glow)"/>
+      <circle class="dot-o" cx="40" cy="150" r="5"/><circle class="dot-o" cx="94" cy="132" r="5"/><circle class="dot-o" cx="150" cy="112" r="5"/><circle class="dot-o" cx="215" cy="88" r="5"/><circle class="dot-o" cx="280" cy="75" r="5"/><circle class="dot-o" cx="340" cy="70" r="5"/><circle class="dot-o" cx="400" cy="66" r="5"/><circle class="dot-o" cx="460" cy="58" r="5"/><circle class="dot-o" cx="515" cy="50" r="5"/><circle class="dot-o" cx="565" cy="46" r="5"/><circle class="dot-o" cx="605" cy="43" r="5"/><circle class="dot" cx="640" cy="40" r="6"/>
+      <text x="40" y="200" text-anchor="middle" class="lbl-s">Характер</text>
+      <text x="340" y="200" text-anchor="middle" class="lbl-s">Блоки · циклы</text>
+      <text x="640" y="200" text-anchor="middle" class="lbl-s">Миссия</text>
+    </svg>
+    <div class="d-cap">Ты входишь через узнавание — и выходишь через выбор.</div>
+  </div>
+</section>
+
+<!-- ★ КАРТА СФЕР — РАДАР -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Карта сфер</span></div>
+  <h2>Сильные и слабые стороны в сферах жизни</h2>
+
+  <p>Прежде чем идти по слоям вглубь, Аблай, — вот твой контур одним взглядом. Десять сфер жизни, и то, сколько сейчас в каждой твоей силы. Это не оценка и не приговор: там, где линия проваливается, — не «плохо», а <strong>там, где твоя энергия пока не привыкла оставаться.</strong></p>
+
+  <div class="figure">
+    <div class="cap-top">Твой контур силы · 10 сфер</div>
+    <svg viewBox="0 0 500 500" role="img" aria-label="Радар-диаграмма силы в десяти сферах жизни">
+      <!-- кольца -->
+      <g fill="none" stroke="#e2ba75" stroke-opacity=".16">
+        <circle cx="250" cy="250" r="40"/><circle cx="250" cy="250" r="80"/>
+        <circle cx="250" cy="250" r="120"/><circle cx="250" cy="250" r="160"/>
+        <circle cx="250" cy="250" r="200" stroke-opacity=".3"/>
+      </g>
+      <!-- спицы -->
+      <g stroke="#e2ba75" stroke-opacity=".14">
+        <line x1="250" y1="250" x2="250" y2="50"/><line x1="250" y1="250" x2="368" y2="88"/>
+        <line x1="250" y1="250" x2="440" y2="188"/><line x1="250" y1="250" x2="440" y2="312"/>
+        <line x1="250" y1="250" x2="368" y2="412"/><line x1="250" y1="250" x2="250" y2="450"/>
+        <line x1="250" y1="250" x2="132" y2="412"/><line x1="250" y1="250" x2="60" y2="312"/>
+        <line x1="250" y1="250" x2="60" y2="188"/><line x1="250" y1="250" x2="132" y2="88"/>
+      </g>
+      <!-- шкала -->
+      <g fill="#8f8ab0" font-family="Manrope" font-size="9" text-anchor="middle">
+        <text x="250" y="173">4</text><text x="250" y="133">6</text><text x="250" y="93">8</text><text x="250" y="55">10</text>
+      </g>
+      <!-- контур -->
+      <polygon points="250,70 320,153 364,213 383,293 309,331 250,410 156,379 155,281 174,225 156,121"
+               fill="url(#radarfill)" stroke="#c4a9ff" stroke-width="1.6" filter="url(#glow)"/>
+      <!-- вершины -->
+      <g fill="#f4d79a" filter="url(#glow)">
+        <circle cx="250" cy="70" r="3.5"/><circle cx="320" cy="153" r="3.5"/><circle cx="364" cy="213" r="3.5"/>
+        <circle cx="383" cy="293" r="3.5"/><circle cx="309" cy="331" r="3.5"/><circle cx="250" cy="410" r="3.5"/>
+        <circle cx="156" cy="379" r="3.5"/><circle cx="155" cy="281" r="3.5"/><circle cx="174" cy="225" r="3.5"/><circle cx="156" cy="121" r="3.5"/>
+      </g>
+      <!-- медальоны-иконки + подписи -->
+      <g>
+        <!-- 0 top: Личностный рост 9 -->
+        <circle cx="250" cy="44" r="15" fill="#171c46" stroke="#e2ba75"/><text x="250" y="49" text-anchor="middle" font-size="14" fill="#f4d79a">✦</text>
+        <text x="250" y="20" text-anchor="middle" class="lbl-s">Личностный рост</text>
+        <!-- 1: Здоровье 6 -->
+        <circle cx="374" cy="82" r="15" fill="#171c46" stroke="#e2ba75"/><text x="374" y="87" text-anchor="middle" font-size="13" fill="#f4d79a">❤</text>
+        <text x="400" y="70" class="lbl-s">Здоровье</text>
+        <!-- 2: Финансы 6 -->
+        <circle cx="452" cy="188" r="15" fill="#171c46" stroke="#e2ba75"/><text x="452" y="193" text-anchor="middle" font-size="13" fill="#f4d79a">◉</text>
+        <text x="472" y="192" class="lbl-s">Финансы</text>
+        <!-- 3: Карьера 7 -->
+        <circle cx="452" cy="312" r="15" fill="#171c46" stroke="#e2ba75"/><text x="452" y="317" text-anchor="middle" font-size="13" fill="#f4d79a">▲</text>
+        <text x="472" y="316" class="lbl-s">Карьера и дело</text>
+        <!-- 4: Отношения 5 -->
+        <circle cx="380" cy="424" r="15" fill="#171c46" stroke="#e2ba75"/><text x="380" y="429" text-anchor="middle" font-size="13" fill="#f4d79a">∞</text>
+        <text x="404" y="440" class="lbl-s">Отношения</text>
+        <!-- 5 bottom: Окружение 8 -->
+        <circle cx="250" cy="464" r="15" fill="#171c46" stroke="#e2ba75"/><text x="250" y="469" text-anchor="middle" font-size="13" fill="#f4d79a">✧</text>
+        <text x="250" y="496" text-anchor="middle" class="lbl-s">Окружение</text>
+        <!-- 6: Творчество 8 -->
+        <circle cx="120" cy="424" r="15" fill="#171c46" stroke="#e2ba75"/><text x="120" y="429" text-anchor="middle" font-size="13" fill="#f4d79a">❈</text>
+        <text x="96" y="440" text-anchor="end" class="lbl-s">Творчество</text>
+        <!-- 7: Эмоции 5 -->
+        <circle cx="48" cy="312" r="15" fill="#171c46" stroke="#e2ba75"/><text x="48" y="317" text-anchor="middle" font-size="13" fill="#f4d79a">☾</text>
+        <text x="28" y="316" text-anchor="end" class="lbl-s">Эмоции</text>
+        <!-- 8: Дом 4 -->
+        <circle cx="48" cy="188" r="15" fill="#171c46" stroke="#e2ba75"/><text x="48" y="193" text-anchor="middle" font-size="13" fill="#f4d79a">⌂</text>
+        <text x="28" y="192" text-anchor="end" class="lbl-s">Дом и комфорт</text>
+        <!-- 9: Духовность 8 -->
+        <circle cx="126" cy="82" r="15" fill="#171c46" stroke="#e2ba75"/><text x="126" y="87" text-anchor="middle" font-size="13" fill="#f4d79a">☯</text>
+        <text x="100" y="70" text-anchor="end" class="lbl-s">Духовность</text>
+      </g>
+    </svg>
+    <div class="d-cap">Контур силён там, где движение и новизна, — и проседает там, где нужно остаться: дом, близость, чувства.</div>
+  </div>
+
+  <p>Смотри, что говорит эта фигура. Твои вершины — <strong>рост, творчество, окружение, глубина</strong>: везде, где есть новое, простор и люди, ты силён от природы. А провалы собраны на одной оси — <strong>дом, отношения, эмоции.</strong> Это не случайные три слабых места. Это одно и то же: всё, что требует остаться и опереться, у тебя пока недобрано. Весь разбор дальше — про то, как поднять именно эту сторону, не срезав свои вершины.</p>
+
+  <div class="anchor">Ты силён во всём, что можно начать. И тонок во всём, где надо остаться.</div>
+
+  <p class="bridge">Это контур снаружи. Теперь — вглубь, в самый центр, из которого растёт вся фигура.</p>
+</section>
+
+<!-- II · ЯДРО -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава II</span></div>
+  <h2>Ядро личности</h2>
+
+  <p>Если свести тебя к одной точке, Аблай, она звучит так: <strong>ты — исследователь с телом лидера.</strong> Тебе нужна не власть, а свобода видеть новое; но выглядишь ты как человек, за которым идут, поэтому тебе всё время выдают роль главного, а ты внутри хотел просто пойти посмотреть, что там за поворотом. Отсюда весь твой рисунок жизни: тебя ставят в центр — а тебе нужен горизонт.</p>
+
+  <p>Снаружи тебя читают как уверенного, лёгкого, слегка отстранённого — человека, которому всё даётся. Внутри — прямая противоположность: чувствительность, которую ты давно научился не показывать, и аналитик, который разбирает каждый разговор на детали. Переход между этими слоями и есть твой главный инструмент: ты быстро считываешь людей именно потому, что сам живёшь на два слоя и знаешь, как это устроено.</p>
+
+  <div class="figure">
+    <div class="cap-top">Три слоя · снаружи · внутри · куда идёшь</div>
+    <svg viewBox="0 0 560 300" role="img" aria-label="Три пересекающихся круга">
+      <circle cx="215" cy="130" r="95" class="stroke-soft"/>
+      <circle cx="345" cy="130" r="95" class="stroke-soft"/>
+      <circle cx="280" cy="210" r="95" class="stroke-soft"/>
+      <circle cx="280" cy="157" r="6" class="dot"/>
+      <text x="150" y="105" text-anchor="middle" class="lbl">каким кажешься</text>
+      <text x="410" y="105" text-anchor="middle" class="lbl">кто изнутри</text>
+      <text x="280" y="272" text-anchor="middle" class="lbl">кем хочешь стать</text>
+      <text x="280" y="150" text-anchor="middle" class="lbl-s">ты</text>
+    </svg>
+    <div class="d-cap">Снаружи — вес и лёгкость. Внутри — аналитик, который не выключается.</div>
+  </div>
+
+  <p>Главный твой конфликт — между двумя равными силами. Одна тянет к простору, движению, новому; вторая тихо просит того, чего у тебя почти никогда не было по-настоящему — <strong>места, где можно не бежать.</strong> Каждый раз, когда ты получаешь свободу, внутри поднимается тоска по опоре. А как только появляется опора — включается духота и желание уйти. Это не поломка. Это твой двигатель: ты движешься, отталкиваясь то от одного берега, то от другого.</p>
+
+  <p>Мыслишь ты быстро и вширь: тебе легче увидеть всю систему сразу, чем терпеливо доделать один угол. Решения твои лучше всего приходят не когда ты долго думаешь, а когда даёшь себе тишину и перестаёшь спрашивать чужие мнения, — в одиночестве ты слышишь себя точнее, чем в любом совете. По быту тебя выдаёт одно и то же: десяток открытых вкладок и начатых дел, привычка выходить «подышать» посреди важного разговора, и то, как ты теряешь интерес к вещи ровно в тот момент, когда её пора не придумывать, а доводить.</p>
+
+  <p>Под давлением ты не взрываешься — ты <strong>исчезаешь в деле.</strong> Загружаешь себя новым, переключаешься, уезжаешь, начинаешь ещё один фронт. Это выглядит как активность, но по сути это способ не чувствовать. Восстанавливаешься ты тоже движением и тишиной — не разговором. И с детства тебе без усилий давалось то, что другим стоит труда: схватывать суть на лету и вести за собой, ещё не понимая, куда. Взрослые чаще звали это «несобранностью». Это была не несобранность — это была скорость, которой негде было приземлиться.</p>
+
+  <div class="anchor">Тебе легко войти в любую комнату — и трудно остаться в одной.</div>
+
+  <p class="bridge">Это ядро — центр. Из него растёт всё остальное: талант, деньги, любовь, блоки, циклы. Дальше — по слоям, и в самом конце они снова сойдутся в одну точку.</p>
+</section>
+
+<!-- III · КАРТА ТАЛАНТОВ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава III</span></div>
+  <h2>Карта талантов и зона гения</h2>
+
+  <p>Твой природный дар, Аблай, виден ещё в подростковых историях: ты умеешь <strong>открывать</strong> — двери, темы, людей, которые сами бы не сдвинулись. Там, где другие ищут инструкцию, ты идёшь первым и по ходу понимаешь, как оно устроено. Это редкая штука: большинство ждёт готовности, а ты делаешь готовность из самого движения.</p>
+
+  <div class="figure">
+    <div class="cap-top">Три силы · главная · опора · тень</div>
+    <svg viewBox="0 0 640 220" role="img" aria-label="Три горизонтальных полосы разной длины">
+      <text x="0" y="34" class="bar-lbl">Входишь и ведёшь</text>
+      <text x="0" y="52" class="bar-sub">главная — сила старта</text>
+      <rect x="230" y="20" width="410" height="16" rx="8" class="bar-track"/><rect x="230" y="20" width="392" height="16" rx="8" class="bar-fill" filter="url(#glow)"/>
+      <text x="0" y="104" class="bar-lbl">Видишь систему целиком</text>
+      <text x="0" y="122" class="bar-sub">поддерживающая</text>
+      <rect x="230" y="90" width="410" height="16" rx="8" class="bar-track"/><rect x="230" y="90" width="300" height="16" rx="8" class="bar-fill"/>
+      <text x="0" y="174" class="bar-lbl">Держишь людей теплом</text>
+      <text x="0" y="192" class="bar-sub">теневая — не считаешь силой</text>
+      <rect x="230" y="160" width="410" height="16" rx="8" class="bar-track"/><rect x="230" y="160" width="175" height="16" rx="8" class="bar-fill soft"/>
+    </svg>
+    <div class="d-cap">Третья сила работает без твоего ведома — и именно ей тебя запоминают.</div>
+  </div>
+
+  <p>Первая сила — <strong>вход</strong>: ты начинаешь легко и заражаешь этим других. Вторая — <strong>охват</strong>: ты видишь всю картину сверху, схватываешь связи там, где остальные тонут в частях. А третья, теневая, — та, которой ты сам себя сильным не считаешь: ты <strong>греешь</strong>. Люди тянутся к тебе не за экспертностью, а за тем ощущением, что рядом с тобой становится интереснее жить. Ты этого почти не замечаешь — но именно это остаётся с людьми, когда конкретные слова давно забылись.</p>
+
+  <p>У главной силы есть и тёмная сторона — тот же механизм, повёрнутый наоборот. Лёгкость входа означает лёгкость выхода: ты так же легко бросаешь, как начинаешь. Зона гения включается на полную не тогда, когда ты открываешь очередную дверь, а когда ты остаёшься в комнате достаточно долго, чтобы там что-то выросло. Аблай, твой максимум — <strong>вести людей туда, где сам ещё не был, и не сбегать в первый же новый коридор.</strong></p>
+
+  <div class="anchor">Ты открываешь двери, которые другие даже не замечают.</div>
+
+  <p class="bridge">Талант — это что. Через что он превращается в деньги — и где именно застревает — дальше.</p>
+</section>
+
+<!-- IV · ДЕНЬГИ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава IV</span></div>
+  <h2>Денежная карта</h2>
+
+  <p>Деньги приходят к тебе, Аблай, через <strong>твоё присутствие и твой старт</strong>, а не через усидчивость. Ты зарабатываешь, когда ведёшь, запускаешь, вдохновляешь, соединяешь людей и возможности. Всё, что требует долгого однообразного дожатия, у тебя проседает — не потому что не умеешь, а потому что к этому моменту ты уже мыслями в следующем.</p>
+
+  <div class="figure">
+    <div class="cap-top">Денежный поток · потолок · окна года</div>
+    <svg viewBox="0 0 640 260" role="img" aria-label="Восходящий поток, упирающийся в линию потолка, и окна года">
+      <path d="M120,240 C120,150 200,150 200,90 C200,60 260,60 300,60" class="stroke" stroke-width="1.6" filter="url(#glow)"/>
+      <path d="M120,240 C120,160 230,170 250,120 C270,80 300,78 360,72" class="stroke-soft"/>
+      <circle cx="120" cy="240" r="5" class="dot"/><text x="120" y="258" text-anchor="middle" class="lbl-s">приход</text>
+      <line x1="90" y1="60" x2="420" y2="60" stroke="#e2ba75" stroke-width="1.4" stroke-dasharray="5 5"/>
+      <text x="90" y="48" class="lbl">потолок — «стало скучно, значит почти дошёл»</text>
+      <line x1="520" y1="40" x2="520" y2="240" class="hair"/>
+      <text x="536" y="44" class="lbl-s">год</text>
+      <circle cx="520" cy="95" r="6" class="dot"/><text x="536" y="99" class="lbl">окно роста · весна</text>
+      <circle cx="520" cy="175" r="6" class="dot"/><text x="536" y="179" class="lbl">окно роста · осень</text>
+      <circle cx="520" cy="215" r="5" class="dot-o"/><text x="536" y="219" class="bar-sub">просадка · середина лета</text>
+    </svg>
+    <div class="d-cap">Деньги идут туда, где ты настоящий. Не туда, где ты правильный.</div>
+  </div>
+
+  <p>Твой денежный потолок не в рынке и не в цене. Он там, где <strong>заканчивается интересное и начинается обязательное.</strong> Ты доводишь дело до восьмидесяти процентов — до точки, где всё уже понятно и осталось скучное доведение, — и именно тут внутри включается «ну всё, дальше неинтересно», и ты уходишь на новый старт. Каждый твой уход на этой отметке — это оставленные на столе деньги, которые ты потом объяснишь чем угодно, кроме этой отметки.</p>
+
+  <p>Второй блок — <strong>цена себя.</strong> Тебе легче отдать, помочь, вписаться бесплатно, чем спокойно назвать сумму и выдержать паузу. За этим стоит давнее тихое решение, что тебя любят за лёгкость, а не за счёт, — и назвать цену как будто значит стать тяжёлым. Это и есть та же пара, что в ядре: свобода против принадлежности. С деньгами ты выбираешь остаться лёгким и свободным — и регулярно недополучаешь.</p>
+
+  <p>2026-й для тебя — <strong>год результата, а не старта.</strong> Он вознаграждает доведение и наказывает разбрасывание. Два окна, где твои деньги растут заметнее всего, — весна и осень; провал вероятнее в середине лета, если поддашься желанию бросить почти готовое ради нового. Главный денежный выбор года простой на словах и трудный на деле: <strong>довести одно вместо того, чтобы начать три.</strong></p>
+
+  <div class="anchor">Деньги идут туда, где ты настоящий, а не туда, где ты правильный.</div>
+
+  <p class="bridge">Деньги — это один слой. На том же фундаменте, из той же пары «свобода и опора», растёт твоя близость. Туда — дальше.</p>
+</section>
+
+<!-- V · ЛЮБОВЬ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава V</span></div>
+  <h2>Любовная карта</h2>
+
+  <p>В близость ты, Аблай, входишь ярко и быстро: тебе интересен человек как новый мир, ты загораешься, ведёшь, открываешь. Держится всё ровно до тех пор, пока сохраняется <strong>дистанция открытия</strong> — пока есть что узнавать. А в момент, когда отношения переходят из «интересно» в «моё, ежедневное, обязательное», внутри поднимается та же духота, что и в деле, и ты начинаешь отдаляться — сначала мыслями, потом делами.</p>
+
+  <p>Тебя тянет к людям ярким, самостоятельным, слегка недосягаемым — к тем, кого нужно «догонять». А подходит тебе на самом деле другой человек: тёплый и устойчивый, рядом с которым не надо ничего доказывать. Но именно его ты чаще всего пропускаешь — потому что там нет погони, а без погони тебе поначалу кажется, что нет и чувства. Ты путаешь <strong>интенсивность с близостью.</strong></p>
+
+  <p>Есть одно микро-действие, которым ты неосознанно разрушаешь то, что тебе дорого: в момент наибольшего сближения ты создаёшь предлог для дистанции — уходишь в работу, в поездку, в холодок. За этим стоит давнее ощущение, что если позволить себе полностью опереться на человека, тебя в итоге оставят одного, — и лучше уйти первым, пока не привязали. Ты уходишь не потому что разлюбил. Ты уходишь потому что стало слишком важно.</p>
+
+  <p>Твой урок в отношениях — один и точный: научиться <strong>оставаться в близости после того, как прошла новизна</strong>, и увидеть, что настоящее начинается как раз там, где заканчивается погоня. То, что ты делаешь с любовью, — тот же механизм, что с деньгами и с делом: сила входа больше силы возврата. Корень везде один.</p>
+
+  <div class="anchor">Ты ищешь того, с кем не надо объяснять, — и первым перестаёшь объяснять.</div>
+
+  <p class="bridge">Любовь — слой. Под ней и под деньгами лежит общая карта блоков — то, из чего всё это растёт. Туда — дальше.</p>
+</section>
+
+<!-- VI · БЛОКИ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава VI</span></div>
+  <h2>Карта блоков</h2>
+
+  <p>Главный твой сценарий, Аблай, наследуется и звучит примерно так: <strong>«беги, пока не привязали».</strong> Свобода как высшая ценность, любое обязательство — как клетка. Он давал тебе лёгкость и скорость, но той же рукой отбирал корни: то, что могло стать твоим домом, делом, глубокой связью, ты снова и снова оставлял на пороге принадлежности.</p>
+
+  <div class="figure">
+    <div class="cap-top">Одна ось · сила и блок</div>
+    <svg viewBox="0 0 640 130" role="img" aria-label="Горизонтальная ось: сила на одном конце, блок на другом">
+      <line x1="60" y1="70" x2="580" y2="70" class="stroke" stroke-width="1.6" filter="url(#glow)"/>
+      <circle cx="60" cy="70" r="8" class="dot"/><circle cx="580" cy="70" r="8" class="dot"/><circle cx="320" cy="70" r="4" class="dot-o"/>
+      <text x="60" y="46" text-anchor="middle" class="lbl">лёгкость входа</text><text x="60" y="98" text-anchor="middle" class="bar-sub">сила</text>
+      <text x="580" y="46" text-anchor="middle" class="lbl">лёгкость выхода</text><text x="580" y="98" text-anchor="middle" class="bar-sub">блок</text>
+      <text x="320" y="108" text-anchor="middle" class="lbl-s">один механизм</text>
+    </svg>
+    <div class="d-cap">Ты бросаешь за шаг до финиша — той же лёгкостью, которой входишь.</div>
+  </div>
+
+  <p>Он проявляется в четырёх сферах сразу. В <strong>деньгах</strong> — уход на восьмидесяти процентах. В <strong>любви</strong> — дистанция в момент сближения. В <strong>теле</strong> — привычка не замечать усталость, пока она не свалит: ты гонишь на ресурсе, будто он бесконечен, и восстановление считаешь потерей времени. В <strong>деле</strong> — коллекция начатого и почти-собранного. Триггер везде один — приближение принадлежности; реакция одна — движение прочь; а под ней желание, в котором ты редко себе признаёшься: чтобы кто-то удержал так, что уходить не понадобится.</p>
+
+  <p>Самое неприятное: ты сам подкрепляешь этот блок и называешь это свободой. Каждый новый старт даёт мгновенное облегчение и подтверждает историю «я свободный человек». Внутренняя выгода реальна — не чувствовать страх привязанности. Цена тоже реальна — жизнь из фрагментов, ни один из которых не дорос до своей полной высоты.</p>
+
+  <p>Чтобы блок начал отпускать, не нужна терапия длиной в жизнь. Нужен один поведенческий сдвиг: <strong>в точке, где обычно уходишь, — остаться ещё немного.</strong> Один проект довести до конца. Один разговор не свернуть. Полный список твоих тонких узлов я здесь не разворачиваю — их несколько, и какие активнее сейчас, видно только в живом диалоге. Здесь — главный.</p>
+
+  <div class="anchor">Ты бросаешь за шаг до финиша — и называешь это свободой.</div>
+
+  <p class="bridge">Блоки — слой. Все слои разворачиваются во времени, по крупным циклам жизни. Туда — дальше.</p>
+</section>
+
+<!-- VII · ЦИКЛЫ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава VII</span></div>
+  <h2>Жизненные циклы</h2>
+
+  <p>Твоя жизнь, Аблай, идёт четырьмя крупными волнами, у каждой своя задача, а между ними — точки перехода, где меняется сам тип запроса к тебе.</p>
+
+  <div class="figure">
+    <div class="cap-top">Линия жизни · четыре цикла</div>
+    <svg viewBox="0 0 660 150" role="img" aria-label="Линия жизни из четырёх сегментов с возрастными границами">
+      <line x1="30" y1="80" x2="630" y2="80" class="hair"/>
+      <rect x="30" y="72" width="150" height="16" rx="8" fill="#6b5aa8"/>
+      <rect x="180" y="72" width="150" height="16" rx="8" fill="url(#goldgrad)" filter="url(#glow)"/>
+      <rect x="330" y="72" width="150" height="16" rx="8" fill="#6b5aa8"/>
+      <rect x="480" y="72" width="150" height="16" rx="8" fill="#6b5aa8"/>
+      <rect x="180" y="66" width="150" height="28" rx="6" fill="none" stroke="#e2ba75" stroke-width="1.4"/>
+      <text x="255" y="58" text-anchor="middle" class="lbl-s">цикл-вызов</text>
+      <text x="30" y="118" text-anchor="middle" class="lbl-s">0</text><text x="180" y="118" text-anchor="middle" class="lbl-s">~29</text><text x="330" y="118" text-anchor="middle" class="lbl-s">~38</text><text x="480" y="118" text-anchor="middle" class="lbl-s">~47</text>
+      <text x="105" y="42" text-anchor="middle" class="lbl">Юность</text><text x="255" y="42" text-anchor="middle" class="lbl">Зрелость I</text><text x="405" y="42" text-anchor="middle" class="lbl">Зрелость II</text><text x="555" y="42" text-anchor="middle" class="lbl">Поздний путь</text>
+    </svg>
+    <div class="d-cap">Самый трудный твой цикл — тот, что учит оставаться.</div>
+  </div>
+
+  <p><strong>Юность — до примерно двадцати девяти.</strong> Твоя задача здесь была искать и пробовать, набирать опыт вширь, не выбирая пока одно. Ты и жил так: много начал, много бросил, много понял. Это не было ошибкой — это был метод. Проблема лишь в том, что метод «пробовать всё» удобно затягивается на всю жизнь, если его вовремя не сменить.</p>
+
+  <p><strong>Зрелость первая — примерно с двадцати девяти до тридцати восьми — твой главный цикл-вызов.</strong> Именно здесь жизнь начинает требовать не нового старта, а формы: довести, углубить, остаться. Всё, что раньше решалось сменой декораций, теперь так не решается. Это самый некомфортный для тебя период — и самый ценный: то, что ты построишь и не бросишь здесь, станет фундаментом всего позднего пути. Если сейчас ты в этом отрезке, Аблай, — это не кризис. Это твой экзамен на «остаться».</p>
+
+  <p><strong>Зрелость вторая — ближе к тридцати восьми–сорока семи.</strong> Здесь включается пересборка: приоритеты, которые казались твоими, оказываются чужими, и ты впервые выбираешь глубину сознательно, а не потому что заставили. А <strong>поздний путь</strong> — время, когда твоя природа раскрывается без сопротивления: ты становишься тем, кто ведёт других к их горизонту, наставником, для которого свобода и опора наконец перестали воевать.</p>
+
+  <div class="anchor">Самый трудный твой цикл — тот, что учит оставаться.</div>
+
+  <p class="bridge">Циклы — крупные волны. Внутри них есть точные возрастные точки, где что-то поворачивалось. Туда — дальше.</p>
+</section>
+
+<!-- VIII · ВОЗРАСТ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава VIII</span></div>
+  <h2>Возрастная карта</h2>
+
+  <div class="figure">
+    <div class="cap-top">Точки сдвига · ±2 года</div>
+    <svg viewBox="0 0 660 120" role="img" aria-label="Пунктирная линия времени с точками возрастных сдвигов">
+      <line x1="30" y1="60" x2="630" y2="60" class="hair" stroke-dasharray="3 5"/>
+      <circle cx="70" cy="60" r="6" class="dot-o"/><text x="70" y="88" text-anchor="middle" class="lbl-s">4–9</text>
+      <circle cx="180" cy="60" r="6" class="dot-o"/><text x="180" y="88" text-anchor="middle" class="lbl-s">12–16</text>
+      <circle cx="300" cy="60" r="6" class="dot-o"/><text x="300" y="88" text-anchor="middle" class="lbl-s">19–24</text>
+      <circle cx="410" cy="60" r="8" class="dot"/><text x="410" y="88" text-anchor="middle" class="lbl-s">28–30</text>
+      <circle cx="510" cy="60" r="6" class="dot-o"/><text x="510" y="88" text-anchor="middle" class="lbl-s">35–37</text>
+      <circle cx="610" cy="60" r="6" class="dot-o"/><text x="610" y="88" text-anchor="middle" class="lbl-s">42–44</text>
+      <text x="410" y="40" text-anchor="middle" class="lbl-s">перелом</text>
+    </svg>
+    <div class="d-cap">В 28–30 громче всего звучит то, от чего ты бежишь.</div>
+  </div>
+
+  <p>В <strong>детстве (4–9)</strong> что-то показало тебе, что опираться на других — небезопасно, надёжнее быть самому по себе. Так родилась твоя самодостаточность — не как выбор, а как защита. В <strong>подростковости (12–16)</strong> закрепилось главное: свобода и движение стали способом не чувствовать то, что чувствовать было слишком. Тогда же оформился твой страх — застрять, остановиться, оказаться «пойманным».</p>
+
+  <p>В <strong>молодости (19–24)</strong> ты впервые почувствовал свою силу входа: люди пошли за тобой, двери начали открываться. А <strong>28–30 — твой перелом.</strong> Здесь тот самый страх звучит громче всего: жизнь впервые просит выбрать и остаться, а всё в тебе кричит бежать. Именно на этой развилке решается, станешь ли ты человеком глубины или коллекционером начатого. Дальше, к <strong>35–37</strong>, приходит тихая пересборка — меняется тип задач, людей и ритма, и глубина впервые начинает притягивать сама, без принуждения. Следующая крупная сверка ждёт около <strong>42–44.</strong></p>
+
+  <div class="anchor">В тридцать ты впервые захочешь то, от чего всю жизнь бежал, — корни.</div>
+
+  <p class="bridge">Возрастная карта — это фон и прошлое. Ближайший конкретный год — 2026-й. Туда — дальше.</p>
+</section>
+
+<!-- IX · ПРОГНОЗ 2026 -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава IX</span></div>
+  <h2>Прогноз 2026</h2>
+
+  <p>2026-й для тебя, Аблай, — <strong>год сбора урожая.</strong> Не год ярких стартов, а год, где выигрывает то, что доведено до конца. Вселенная в этом году как будто специально ставит тебя в ситуацию, максимально неудобную твоему характеру: награда идёт за усидчивость, ответственность и завершение, а не за новый блеск.</p>
+
+  <div class="figure">
+    <div class="cap-top">Год по кварталам · развилка</div>
+    <svg viewBox="0 0 660 240" role="img" aria-label="Четыре квартала года и развилка на два пути">
+      <rect x="30" y="30" width="140" height="40" rx="8" fill="rgba(255,255,255,.05)" stroke="var(--line)"/>
+      <rect x="180" y="30" width="140" height="40" rx="8" fill="rgba(255,255,255,.05)" stroke="var(--line)"/>
+      <rect x="330" y="30" width="140" height="40" rx="8" fill="rgba(255,255,255,.05)" stroke="var(--line)"/>
+      <rect x="480" y="30" width="140" height="40" rx="8" fill="url(#goldgrad)" filter="url(#glow)"/>
+      <text x="100" y="55" text-anchor="middle" class="lbl">I · разгон</text>
+      <text x="250" y="55" text-anchor="middle" class="lbl">II · рост</text>
+      <text x="400" y="55" text-anchor="middle" class="lbl">III · выбор</text>
+      <text x="550" y="55" text-anchor="middle" class="lbl" fill="#22183a">IV · сбор</text>
+      <text x="550" y="22" text-anchor="middle" class="lbl-s">главное окно</text>
+      <line x1="330" y1="130" x2="440" y2="130" class="stroke" stroke-width="1.6" filter="url(#glow)"/>
+      <circle cx="440" cy="130" r="5" class="dot"/>
+      <path class="stroke" d="M440,130 C500,130 500,80 570,80"/>
+      <path class="stroke-soft" d="M440,130 C500,130 500,180 570,180"/>
+      <text x="330" y="122" class="lbl-s">точка выбора года</text>
+      <text x="584" y="84" class="lbl">довёл одно → рост</text>
+      <text x="584" y="184" class="lbl">начал три → повтор петли</text>
+    </svg>
+    <div class="d-cap">В этом году выигрывает не тот, кто начал, а тот, кто довёл.</div>
+  </div>
+
+  <p>По кварталам это выглядит так. <strong>Зима–весна</strong> — разгон: появляются возможности, хочется схватить сразу все, и главный соблазн — распылиться. <strong>Весна–лето</strong> — рост того, во что ты вложился всерьёз; здесь виден первый результат доведения. <strong>Лето–начало осени</strong> — точки выбора: именно в эти месяцы решения лучше принимать не на эмоции и не на чужом совете, а из тишины, где ты слышишь себя. <strong>Осень</strong> — твоё главное окно года: то, что доведено, приносит плоды, и это же задаёт тон всему 2027-му.</p>
+
+  <p>Главный риск года — ровно твой сценарий: в момент, когда останется скучное доведение, поддаться и уйти в новый блестящий старт. И тогда развилка проста. Либо ты <strong>доводишь одно</strong> — и год закрывается ростом и новым уровнем. Либо <strong>начинаешь три</strong> — и год повторяет старую петлю, только с более высокой ценой. Корень выбора один: выдержишь ли ты скуку финала.</p>
+
+  <div class="anchor">В этом году выигрывает не тот, кто начал, а тот, кто довёл.</div>
+
+  <p class="bridge">2026-й — один год. Куда ты идёшь в горизонте пяти лет — дальше.</p>
+</section>
+
+<!-- X · ГОРИЗОНТ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава X</span></div>
+  <h2>Горизонт пяти лет</h2>
+
+  <p>Если ничего не менять, Аблай, твоя текущая траектория ведёт к 2031-му вот куда: широкий, признанный, интересный человек с множеством начатого и без одного большого, доведённого до полной высоты дела. Уважаемый, свободный — и с тихим неназванным ощущением, что мог глубже. Это не плохая жизнь. Просто не твой максимум.</p>
+
+  <p>Чтобы открылся следующий уровень, должно сдвинуться одно внутреннее: <strong>когда ты перестанешь бежать от «застревания» — застревание окажется не клеткой, а корнем.</strong> Второй сдвиг — научиться считать доведение не потерей свободы, а её высшей формой: свободен не тот, кто может уйти отовсюду, а тот, кто выбрал остаться и потому построил что-то, что его держит.</p>
+
+  <p>Возможен и другой сценарий 2031-го — не хуже, просто иной: ты уходишь в чистое движение, серию ярких проектов и мест, оставаясь тем, кто открывает, но не остаётся. Твой союзник на этом горизонте — <strong>тёплый устойчивый человек рядом</strong>, чьё присутствие впервые сделает «остаться» не пугающим, а желанным. Твоё главное препятствие — знакомое с детства состояние, только в новой форме: тонкое беспокойство, что если пустить корни, потеряешь себя. Точные даты крупных поворотов я не разворачиваю — они зависят от твоих выборов в 2026-м и 2027-м. Здесь — структура.</p>
+
+  <div class="anchor">Через пять лет тебя определит не то, что ты начал, а то, что оставил стоять.</div>
+
+  <p class="bridge">Горизонт — это направление. А сама вещь, ради которой ты прошёл все слои, — в финале.</p>
+</section>
+
+<!-- XI · МИССИЯ -->
+<section class="chapter">
+  <div class="eyebrow"><span class="num">Глава XI</span></div>
+  <h2>Жизненная миссия и точка выбора</h2>
+
+  <p>Твоя миссия, Аблай, в одной строке: <strong>научиться оставаться — не переставая быть свободным.</strong> Пронести свою силу входа, свой охват, своё тепло не через десятки брошенных начал, а через одно-два дела и одну-две связи, доведённые до полной высоты. И всё, что было в деньгах, в любви, в теле, в деле, — это варианты одной и той же задачи. Не двенадцать проблем. Одна.</p>
+
+  <div class="figure">
+    <div class="cap-top">Карта слоёв · связки вокруг ядра</div>
+    <svg viewBox="0 0 560 520" role="img" aria-label="Карта из 12 слоёв вокруг ядра со связками">
+      <g class="stroke-soft">
+        <line x1="453" y1="130" x2="107" y2="390"/>
+        <line x1="107" y1="130" x2="453" y2="390"/>
+        <line x1="500" y1="260" x2="60" y2="260"/>
+      </g>
+      <g class="hair">
+        <line x1="280" y1="260" x2="280" y2="70"/><line x1="280" y1="260" x2="453" y2="130"/><line x1="280" y1="260" x2="500" y2="260"/><line x1="280" y1="260" x2="453" y2="390"/><line x1="280" y1="260" x2="280" y2="450"/><line x1="280" y1="260" x2="107" y2="390"/><line x1="280" y1="260" x2="60" y2="260"/><line x1="280" y1="260" x2="107" y2="130"/>
+      </g>
+      <circle cx="280" cy="260" r="54" fill="url(#core)" opacity=".9"/>
+      <circle cx="280" cy="260" r="52" fill="none" stroke="#e2ba75" stroke-width="1.4"/>
+      <text x="280" y="256" text-anchor="middle" class="lbl-serif" font-size="21" fill="#22183a">ядро</text>
+      <text x="280" y="278" text-anchor="middle" font-family="Manrope" font-size="9" letter-spacing="1.5" fill="#3a2c14">СВОБОДА ↔ ОПОРА</text>
+      <g>
+        <circle class="dot-o" cx="280" cy="70" r="7"/><text x="280" y="52" text-anchor="middle" class="lbl">Характер</text>
+        <circle class="dot-o" cx="453" cy="130" r="7"/><text x="470" y="120" class="lbl">Талант</text>
+        <circle class="dot" cx="500" cy="260" r="7"/><text x="512" y="264" class="lbl">Деньги</text>
+        <circle class="dot" cx="453" cy="390" r="7"/><text x="470" y="404" class="lbl">Любовь</text>
+        <circle class="dot-o" cx="280" cy="450" r="7"/><text x="280" y="472" text-anchor="middle" class="lbl">Реализация</text>
+        <circle class="dot" cx="107" cy="390" r="7"/><text x="92" y="404" text-anchor="end" class="lbl">Блоки</text>
+        <circle class="dot" cx="60" cy="260" r="7"/><text x="48" y="264" text-anchor="end" class="lbl">Тело</text>
+        <circle class="dot-o" cx="107" cy="130" r="7"/><text x="92" y="120" text-anchor="end" class="lbl">Циклы</text>
+      </g>
+    </svg>
+    <div class="d-cap">Деньги, любовь и дело — не три темы. Это один механизм в трёх костюмах.</div>
+  </div>
+
+  <p>Формула тебя в одну строку: <strong>исследователь с телом лидера, чей двигатель — вечное качание между простором и опорой, а задача — впервые выбрать опору, не потеряв простор.</strong> Прочти и проверь: это ведь ты целиком, а не «люди твоего типа».</p>
+
+  <p>Ты только что прошёл двенадцать слоёв своей жизни — и теперь видишь не только каждый по отдельности, но и как они держат друг друга. Это и есть карта. Карта — не будущее; это то, что уже работает в тебе прямо сейчас. Но с той минуты, как она названа словами, она перестаёт работать втёмную. Ты будешь раньше замечать петлю, раньше отличать интенсивность от близости, раньше ловить свою руку, тянущуюся к новому старту в момент, когда старое почти дошло. Не магия. Внимание.</p>
+
+  <p>И здесь твоя точка выбора, Аблай. Две версии тебя. В первой карта остаётся информацией: интересно, точно, «надо же» — и через полгода жизнь идёт по прежней колее, только теперь ты про неё знаешь. Во второй карта становится инструментом: ты берёшь один блок — тот, где обычно уходишь, — и в этом году остаёшься. Одно дело доводишь. Один раз не сбегаешь. И через год-два жизнь собирается так, как не собиралась за десять.</p>
+
+  <p>Что делать с картой — просто. На эту неделю: выбери одно начатое и доведи его до конца, особенно на скучных последних процентах. На этот месяц: в точке, где обычно создаёшь дистанцию — в деле или в близости, — останься на один шаг дольше, чем хочется. Всё. Без курсов и терапии. На уровне поведения.</p>
+
+  <div class="anchor">Ты пришёл научиться оставаться — не переставая быть свободным.</div>
+
+  <p>Ты увидел свою карту, Аблай. И теперь ты уже не сможешь снова уйти в новый блестящий старт, не заметив, что опять убегаешь от финиша. Это и есть то, что нельзя развидеть.</p>
+</section>
+
+<div class="end">Veluna · полный разбор</div>
+
+</div>
+</div>
+</body>
+</html>

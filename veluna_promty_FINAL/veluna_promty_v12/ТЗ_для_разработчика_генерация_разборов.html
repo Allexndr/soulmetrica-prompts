@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТЗ · Генерация разборов Veluna (LLM → JSON → шаблон)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0f1117;--panel:#171a22;--panel2:#1d212b;--ink:#e7e9ee;--ink-soft:#a4abb8;--ink-faint:#6b7280;
+    --acc:#7c9cff;--acc2:#59d499;--warn:#f0b429;--line:#2a2f3a;--code-bg:#0b0d12;
+    --gold:#e2ba75;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:300;font-size:16px;line-height:1.7}
+  .wrap{max-width:900px;margin:0 auto;padding:56px 32px 100px}
+  h1{font-weight:700;font-size:clamp(28px,4vw,40px);line-height:1.15;margin-bottom:10px;letter-spacing:-.02em}
+  h1 .sub{display:block;font-weight:400;font-size:17px;color:var(--ink-soft);margin-top:12px;letter-spacing:0}
+  h2{font-weight:600;font-size:24px;margin:52px 0 18px;padding-top:24px;border-top:1px solid var(--line);letter-spacing:-.01em}
+  h2 .n{color:var(--acc);font-weight:700;margin-right:10px}
+  h3{font-weight:600;font-size:18px;margin:28px 0 10px;color:var(--gold)}
+  p{margin-bottom:14px;color:var(--ink)}
+  strong{font-weight:600;color:#fff}
+  em{color:var(--acc2);font-style:normal;font-weight:500}
+  ul,ol{margin:0 0 16px 22px}
+  li{margin-bottom:7px}
+  code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:var(--panel2);padding:2px 6px;border-radius:4px;color:#cfe0ff}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:18px 20px;overflow-x:auto;margin:14px 0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6}
+  pre code{background:none;padding:0;color:#d6dbe6}
+  .tok-k{color:#c792ea}.tok-s{color:#c3e88d}.tok-c{color:#5f6b7d;font-style:italic}.tok-f{color:#82aaff}
+  .lead{font-size:18px;color:var(--ink-soft);background:var(--panel);border-left:3px solid var(--acc);padding:16px 20px;border-radius:0 8px 8px 0;margin:20px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:18px 0}
+  .flow{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0;align-items:stretch}
+  .flow .step{flex:1;min-width:200px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .flow .step .lbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc);margin-bottom:8px;font-weight:600}
+  .flow .arrow{align-self:center;color:var(--ink-faint);font-size:22px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--ink-soft);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  td code{font-size:12px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;letter-spacing:.03em}
+  .tag.llm{background:#2a2140;color:#c9a5ff}
+  .tag.code{background:#16302a;color:#7be2b4}
+  .note{background:#1a1510;border:1px solid #3a2f1a;border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px;color:#e8d3ab}
+  .note b{color:#f4d79a}
+  .files{font-size:14px}
+  .files td:first-child{white-space:nowrap}
+  @media print{body{background:#fff;color:#111}.wrap{max-width:100%}pre,.card,.flow .step,.note,.lead{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Генерация разборов Veluna
+    <span class="sub">Техническое задание для разработчика · как поставить генерацию «текст → дизайн → диаграммы» на поток через Claude API</span>
+  </h1>
+
+  <p class="lead"><strong>Главная идея архитектуры.</strong> Модель (LLM) НЕ рисует HTML руками — это ненадёжно на длинных разборах. Модель отдаёт <strong>только данные в строгом JSON</strong>, а готовый <strong>HTML-шаблон</strong> на нашей стороне детерминированно превращает эти данные в свёрстанную страницу с диаграммами. Дизайн тогда идентичен на каждом разборе, а не «как повезёт».</p>
+
+  <div class="flow">
+    <div class="step"><div class="lbl">Вход</div>Имя, дата, пол, время (опц.), место (опц.)</div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="lbl"><span class="tag llm">LLM</span> Пасс 1</div>Промт A07 + правило «отдай JSON». Claude возвращает структуру: обложка, 11 блоков, 10 значений сфер, границы циклов</div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="lbl"><span class="tag code">CODE</span> Пасс 2</div>Наш рендер подставляет JSON в HTML-шаблон + SVG-диаграммы. Готовый файл / PDF</div>
+  </div>
+
+  <h2><span class="n">1</span>Что уже готово (передать разработчику)</h2>
+  <p>Ты уже отправил промты. Вот полный список файлов и что каждый значит для разработчика:</p>
+  <table class="files">
+    <tr><th>Файл</th><th>Роль в системе</th></tr>
+    <tr><td><code>veluna_promty_v12/A07_full_reading_v12.md</code></td><td>Системный промт генерации разбора (движок, 9 систем, стоп-слова, дуга, блоки 1–12). <b>Ядро пасса 1.</b></td></tr>
+    <tr><td><code>veluna_promty_v12/A10_visual_layer.md</code></td><td>Правила визуального слоя: палитра, поведенческие диаграммы, запреты. Пояснительная записка к шаблону.</td></tr>
+    <tr><td><code>Veluna_разборы/Аблай_разбор_ПРЕМИУМ.html</code></td><td><b>Эталон HTML-шаблона</b> (тёмный космос + радар). Разработчик берёт его как готовую вёрстку и параметризует.</td></tr>
+    <tr><td><code>Veluna_разборы/ВИЗУАЛЬНЫЙ_КИТ_диаграммы.html</code></td><td>Библиотека всех SVG-диаграмм по отдельности — исходники компонентов.</td></tr>
+  </table>
+
+  <h2><span class="n">2</span>Модель и SDK</h2>
+  <ul>
+    <li><strong>Модель:</strong> <code>claude-opus-4-8</code> (лучшее качество текста; для экономии на объёме — <code>claude-sonnet-5</code>).</li>
+    <li><strong>SDK:</strong> официальный Anthropic — Python (<code>pip install anthropic</code>) или Node (<code>npm i @anthropic-ai/sdk</code>).</li>
+    <li><strong>Ключ:</strong> env-переменная <code>ANTHROPIC_API_KEY</code>. Никогда не хардкодить в коде.</li>
+    <li><strong>Structured output:</strong> через <code>client.messages.parse()</code> (Python + Pydantic) или <code>output_config.format</code> — гарантирует валидный JSON по нашей схеме.</li>
+    <li><strong>Стриминг обязателен:</strong> разбор длинный (5–7к слов). Ставим <code>max_tokens=32000+</code> и используем стрим, иначе запрос упрётся в таймаут.</li>
+    <li><strong>Кэш-экономия:</strong> системный промт A07 большой и одинаковый — вешаем на него <code>cache_control: ephemeral</code>. Каждый следующий разбор дешевле на ~90% по системной части.</li>
+  </ul>
+
+  <h2><span class="n">3</span>JSON-контракт (что модель обязана вернуть)</h2>
+  <p>Это единственный «интерфейс» между LLM и вёрсткой. Разработчик валидирует ответ по этой схеме; вёрстка читает только эти поля.</p>
+<pre><code><span class="tok-c"># схема ответа (упрощённо, JSON Schema / Pydantic)</span>
+{
+  <span class="tok-s">"cover"</span>: {
+    <span class="tok-s">"title"</span>: <span class="tok-s">"Полный разбор личности и жизни"</span>,
+    <span class="tok-s">"who"</span>:   <span class="tok-s">"для Аблая"</span>,
+    <span class="tok-s">"subtitle"</span>: <span class="tok-s">"…до 140 символов, про ядро характера…"</span>,
+    <span class="tok-s">"epigraph"</span>: <span class="tok-s">"…точная фраза в кавычках…"</span>
+  },
+
+  <span class="tok-c">// радар «10 сфер» — значения 0..10, порядок фиксирован</span>
+  <span class="tok-s">"spheres"</span>: [
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"growth"</span>,       <span class="tok-s">"label"</span>:<span class="tok-s">"Личностный рост"</span>, <span class="tok-s">"value"</span>:9},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"health"</span>,       <span class="tok-s">"label"</span>:<span class="tok-s">"Здоровье"</span>,        <span class="tok-s">"value"</span>:6},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"finance"</span>,      <span class="tok-s">"label"</span>:<span class="tok-s">"Финансы"</span>,         <span class="tok-s">"value"</span>:6},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"career"</span>,       <span class="tok-s">"label"</span>:<span class="tok-s">"Карьера и дело"</span>,  <span class="tok-s">"value"</span>:7},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"relations"</span>,    <span class="tok-s">"label"</span>:<span class="tok-s">"Отношения"</span>,       <span class="tok-s">"value"</span>:5},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"circle"</span>,       <span class="tok-s">"label"</span>:<span class="tok-s">"Окружение"</span>,       <span class="tok-s">"value"</span>:8},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"creativity"</span>,   <span class="tok-s">"label"</span>:<span class="tok-s">"Творчество"</span>,      <span class="tok-s">"value"</span>:8},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"emotions"</span>,     <span class="tok-s">"label"</span>:<span class="tok-s">"Эмоции"</span>,          <span class="tok-s">"value"</span>:5},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"home"</span>,         <span class="tok-s">"label"</span>:<span class="tok-s">"Дом и комфорт"</span>,   <span class="tok-s">"value"</span>:4},
+    {<span class="tok-s">"key"</span>:<span class="tok-s">"spirit"</span>,       <span class="tok-s">"label"</span>:<span class="tok-s">"Духовность"</span>,      <span class="tok-s">"value"</span>:8}
+  ],
+
+  <span class="tok-c">// возрастные опоры для диаграмм (числа — можно; это не «магия»)</span>
+  <span class="tok-s">"cycles"</span>: {<span class="tok-s">"b1"</span>:29, <span class="tok-s">"b2"</span>:38, <span class="tok-s">"b3"</span>:47, <span class="tok-s">"challenge"</span>:2},   <span class="tok-c">// границы 4 циклов + № цикла-вызова</span>
+  <span class="tok-s">"agePoints"</span>: [<span class="tok-s">"4–9"</span>,<span class="tok-s">"12–16"</span>,<span class="tok-s">"19–24"</span>,<span class="tok-s">"28–30"</span>,<span class="tok-s">"35–37"</span>,<span class="tok-s">"42–44"</span>],
+  <span class="tok-s">"peakAge"</span>: <span class="tok-s">"28–30"</span>,
+
+  <span class="tok-c">// 11 глав. diagram = какой SVG вставить (или null)</span>
+  <span class="tok-s">"blocks"</span>: [
+    {
+      <span class="tok-s">"num"</span>:<span class="tok-s">"I"</span>, <span class="tok-s">"eyebrow"</span>:<span class="tok-s">"Глава I"</span>, <span class="tok-s">"title"</span>:<span class="tok-s">"Введение"</span>,
+      <span class="tok-s">"paragraphs"</span>: [<span class="tok-s">"абзац…"</span>, <span class="tok-s">"абзац…"</span>],
+      <span class="tok-s">"lead"</span>: <span class="tok-s">"курсивная строка-обещание или null"</span>,
+      <span class="tok-s">"anchor"</span>: <span class="tok-s">"якорная фраза или null"</span>,
+      <span class="tok-s">"bridge"</span>: <span class="tok-s">"мостик к след. блоку или null"</span>,
+      <span class="tok-s">"diagram"</span>: <span class="tok-s">"arc"</span>          <span class="tok-c">// см. таблицу в п.5</span>
+    }
+    <span class="tok-c">// … блоки II…XI</span>
+  ]
+}</code></pre>
+  <div class="note"><b>Важно про данные:</b> место рождения опционально. Если его нет — модель по правилу A07 <b>не считает</b> Асцендент и «дизайн человека» и не выдумывает их. На JSON это не влияет по форме, но текст будет честным. Числа возраста/годов в диаграммах — разрешены; «голые магические числа» систем (проценты стихий, номер типа) — запрещены и в JSON их нет.</div>
+
+  <h2><span class="n">3.1</span>Правило-обёртка к промту (добавить к A07)</h2>
+  <p>A07 сейчас пишет текст. Для пасса-1 добавляем в конец системного промта короткую инструкцию вывода:</p>
+<pre><code>Сгенерируй ПОЛНЫЙ разбор и верни его СТРОГО одним JSON-объектом
+по заданной схеме. Никакого текста вне JSON. Правила разбора (стоп-слова,
+скрытие систем, дуга, якорные фразы, поведенческие формулировки) —
+соблюдать внутри полей paragraphs/anchor/bridge. Значения spheres — целые
+0..10, отражают силу сфер по тексту. cycles/agePoints — из расчётов.</code></pre>
+
+  <h2><span class="n">4</span>Пример кода (Python)</h2>
+<pre><code><span class="tok-k">import</span> anthropic, json
+<span class="tok-k">from</span> pydantic <span class="tok-k">import</span> BaseModel
+
+<span class="tok-c"># 1) описываем схему (Pydantic) — Sphere, Block, Reading …</span>
+<span class="tok-k">class</span> <span class="tok-f">Reading</span>(BaseModel):
+    cover: dict; spheres: list; cycles: dict
+    agePoints: list; peakAge: str; blocks: list
+
+client = anthropic.<span class="tok-f">Anthropic</span>()   <span class="tok-c"># ключ из ANTHROPIC_API_KEY</span>
+
+SYSTEM = <span class="tok-f">open</span>(<span class="tok-s">"A07_full_reading_v12.md"</span>, encoding=<span class="tok-s">"utf-8"</span>).<span class="tok-f">read</span>() + WRAPPER
+
+<span class="tok-c"># 2) генерация → строгий JSON (стрим, т.к. ответ большой)</span>
+<span class="tok-k">with</span> client.messages.<span class="tok-f">stream</span>(
+    model=<span class="tok-s">"claude-opus-4-8"</span>,
+    max_tokens=<span class="tok-s">48000</span>,
+    thinking={<span class="tok-s">"type"</span>:<span class="tok-s">"adaptive"</span>},
+    system=[{<span class="tok-s">"type"</span>:<span class="tok-s">"text"</span>,<span class="tok-s">"text"</span>:SYSTEM,
+             <span class="tok-s">"cache_control"</span>:{<span class="tok-s">"type"</span>:<span class="tok-s">"ephemeral"</span>}}],
+    output_config={<span class="tok-s">"format"</span>:{<span class="tok-s">"type"</span>:<span class="tok-s">"json_schema"</span>,<span class="tok-s">"schema"</span>:Reading.model_json_schema()}},
+    messages=[{<span class="tok-s">"role"</span>:<span class="tok-s">"user"</span>,
+        <span class="tok-s">"content"</span>:<span class="tok-s">"Имя: Аблай · дата: 14.02.1998 · пол: м · время: 17:00 · место: —"</span>}],
+) <span class="tok-k">as</span> stream:
+    msg = stream.<span class="tok-f">get_final_message</span>()
+
+data = json.<span class="tok-f">loads</span>(<span class="tok-f">next</span>(b.text <span class="tok-k">for</span> b <span class="tok-k">in</span> msg.content <span class="tok-k">if</span> b.type==<span class="tok-s">"text"</span>))
+
+<span class="tok-c"># 3) рендер: подставляем data в HTML-шаблон + SVG (наш код, без LLM)</span>
+html = <span class="tok-f">render_template</span>(data)          <span class="tok-c"># см. п.5</span>
+<span class="tok-f">open</span>(<span class="tok-s">"razbor.html"</span>,<span class="tok-s">"w"</span>,encoding=<span class="tok-s">"utf-8"</span>).<span class="tok-f">write</span>(html)</code></pre>
+  <p><code>render_template</code> — обычная шаблонизация (Jinja2 / string.Template / JS-темплейт). Берёт <code>Аблай_разбор_ПРЕМИУМ.html</code>, оставляет CSS/структуру как есть, а тексты и числа подставляет из <code>data</code>.</p>
+
+  <h2><span class="n">5</span>Маппинг «блок → диаграмма» (для рендера)</h2>
+  <p>Все SVG уже готовы в эталонном файле. Рендер по полю <code>diagram</code> вставляет нужный компонент и заполняет его числами из JSON. Не более 1 диаграммы на блок.</p>
+  <table>
+    <tr><th>Блок</th><th><code>diagram</code></th><th>Данные из JSON</th></tr>
+    <tr><td>Введение</td><td><code>arc</code></td><td>—(статичная дуга)</td></tr>
+    <tr><td>Карта сфер</td><td><code>radar</code> ⭐</td><td><code>spheres[].value</code> → координаты полигона</td></tr>
+    <tr><td>Ядро</td><td><code>triad</code></td><td>—</td></tr>
+    <tr><td>Таланты</td><td><code>forces</code></td><td>ширины 3 полос (можно фикс.)</td></tr>
+    <tr><td>Деньги</td><td><code>money</code></td><td>окна года (весна/осень/лето)</td></tr>
+    <tr><td>Блоки</td><td><code>axis</code></td><td>—</td></tr>
+    <tr><td>Циклы</td><td><code>life</code></td><td><code>cycles.b1/b2/b3</code>, <code>challenge</code></td></tr>
+    <tr><td>Возраст</td><td><code>ages</code></td><td><code>agePoints[]</code>, <code>peakAge</code></td></tr>
+    <tr><td>Прогноз</td><td><code>year</code></td><td>кварталы + развилка</td></tr>
+    <tr><td>Горизонт</td><td><code>null</code></td><td>без диаграммы</td></tr>
+    <tr><td>Миссия</td><td><code>map</code> ⭐</td><td>карта 12 слоёв (статичная)</td></tr>
+  </table>
+  <div class="note">⭐ <b>Радар</b> — единственная диаграмма с реальным пересчётом координат. Формула вершины: центр (250,250), радиус <code>r = value/10 × 200</code>, угол <code>-90° + i×36°</code>. Код-генератор <code>points</code> — 8 строк; можно вынести в утилиту <code>radarPolygon(values)</code>.</div>
+
+  <h2><span class="n">6</span>Опция: генерация по главам (если один запрос тяжёл)</h2>
+  <p>Если разбор целиком в одном запросе получается слишком большим — генерировать блоки пачками (например: обложка+сферы+ядро → таланты+деньги+любовь → блоки+циклы → возраст+прогноз+горизонт+миссия), сохраняя историю диалога, затем собрать общий JSON. Системный промт (A07) при этом кэшируется и переиспользуется — дёшево.</p>
+
+  <h2><span class="n">7</span>QA-чек перед отдачей клиенту</h2>
+  <ul>
+    <li>JSON проходит валидацию схемы; 11 блоков, 10 сфер, значения 0..10.</li>
+    <li>В текстах нет стоп-слов и названий систем (простой словарный фильтр по списку из A07).</li>
+    <li>Радар присутствует; карта 12 слоёв присутствует; ≤1 диаграммы на блок.</li>
+    <li>Файл открывается офлайн; печать в PDF (обложка на страницу, главы с новой страницы).</li>
+    <li>Мобилка: колонка не ломается, SVG тянутся по ширине (<code>viewBox</code> + <code>width:100%</code>).</li>
+    <li>Нет места рождения → в тексте нет выдуманных Асцендента/«дизайна» (спот-чек).</li>
+  </ul>
+
+  <div class="card" style="margin-top:36px">
+    <h3 style="margin-top:0">Короткое резюме для разработчика</h3>
+    <p style="margin-bottom:0">Есть промт <code>A07</code> (генерация) и эталонный HTML <code>Аблай_разбор_ПРЕМИУМ.html</code> (вёрстка). Задача: (1) обернуть A07 инструкцией «верни JSON по схеме из п.3», (2) вызвать <code>claude-opus-4-8</code> со structured output + стрим + кэш системного промта, (3) написать <code>render_template(data)</code>, который подставляет JSON в шаблон и заполняет радар по формуле из п.5. LLM отвечает за содержание, шаблон — за дизайн. Диаграммы уже нарисованы.</p>
+  </div>
+
+  <p style="color:var(--ink-faint);font-size:13px;margin-top:40px;text-align:center">Veluna · внутренний технический документ</p>
+
+</div>
+</body>
+</html>
