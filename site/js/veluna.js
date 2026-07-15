@@ -228,7 +228,9 @@
   var orderTotalEl = document.getElementById('orderTotal');
   var orderCart = document.getElementById('orderCart');
   var currentProduct = '';
-  var basePrice = 15000;
+  // TEMP тест оплаты: минимум Unicorn = 30 ₸. Вернуть — поставить null.
+  var TEST_PAY_SUM = 30;
+  var basePrice = TEST_PAY_SUM != null ? TEST_PAY_SUM : 15000;
   var addons = {};
 
   var PRODUCT_PRICES = {
@@ -248,6 +250,7 @@
   }
 
   function resolveBasePrice(name) {
+    if (TEST_PAY_SUM != null) return TEST_PAY_SUM;
     if (PRODUCT_PRICES[name] != null) return PRODUCT_PRICES[name];
     if (/целиком|полный/i.test(name)) return 15000;
     if (/совместим/i.test(name)) return 3990;
@@ -285,15 +288,16 @@
   function updateOrderTotal() {
     var addonSum = 0;
     Object.keys(addons).forEach(function (k) { addonSum += addons[k]; });
-    var total = basePrice + addonSum;
-    /* Скидка −67% только на основной продукт: было = base×3 + аддоны без скидки */
-    var was = basePrice * 3 + addonSum;
-    if (orderBasePriceEl) orderBasePriceEl.textContent = formatTenge(basePrice);
+    var total = TEST_PAY_SUM != null ? TEST_PAY_SUM : basePrice + addonSum;
+    var was = (TEST_PAY_SUM != null ? TEST_PAY_SUM : basePrice) * 3 + (TEST_PAY_SUM != null ? 0 : addonSum);
+    if (orderBasePriceEl) orderBasePriceEl.textContent = formatTenge(TEST_PAY_SUM != null ? TEST_PAY_SUM : basePrice);
     if (orderTotalEl) orderTotalEl.textContent = formatTenge(total);
     if (orderOldPriceEl) {
       orderOldPriceEl.textContent = formatTenge(was);
       orderOldPriceEl.hidden = was <= total;
     }
+    var dealPrice = document.getElementById('orderDealPrice');
+    if (dealPrice) dealPrice.textContent = formatTenge(total);
   }
 
   function cartLabel(productName) {
@@ -808,6 +812,7 @@
       e.preventDefault();
       var total = basePrice;
       Object.keys(addons).forEach(function (k) { total += addons[k]; });
+      if (TEST_PAY_SUM != null) total = TEST_PAY_SUM;
       var data = {
         product: currentProduct,
         addons: Object.keys(addons),

@@ -26,6 +26,9 @@ module.exports = async function handler(req, res) {
   try {
     var body = await sec.readJson(req);
     var sum = Math.round(Number(body.sum || body.total || 0));
+    // TEMP тест: минимум Unicorn = 30 ₸. Вернуть: удалить блок / поставить null.
+    var TEST_PAY_SUM = 30;
+    if (TEST_PAY_SUM != null) sum = TEST_PAY_SUM;
     var phone = contact.normalizePhone(body.phone || '');
     var tgUser = contact.parseTelegramUsername(body.contact || body.telegram || '');
     var product = String(body.product || 'Разбор').slice(0, 60);
@@ -38,7 +41,8 @@ module.exports = async function handler(req, res) {
       telegram: tgUser ? '@' + tgUser : null,
       name: body.name || null,
       ip: ip,
-      hasAddons: Array.isArray(body.addons) && body.addons.length > 0
+      hasAddons: Array.isArray(body.addons) && body.addons.length > 0,
+      testPay: TEST_PAY_SUM != null
     });
 
     if (!sum || sum < 1) {
