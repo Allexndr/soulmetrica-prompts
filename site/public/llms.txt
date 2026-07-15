@@ -1,0 +1,50 @@
+# SoulMetrica
+
+> Нумерологические и персональные разборы личности. Сайт: https://soulmetrica.com · Бот: https://t.me/soulmetrica_bot
+
+## What this site is
+
+SoulMetrica — сервис персональных разборов по дате рождения: полный разбор личности, сценарий любви, денежный код, прогноз, совместимость. Оплата через Unicorn; доставка разбора в Telegram.
+
+Юрлицо: ТОО «НЕЙРОКИДС», БИН 260540017173, Алматы, Казахстан.
+
+## Key pages
+
+- [Главная](https://soulmetrica.com/): продукты, квиз, оформление заказа
+- [Оферта](https://soulmetrica.com/offer): публичная оферта
+- [Конфиденциальность](https://soulmetrica.com/privacy): политика ПДн
+- [API docs](https://soulmetrica.com/docs/api): документация публичных и агентных точек
+- [auth.md](https://soulmetrica.com/auth.md): как агенты и пользователи аутентифицируются
+- [OpenAPI](https://soulmetrica.com/openapi.json): machine-readable API
+- [llms-full.txt](https://soulmetrica.com/llms-full.txt): расширенное описание для агентов
+
+## Products (names + intent)
+
+| Product | Purpose |
+|--------|---------|
+| Полный разбор | 12 глав: характер, деньги, любовь, блоки, прогноз 2026, горизонт 5 лет |
+| Сценарий любви | Повторяющиеся паттерны в отношениях |
+| Денежный код | Денежный канал и блоки |
+| Прогноз 2026 | Годовой прогноз по кварталам |
+| Реализация | Сила и путь реализации |
+| Скрытые блоки | Что тормозит |
+| Детский разбор | Характер и таланты ребёнка по дате |
+| Совместимость пары | Две даты |
+| Число судьбы | Базовый слой личности |
+
+## How to order (agents / humans)
+
+1. Открыть https://soulmetrica.com/ и выбрать продукт (или WebMCP tool `open_order`).
+2. Указать имя, дату рождения, телефон, Telegram @ник.
+3. Оплатить через Unicorn (тест-режим может быть 30 ₸).
+4. После оплаты — разбор в @soulmetrica_bot и кабинете /profile (после Telegram login).
+
+## Crawl / AI preferences
+
+See `/robots.txt`: search=yes, ai-train=no, ai-input=yes. Private surfaces `/admin`, `/api/`, `/profile`, `/reading` are disallowed.
+
+## Contact
+
+- Telegram: https://t.me/soulmetrica_bot
+- Phone: +7 (707) 932 21 93
+- Site: https://soulmetrica.com

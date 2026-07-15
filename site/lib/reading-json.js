@@ -5,7 +5,13 @@ var format = require('./format-reading');
 var chartCalc = require('./chart-calc');
 var diagramKit = require('./diagram-kit');
 
-var ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+var ROMAN = [
+  '',
+  'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
+  'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX',
+  'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX',
+  'XXXI', 'XXXII', 'XXXIII', 'XXXIV', 'XXXV', 'XXXVI', 'XXXVII', 'XXXVIII', 'XXXIX', 'XL'
+];
 
 var JSON_OUTPUT_WRAPPER =
   '\n\n---\n\nСгенерируй ПОЛНЫЙ разбор и верни его СТРОГО одним JSON-объектом по схеме: ' +

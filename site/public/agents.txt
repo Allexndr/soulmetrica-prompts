@@ -1,0 +1,11 @@
+# agents.txt — SoulMetrica
+# https://agents-txt.com/
+
+Contact: https://t.me/soulmetrica_bot
+Policy: https://soulmetrica.com/privacy
+llms: https://soulmetrica.com/llms.txt
+API-Catalog: https://soulmetrica.com/.well-known/api-catalog
+MCP: https://soulmetrica.com/api/mcp
+WebMCP: https://soulmetrica.com/
+Auth: https://soulmetrica.com/auth.md
+Sitemap: https://soulmetrica.com/sitemap.xml

@@ -50,7 +50,7 @@ function drawFooter(doc, pageNum, totalPages) {
     doc.strokeColor(COLORS.line).lineWidth(0.7);
     doc.moveTo(48, y - 10).lineTo(doc.page.width - 48, y - 10).stroke();
     doc.fillColor(COLORS.faint).font('Body').fontSize(8);
-    doc.text('YourVeluna', 48, y, { width: 160, lineBreak: false });
+    doc.text('SoulMetrica', 48, y, { width: 160, lineBreak: false });
     doc.text(String(pageNum) + ' / ' + String(totalPages), doc.page.width - 48 - 72, y, {
       width: 72,
       align: 'right',
@@ -461,8 +461,8 @@ function buildReadingPdf(reading, order) {
         autoFirstPage: true,
         margins: { top: 56, bottom: 64, left: 48, right: 48 },
         info: {
-          Title: reading.title || 'Разбор YourVeluna',
-          Author: 'YourVeluna',
+          Title: reading.title || 'Разбор SoulMetrica',
+          Author: 'SoulMetrica',
           Subject: reading.order_id || ''
         }
       });
@@ -522,7 +522,7 @@ function buildReadingPdf(reading, order) {
       // Cover — clean paper, no muddy overlays
       paintBg(doc, COLORS.warm);
       doc.fillOpacity(1).fillColor(COLORS.gold).font('Display').fontSize(11);
-      doc.text('YOURVELUNA', 48, 130, {
+      doc.text('SOULMETRICA', 48, 130, {
         align: 'center',
         width: doc.page.width - 96,
         characterSpacing: 4

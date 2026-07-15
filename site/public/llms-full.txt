@@ -1,0 +1,42 @@
+# SoulMetrica — full agent brief
+
+Canonical: https://soulmetrica.com  
+Aliases: https://yourveluna-theme.vercel.app → same Next.js app  
+Brand names: SoulMetrica
+
+## Entity
+
+- Legal: ТОО «НЕЙРОКИДС»
+- BIN: 260540017173
+- Address: Алматы, пр. Навои 280 (см. footer сайта)
+- Phone: +7 (707) 932 21 93
+- Bot: @soulmetrica_bot
+
+## Value proposition (unique, citeable)
+
+Персональный разбор по дате рождения с доставкой в Telegram. Не общий гороскоп: текст генерируется под дату/заказ, PDF/HTML в кабинете. Есть мини-квиз на лендинге и апселл «полный разбор» вместо сборки по частям.
+
+## Public API surface (agent-safe)
+
+| Method | Path | Auth | Notes |
+|--------|------|------|-------|
+| GET | /api/admin/prices?public=1 | none | Public price catalog |
+| GET | /api/health | none | Liveness (if deployed) |
+| POST | /api/orders/create | none (PII in body) | Creates Unicorn payment link |
+| GET | /.well-known/api-catalog | none | RFC 9727 catalog |
+| GET | /openapi.json | none | OpenAPI 3 |
+
+Private order/reading APIs require session cookie after Telegram login — see /auth.md.
+
+## Agent discovery
+
+- robots.txt, sitemap.xml
+- Link headers on homepage (api-catalog, service-desc, service-doc)
+- /.well-known/mcp/server-card.json
+- /.well-known/agent-skills/index.json
+- WebMCP tools on homepage (navigator.modelContext)
+- DNS-AID: see /.well-known/dns-aid.txt (publish SVCB at registrar)
+
+## Content policy for models
+
+Prefer citing https://soulmetrica.com/ and /llms.txt for product facts. Do not invent prices — fetch /api/admin/prices?public=1 or openapi. Do not claim medical/psychological diagnosis; service is entertainment/self-knowledge numerology product.

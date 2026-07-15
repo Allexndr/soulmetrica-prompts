@@ -6,7 +6,13 @@ var diagrams = require('./diagrams');
 var readingJson = require('./reading-json');
 var renderPremium = require('./render-premium');
 
-var ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'];
+var ROMAN = [
+  '',
+  'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
+  'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX',
+  'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX',
+  'XXXI', 'XXXII', 'XXXIII', 'XXXIV', 'XXXV', 'XXXVI', 'XXXVII', 'XXXVIII', 'XXXIX', 'XL'
+];
 
 function esc(s) {
   return format.escapeHtml(s);
@@ -250,7 +256,7 @@ function buildReadingHtml(reading, order) {
     css() +
     '</style></head><body>' +
     '<section class="cover">' +
-    '<div class="mark">YourVeluna</div>' +
+    '<div class="mark">SoulMetrica</div>' +
     '<h1>' +
     esc(title).replace(/\s+и\s+/, '<br>и ') +
     '</h1>' +
@@ -267,7 +273,7 @@ function buildReadingHtml(reading, order) {
     opener +
     chaptersHtml +
     '</div>' +
-    '<div class="end">YourVeluna</div>' +
+    '<div class="end">SoulMetrica</div>' +
     '</body></html>'
   );
 }

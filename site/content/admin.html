@@ -1,0 +1,127 @@
+<div id="loginStage" class="boot">
+    <form class="login" id="loginForm">
+      <h1>Admin OS</h1>
+      <p>Супер-админка SoulMetrica. Только для роли admin.</p>
+      <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="username"></label>
+      <label class="field"><span>Пароль</span><input type="password" name="password" required autocomplete="current-password" minlength="10"></label>
+      <button class="btn btn--solid" type="submit" style="width:100%">Войти</button>
+      <p class="msg" id="loginMsg"></p>
+    </form>
+  </div>
+
+  <div id="appStage" class="shell hidden">
+    <aside class="side">
+      <div class="brand">SoulMetrica Admin</div>
+      <button type="button" class="nav-btn is-on" data-view="home">Обзор</button>
+      <button type="button" class="nav-btn" data-view="orders">Платежи</button>
+      <button type="button" class="nav-btn" data-view="prices">Цены</button>
+      <button type="button" class="nav-btn" data-view="users">Клиенты</button>
+      <button type="button" class="nav-btn" data-view="readings">Разборы</button>
+      <button type="button" class="nav-btn" data-view="settings">Настройки</button>
+      <button type="button" class="nav-btn" data-view="audit">Аудит</button>
+      <div class="side__foot">
+        <div id="adminName">—</div>
+        <button type="button" class="btn" id="logoutBtn" style="margin-top:8px;width:100%">Выйти</button>
+      </div>
+    </aside>
+    <main class="main">
+      <section class="view is-on" id="view-home">
+        <div class="top"><h1>Панель управления</h1></div>
+        <div class="cards">
+          <div class="card"><b>Выручка (paid)</b><strong id="statRevenue">0</strong></div>
+          <div class="card"><b>Заказы</b><strong id="statOrders">0</strong></div>
+          <div class="card"><b>Клиенты</b><strong id="statUsers">0</strong></div>
+          <div class="card"><b>Ready разборы</b><strong id="statReady">0</strong></div>
+        </div>
+        <div class="panel"><div class="panel__h"><h2>Последние заказы</h2></div><div class="panel__b" id="homeOrders"></div></div>
+      </section>
+
+      <section class="view" id="view-orders">
+        <div class="top"><h1>Платежи и заказы</h1>
+          <div class="toolbar">
+            <select id="orderStatusFilter"><option value="">Все статусы</option><option>pending</option><option>paid</option><option>cancelled</option><option>failed</option></select>
+            <button type="button" class="btn" id="reloadOrders">Обновить</button>
+          </div>
+        </div>
+        <div class="split">
+          <div class="panel"><div class="panel__h"><h2>Список</h2></div><div class="panel__b" id="ordersList"></div></div>
+          <div class="panel"><div class="panel__h"><h2>Карточка заказа</h2></div><div class="panel__b" id="orderDetail"><p class="msg">Выбери заказ слева</p></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-prices">
+        <div class="top"><h1>Цены услуг</h1><button type="button" class="btn" id="reloadPrices">Обновить</button></div>
+        <div class="panel"><div class="panel__b" id="pricesList"></div></div>
+      </section>
+
+      <section class="view" id="view-users">
+        <div class="top"><h1>Клиенты</h1>
+          <div class="toolbar">
+            <input id="userQuery" placeholder="Поиск email / @tg / телефон" style="min-width:220px">
+            <button type="button" class="btn" id="reloadUsers">Найти</button>
+          </div>
+        </div>
+        <div class="split">
+          <div class="panel"><div class="panel__b" id="usersList"></div></div>
+          <div class="panel"><div class="panel__h"><h2>Профиль</h2></div><div class="panel__b" id="userDetail"><p class="msg">Выбери клиента</p></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-readings">
+        <div class="top"><h1>Разборы</h1>
+          <div class="toolbar">
+            <select id="readingStatusFilter"><option value="">Все</option><option>ready</option><option>generating</option><option>queued</option><option>failed</option></select>
+            <button type="button" class="btn" id="reloadReadings">Обновить</button>
+          </div>
+        </div>
+        <div class="panel"><div class="panel__b" id="readingsList"></div></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="top"><h1>Настройки оплаты</h1></div>
+        <div class="panel"><div class="panel__b">
+          <label class="field"><span>Test mode</span>
+            <select id="setTestMode"><option value="true">Включён</option><option value="false">Выключен</option></select>
+          </label>
+          <label class="field"><span>Force test sum (₸), пусто = каталог</span>
+            <input id="setForceSum" type="number" min="30" step="1" placeholder="например 30">
+          </label>
+          <label class="field"><span>Провайдер по умолчанию</span>
+            <select id="setPayProvider">
+              <option value="unicorn">Unicorn (карта/ссылка)</option>
+              <option value="aipay">AI Pay / Kaspi</option>
+              <option value="both">Оба (клиент выбирает, приоритет AI Pay)</option>
+            </select>
+          </label>
+          <label class="field"><span>Unicorn включён</span>
+            <select id="setUnicornOn"><option value="true">Да</option><option value="false">Нет</option></select>
+          </label>
+          <hr style="border:0;border-top:1px solid rgba(0,0,0,.08);margin:16px 0">
+          <h3 style="margin:0 0 10px;font-size:15px">AI Pay (Paylab / Kaspi)</h3>
+          <label class="field"><span>AI Pay включён</span>
+            <select id="setAipayOn"><option value="false">Нет</option><option value="true">Да</option></select>
+          </label>
+          <label class="field"><span>Base URL</span>
+            <input id="setAipayBase" type="url" placeholder="https://dev.paylab.kz/api/v2">
+          </label>
+          <label class="field"><span>Company ID</span>
+            <input id="setAipayCompany" type="text" placeholder="uuid компании">
+          </label>
+          <label class="field"><span>POS ID</span>
+            <input id="setAipayPos" type="text" placeholder="uuid POS терминала">
+            <small id="aipayPosHint" class="msg"></small>
+          </label>
+          <p class="msg">API-ключ только в Vercel env (<code>AIPAY_API_KEY</code>), в админке не хранится.</p>
+          <p class="msg">Webhook URL для кабинета AI Pay: <code id="aipayWebhookUrl">/api/aipay-webhook</code></p>
+          <button type="button" class="btn btn--solid" id="saveSettings">Сохранить</button>
+          <p class="msg" id="settingsMsg"></p>
+        </div></div>
+      </section>
+
+      <section class="view" id="view-audit">
+        <div class="top"><h1>Аудит действий</h1><button type="button" class="btn" id="reloadAudit">Обновить</button></div>
+        <div class="panel"><div class="panel__b" id="auditList"></div></div>
+      </section>
+      <p class="msg" id="appMsg"></p>
+    </main>
+  </div>

@@ -13,21 +13,31 @@ function siteOrigin() {
   }
 }
 
-function setSecurityHeaders(res) {
+function setSecurityHeaders(res, opts) {
+  opts = opts || {};
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Frame-Options', opts.allowFrame ? 'SAMEORIGIN' : 'SAMEORIGIN');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader(
     'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.telegram.org; frame-src https://oauth.telegram.org;"
+    opts.allowFrame
+      ? "default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://api.telegram.org; frame-ancestors 'self'; frame-src 'self' https://oauth.telegram.org blob:;"
+      : "default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.telegram.org; frame-ancestors 'self'; frame-src 'self' https://oauth.telegram.org blob:;"
   );
   res.setHeader('Permissions-Policy', 'payment=(), geolocation=()');
 }
 
 function setCors(req, res) {
   var origin = (req.headers.origin || '').toString();
-  var allowed = siteOrigin();
-  if (origin === allowed || origin === 'http://localhost:5173') {
+  var allowed = {
+    [siteOrigin()]: true,
+    'https://soulmetrica.com': true,
+    'https://www.soulmetrica.com': true,
+    'https://yourveluna-theme.vercel.app': true,
+    'http://localhost:5173': true,
+    'http://localhost:3000': true
+  };
+  if (allowed[origin]) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');

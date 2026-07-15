@@ -8,3 +8,8 @@ certs/
 **/point_*.p12
 .env*
 .admin-credentials.local.json
+.next/
+node_modules/
+tmp/
+*.log
+.DS_Store

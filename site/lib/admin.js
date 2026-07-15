@@ -13,6 +13,7 @@ var NAME_TO_KEY = {
   'Прогноз 2026': 'forecast',
   'Реализация': 'realization',
   'Скрытые блоки': 'blocks',
+  'Детский разбор': 'child',
   'Совместимость пары': 'compatibility',
   'Число судьбы': 'destiny'
 };
@@ -73,16 +74,49 @@ async function listPrices() {
   return data || [];
 }
 
+function normalizeProvider(raw) {
+  var p = String(raw || '').toLowerCase().trim();
+  if (p === 'aipay' || p === 'kaspi' || p === 'paylab') return 'aipay';
+  if (p === 'unicorn') return 'unicorn';
+  if (p === 'both') return 'both';
+  return 'unicorn';
+}
+
 async function getCheckoutSettings() {
   var db = getDb();
   var { data } = await db.from('app_settings').select('value').eq('key', 'checkout').maybeSingle();
   var value = (data && data.value) || {};
+  var provider = normalizeProvider(value.payment_provider || value.provider || 'unicorn');
   return {
     force_test_sum:
       value.force_test_sum == null || value.force_test_sum === ''
         ? null
         : Math.round(Number(value.force_test_sum)),
-    test_mode: !!value.test_mode
+    test_mode: !!value.test_mode,
+    payment_provider: provider,
+    unicorn_enabled: value.unicorn_enabled == null ? true : !!value.unicorn_enabled,
+    aipay_enabled: !!value.aipay_enabled,
+    aipay_base_url: value.aipay_base_url ? String(value.aipay_base_url).trim() : '',
+    aipay_company_id: value.aipay_company_id ? String(value.aipay_company_id).trim() : '',
+    aipay_pos_id: value.aipay_pos_id ? String(value.aipay_pos_id).trim() : ''
+  };
+}
+
+function publicCheckoutSettings(settings) {
+  var s = settings || {};
+  var unicornOn = s.unicorn_enabled !== false;
+  var aipayOn = !!s.aipay_enabled;
+  var provider = normalizeProvider(s.payment_provider || 'unicorn');
+  if (provider === 'aipay' && !aipayOn) provider = unicornOn ? 'unicorn' : 'aipay';
+  if (provider === 'unicorn' && !unicornOn && aipayOn) provider = 'aipay';
+  if (provider === 'both' && !unicornOn && aipayOn) provider = 'aipay';
+  if (provider === 'both' && unicornOn && !aipayOn) provider = 'unicorn';
+  return {
+    test_mode: !!s.test_mode,
+    force_test_sum: s.force_test_sum == null ? null : s.force_test_sum,
+    payment_provider: provider,
+    unicorn_enabled: unicornOn,
+    aipay_enabled: aipayOn
   };
 }
 
@@ -157,6 +191,8 @@ module.exports = {
   audit,
   listPrices,
   getCheckoutSettings,
+  publicCheckoutSettings,
+  normalizeProvider,
   resolveChargeAmount,
   patchUserSchema,
   patchOrderSchema,

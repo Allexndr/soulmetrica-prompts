@@ -143,7 +143,7 @@ function renderCover(cover, order) {
     '<section class="cover">' +
     mandalaSvg() +
     '<div class="cover-inner">' +
-    '<div class="mark">YourVeluna</div>' +
+    '<div class="mark">SoulMetrica</div>' +
     '<h1>' +
     esc(cover.title || 'Полный разбор личности и жизни').replace(/\s+и\s+/, '<br>и ') +
     '</h1>' +
@@ -238,7 +238,7 @@ function buildPremiumHtml(data, order) {
     '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<title>' +
     esc(data.cover && data.cover.title ? data.cover.title : 'Полный разбор') +
-    ' · YourVeluna</title><style>' +
+    ' · SoulMetrica</title><style>' +
     premiumCss() +
     '</style></head><body>' +
     '<div class="stars"></div>' +
@@ -248,7 +248,7 @@ function buildPremiumHtml(data, order) {
     '<div class="page">' +
     blocksHtml +
     '</div>' +
-    '<div class="end">YourVeluna · полный разбор</div>' +
+    '<div class="end">SoulMetrica · полный разбор</div>' +
     '</div></body></html>'
   );
 }

@@ -61,7 +61,7 @@ function toPhone(contact) {
 function buildAuthXml(order) {
   var point = env('UNICORN_POINT', '4554');
   var service = env('UNICORN_SERVICE', '1330');
-  var store = env('UNICORN_STORE', 'YourVeluna');
+  var store = env('UNICORN_STORE', 'SoulMetrica');
   var siteUrl = env('SITE_URL', 'https://yourveluna-theme.vercel.app').replace(/\/$/, '');
   var successBase = env('UNICORN_SUCCESS_URL', siteUrl + '/api/pay-success');
   var successUrl =
@@ -72,7 +72,7 @@ function buildAuthXml(order) {
   var failUrl = env('UNICORN_FAIL_URL', siteUrl + '/api/pay-fail');
   var notifyUrl = env('UNICORN_NOTIFY_URL', siteUrl + '/api/unicorn-webhook');
 
-  var desc = String(order.desc || 'YourVeluna').slice(0, 120);
+  var desc = String(order.desc || 'SoulMetrica').slice(0, 120);
   // Unicorn: sum в тиынах (30 ₸ = 3000). На сайте цены в тенге → ×100.
   var tenge = Math.max(1, Math.round(Number(order.sum) || 0));
   var sumInTiyn = env('UNICORN_SUM_IN_TIYN', '1') !== '0';
@@ -91,7 +91,7 @@ function buildAuthXml(order) {
     '<attribute name="id" value="' + escapeXml(order.id) + '"/>' +
     '<attribute name="desc" value="' + escapeXml(desc) + '"/>' +
     '<attribute name="sum" value="' + escapeXml(sum) + '"/>' +
-    '<attribute name="email" value="' + escapeXml(order.email || 'order@yourveluna.kz') + '"/>' +
+    '<attribute name="email" value="' + escapeXml(order.email || 'order@soulmetrica.com') + '"/>' +
     '<attribute name="phone_number" value="' + escapeXml(toPhone(order.phone || order.contact)) + '"/>' +
     '<attribute name="name" value="' + escapeXml(order.name || 'Клиент') + '"/>' +
     '<attribute name="redirect_url" value="' + escapeXml(siteUrl + '/') + '"/>' +

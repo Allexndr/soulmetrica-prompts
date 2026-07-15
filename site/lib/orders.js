@@ -24,13 +24,63 @@ async function upsertPendingOrder(payload) {
     gender: payload.gender || 'unknown',
     updated_at: new Date().toISOString()
   };
+  if (payload.paymentProvider) row.payment_provider = String(payload.paymentProvider).slice(0, 40);
+  if (payload.providerPaymentId) row.provider_payment_id = String(payload.providerPaymentId).slice(0, 120);
+  if (payload.paymentMeta && typeof payload.paymentMeta === 'object') {
+    row.payment_meta = payload.paymentMeta;
+  }
+
   var { error } = await db.from('orders').upsert(row, { onConflict: 'id' });
+  if (error && /payment_provider|provider_payment_id|payment_meta/i.test(error.message || '')) {
+    // Columns may be missing until migration 003 — retry without them
+    delete row.payment_provider;
+    delete row.provider_payment_id;
+    delete row.payment_meta;
+    var retry = await db.from('orders').upsert(row, { onConflict: 'id' });
+    error = retry.error;
+  }
   if (error) {
     payError('orders.upsert_fail', new Error(error.message), { orderId: payload.id });
     throw new Error(error.message);
   }
-  payLog('orders.upsert_pending', { orderId: payload.id, amount: payload.amount, product: payload.product });
+  payLog('orders.upsert_pending', {
+    orderId: payload.id,
+    amount: payload.amount,
+    product: payload.product,
+    paymentProvider: payload.paymentProvider || null
+  });
   return row;
+}
+
+async function attachProviderPayment(orderId, provider, providerPaymentId, meta) {
+  var db = getDb();
+  var patch = {
+    updated_at: new Date().toISOString()
+  };
+  if (provider) patch.payment_provider = String(provider).slice(0, 40);
+  if (providerPaymentId) patch.provider_payment_id = String(providerPaymentId).slice(0, 120);
+  if (meta && typeof meta === 'object') patch.payment_meta = meta;
+  var { data, error } = await db.from('orders').update(patch).eq('id', orderId).select('*').maybeSingle();
+  if (error && /payment_provider|provider_payment_id|payment_meta/i.test(error.message || '')) {
+    payLog('orders.attach_provider.skip_columns', { orderId: orderId, reason: error.message });
+    return getOrder(orderId);
+  }
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+async function findOrderByProviderPaymentId(providerPaymentId) {
+  var db = getDb();
+  var id = String(providerPaymentId || '').trim();
+  if (!id) return null;
+  var { data, error } = await db
+    .from('orders')
+    .select('*')
+    .eq('provider_payment_id', id)
+    .maybeSingle();
+  if (error && /provider_payment_id/i.test(error.message || '')) return null;
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 async function getOrder(orderId) {
@@ -119,51 +169,54 @@ async function linkOrderToUser(orderId, userId) {
 
 async function enqueueReadings(order) {
   var db = getDb();
-  var products = prompts.productsForOrder(order);
+  // One document per order: primary chapters + addon modules glued in
+  var plan = prompts.buildMergedPlan(order);
   var created = [];
+  var p = { key: plan.mainKey, title: plan.mainTitle };
+  var blocksTotal = plan.steps.length;
 
-  for (var i = 0; i < products.length; i++) {
-    var p = products[i];
-    var md = prompts.loadPromptFile(p.key);
-    var blocks = prompts.parseBlocks(md);
-    var { data: existing } = await db
+  var { data: existing } = await db
+    .from('readings')
+    .select('id, status')
+    .eq('order_id', order.id)
+    .eq('product_key', p.key)
+    .maybeSingle();
+
+  if (existing && existing.status !== 'failed') {
+    created.push(existing);
+    return created;
+  }
+
+  var title = p.title;
+  if (plan.addonKeys && plan.addonKeys.length) {
+    title = p.title + ' · с модулями';
+  }
+
+  var row = {
+    order_id: order.id,
+    user_id: order.user_id || null,
+    product_key: p.key,
+    title: title,
+    status: 'queued',
+    blocks_total: blocksTotal,
+    blocks_done: 0,
+    blocks_content: [],
+    updated_at: new Date().toISOString()
+  };
+
+  if (existing) {
+    var { data: upd, error: updErr } = await db
       .from('readings')
-      .select('id, status')
-      .eq('order_id', order.id)
-      .eq('product_key', p.key)
-      .maybeSingle();
-
-    if (existing && existing.status !== 'failed') {
-      created.push(existing);
-      continue;
-    }
-
-    var row = {
-      order_id: order.id,
-      user_id: order.user_id || null,
-      product_key: p.key,
-      title: p.title,
-      status: 'queued',
-      blocks_total: blocks.length,
-      blocks_done: 0,
-      blocks_content: [],
-      updated_at: new Date().toISOString()
-    };
-
-    if (existing) {
-      var { data: upd, error: updErr } = await db
-        .from('readings')
-        .update(row)
-        .eq('id', existing.id)
-        .select('*')
-        .single();
-      if (updErr) throw new Error(updErr.message);
-      created.push(upd);
-    } else {
-      var { data: ins, error: insErr } = await db.from('readings').insert(row).select('*').single();
-      if (insErr) throw new Error(insErr.message);
-      created.push(ins);
-    }
+      .update(row)
+      .eq('id', existing.id)
+      .select('*')
+      .single();
+    if (updErr) throw new Error(updErr.message);
+    created.push(upd);
+  } else {
+    var { data: ins, error: insErr } = await db.from('readings').insert(row).select('*').single();
+    if (insErr) throw new Error(insErr.message);
+    created.push(ins);
   }
   return created;
 }
@@ -192,6 +245,8 @@ async function listReadingsForUser(userId) {
 
 module.exports = {
   upsertPendingOrder,
+  attachProviderPayment,
+  findOrderByProviderPaymentId,
   getOrder,
   markOrderPaid,
   linkTelegramToOrder,

@@ -61,7 +61,9 @@ function isPremiumReading(reading) {
   return reading && (reading.product_key === 'A07' || /полный разбор/i.test(reading.title || ''));
 }
 
-function useJsonMode(reading) {
+function useJsonMode(reading, order) {
+  // С addon-модулями всегда идём по merged plan поблочно — JSON one-shot не знает про склейку
+  if (prompts.orderHasAddons(order)) return false;
   return isPremiumReading(reading) && process.env.A07_JSON_MODE === '1';
 }
 
@@ -158,7 +160,7 @@ async function processOneBlock(reading) {
   var order = await orders.getOrder(reading.order_id);
   if (!order) throw new Error('Order not found');
 
-  if (useJsonMode(reading) && reading.blocks_done === 0) {
+  if (useJsonMode(reading, order) && reading.blocks_done === 0) {
     try {
       return await processA07Json(reading);
     } catch (err) {
@@ -167,35 +169,68 @@ async function processOneBlock(reading) {
     }
   }
 
-  var md = prompts.loadPromptFile(reading.product_key);
-  var system = prompts.extractSystemPrompt(md);
-  var blocks = prompts.parseBlocks(md);
+  var plan = prompts.buildMergedPlan(order);
+  var steps = plan.steps;
   var userContext = prompts.buildUserContext(order);
 
-  if (reading.blocks_done >= blocks.length) {
-    return finalizeReading(reading, order, blocks);
+  if (reading.blocks_done >= steps.length) {
+    return finalizeReading(reading, order, steps);
   }
 
-  var block = blocks[reading.blocks_done];
-  var userPrompt = prompts.blockRequest(system, userContext, block);
+  var step = steps[reading.blocks_done];
+  var content = Array.isArray(reading.blocks_content) ? reading.blocks_content.slice() : [];
 
   await db
     .from('readings')
-    .update({ status: 'generating', updated_at: new Date().toISOString() })
+    .update({
+      status: 'generating',
+      blocks_total: steps.length,
+      updated_at: new Date().toISOString()
+    })
     .eq('id', reading.id);
 
-  var text = format.cleanText(await llm.callOpenAI(system, userPrompt, order, block));
-  var content = Array.isArray(reading.blocks_content) ? reading.blocks_content.slice() : [];
-  content.push({ num: block.num, title: format.chapterTitle(block), text: text });
+  var text;
+  var title = format.chapterTitle({ title: step.title });
+
+  if (step.kind === 'divider') {
+    text = format.cleanText(
+      'Дальше — расширение «' +
+        (step.moduleTitle || title) +
+        '». Это отдельный глубокий слой по теме, который ты добавил к основному разбору. Читай как продолжение одной карты, а не как второй файл.'
+    );
+  } else {
+    var md = prompts.loadPromptFile(step.productKey);
+    var system = prompts.extractSystemPrompt(md);
+    var blockForLlm = Object.assign({}, step.block, { title: step.title });
+    var userPrompt = prompts.blockRequest(system, userContext, blockForLlm);
+    if (step.kind === 'addon') {
+      userPrompt +=
+        '\n\nКОНТЕКСТ СКЛЕЙКИ: это модуль «' +
+        step.moduleTitle +
+        '», который дописывается в основной документ клиента. ' +
+        'Не пиши отдельную обложку и не повторяй введение «кто ты». Сразу дай содержание главы. ' +
+        'Согласуй тон с уже собранным полным разбором.';
+    }
+    text = format.cleanText(await llm.callOpenAI(system, userPrompt, order, step.block));
+  }
+
+  content.push({
+    num: step.displayNum,
+    title: title,
+    text: text,
+    source_key: step.productKey,
+    kind: step.kind
+  });
 
   var done = reading.blocks_done + 1;
   var patch = {
     blocks_done: done,
+    blocks_total: steps.length,
     blocks_content: content,
     updated_at: new Date().toISOString()
   };
 
-  if (done >= blocks.length) {
+  if (done >= steps.length) {
     patch.content_text = format.cleanFullReading({
       title: reading.title,
       blocks_content: content
@@ -206,12 +241,12 @@ async function processOneBlock(reading) {
   var { data: updated } = await db.from('readings').update(patch).eq('id', reading.id).select('*').single();
 
   if (updated.status === 'ready') {
-    await finalizeReading(updated, order, blocks);
+    await finalizeReading(updated, order, steps);
   }
   return updated;
 }
 
-async function finalizeReading(reading, order, blocks) {
+async function finalizeReading(reading, order, blocksOrSteps) {
   var db = getDb();
   var cleanedBlocks = (Array.isArray(reading.blocks_content) ? reading.blocks_content : [])
     .filter(function (b) {
@@ -221,7 +256,9 @@ async function finalizeReading(reading, order, blocks) {
     return {
       num: b.num,
       title: format.chapterTitle(b),
-      text: format.cleanText(b.text || '')
+      text: format.cleanText(b.text || ''),
+      source_key: b.source_key || null,
+      kind: b.kind || null
     };
   });
   var full = format.cleanFullReading({
@@ -244,7 +281,8 @@ async function finalizeReading(reading, order, blocks) {
     console.error('[readings] blob', err.message);
   }
 
-  if (isPremiumReading(reading) && process.env.BLOB_READ_WRITE_TOKEN) {
+  // HTML (premium for A07 / classic otherwise) — including glued addon chapters
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
       var html = htmlReading.buildReadingHtml(
         Object.assign({}, reading, { blocks_content: cleanedBlocks }),
@@ -265,6 +303,13 @@ async function finalizeReading(reading, order, blocks) {
     }
   }
 
+  var total =
+    Array.isArray(blocksOrSteps) && blocksOrSteps.length
+      ? blocksOrSteps.length
+      : cleanedBlocks.filter(function (b) {
+          return b.title !== '__html__';
+        }).length;
+
   var { data: updated } = await db
     .from('readings')
     .update({
@@ -273,8 +318,8 @@ async function finalizeReading(reading, order, blocks) {
       blocks_content: cleanedBlocks,
       file_url: blobUrl,
       user_id: order.user_id || reading.user_id || null,
-      blocks_total: blocks ? blocks.length : reading.blocks_total,
-      blocks_done: blocks ? blocks.length : reading.blocks_done,
+      blocks_total: total,
+      blocks_done: total,
       updated_at: new Date().toISOString()
     })
     .eq('id', reading.id)
@@ -416,7 +461,7 @@ async function sendReadingHtml(chatId, readingId) {
   await telegram.sendMessage(chatId, 'Собираю HTML…');
   var html = htmlReading.buildReadingHtml(reading, order || {});
   var fname = fileName.readingFileName(order || {}, 'html', reading.title);
-  var caption = ('YourVeluna · ' + (reading.title || 'Разбор') + ' · ' + ((order && order.customer_name) || '')).trim();
+  var caption = ('SoulMetrica · ' + (reading.title || 'Разбор') + ' · ' + ((order && order.customer_name) || '')).trim();
   return telegram.uploadDocumentBuffer(chatId, Buffer.from(html, 'utf8'), fname, caption);
 }
 
@@ -428,7 +473,7 @@ async function sendReadingPdf(chatId, readingId) {
   }
   var order = await orders.getOrder(reading.order_id);
   var fname = fileName.readingFileName(order || {}, 'pdf', reading.title);
-  var caption = ('YourVeluna · ' + (reading.title || 'Разбор') + ' · ' + ((order && order.customer_name) || '')).trim();
+  var caption = ('SoulMetrica · ' + (reading.title || 'Разбор') + ' · ' + ((order && order.customer_name) || '')).trim();
 
   if (isPremiumReading(reading)) {
     await telegram.sendMessage(chatId, 'Собираю PDF…');

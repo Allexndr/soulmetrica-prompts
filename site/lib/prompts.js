@@ -66,8 +66,31 @@ function resolveProductKey(productName) {
   return 'A07';
 }
 
+var _resolvedPromptsDir = null;
+
 function promptsDir() {
-  return path.join(__dirname, 'prompts');
+  if (_resolvedPromptsDir) return _resolvedPromptsDir;
+  var candidates = [
+    // Next/Vercel often executes bundled copies under .next/server/chunks,
+    // so __dirname alone cannot find lib/prompts/*.md.
+    path.join(process.cwd(), 'lib', 'prompts'),
+    path.join(process.cwd(), 'prompts'),
+    path.join(__dirname, 'prompts'),
+    path.join(__dirname, '..', 'prompts'),
+    path.join(__dirname, '..', 'lib', 'prompts'),
+    path.join(__dirname, '..', '..', 'lib', 'prompts'),
+    path.join(__dirname, '..', '..', '..', 'lib', 'prompts')
+  ];
+  for (var i = 0; i < candidates.length; i++) {
+    try {
+      if (fs.existsSync(path.join(candidates[i], PROMPT_FILES.A07))) {
+        _resolvedPromptsDir = candidates[i];
+        return _resolvedPromptsDir;
+      }
+    } catch (e) {}
+  }
+  _resolvedPromptsDir = path.join(process.cwd(), 'lib', 'prompts');
+  return _resolvedPromptsDir;
 }
 
 function loadEnginePrompt() {
@@ -81,7 +104,19 @@ function loadEnginePrompt() {
 function loadPromptFile(key) {
   var file = PROMPT_FILES[key];
   if (!file) throw new Error('Unknown prompt key: ' + key);
-  return fs.readFileSync(path.join(promptsDir(), file), 'utf8');
+  var full = path.join(promptsDir(), file);
+  try {
+    return fs.readFileSync(full, 'utf8');
+  } catch (err) {
+    throw new Error(
+      'Prompt missing: ' +
+        full +
+        ' cwd=' +
+        process.cwd() +
+        ' dirname=' +
+        __dirname
+    );
+  }
 }
 
 function extractSystemPrompt(md) {
@@ -198,6 +233,93 @@ function productsForOrder(order) {
   return items;
 }
 
+/**
+ * Единый план глав: основной продукт + addon-модули в один документ.
+ * У модулей пропускаем обложку и введение (уже есть в основном разборе).
+ */
+function buildMergedPlan(order) {
+  var mainKey = resolveProductKey(order.product);
+  var plan = [];
+  var displayNum = 0;
+
+  function pushBlock(opts) {
+    displayNum += 1;
+    plan.push({
+      productKey: opts.productKey,
+      kind: opts.kind,
+      moduleTitle: opts.moduleTitle || null,
+      block: opts.block,
+      displayNum: displayNum,
+      title: opts.title
+    });
+  }
+
+  var mainBlocks = parseBlocks(loadPromptFile(mainKey));
+  mainBlocks.forEach(function (block) {
+    pushBlock({
+      productKey: mainKey,
+      kind: 'main',
+      block: block,
+      title: block.title
+    });
+  });
+
+  var addons = Array.isArray(order.addons) ? order.addons : [];
+  var seen = {};
+  seen[mainKey] = true;
+
+  addons.forEach(function (addon) {
+    var key = resolveProductKey(addon);
+    if (seen[key]) return;
+    // Полный разбор уже покрывает экспресс — трипвайер внутрь A07 не клеим
+    if (mainKey === 'A07' && key === 'A01') return;
+    seen[key] = true;
+
+    var moduleTitle = String(addon || '').trim() || TITLES[key] || key;
+    var blocks = parseBlocks(loadPromptFile(key));
+    // Cover + intro already exist in the main doc — glue only depth chapters
+    var contentBlocks = blocks.filter(function (b) {
+      return Number(b.num) >= 3;
+    });
+    if (!contentBlocks.length) contentBlocks = blocks.slice(2);
+
+    pushBlock({
+      productKey: key,
+      kind: 'divider',
+      moduleTitle: moduleTitle,
+      block: {
+        num: 0,
+        title: 'Модуль · ' + moduleTitle,
+        body: ''
+      },
+      title: 'Модуль · ' + moduleTitle
+    });
+
+    contentBlocks.forEach(function (block) {
+      pushBlock({
+        productKey: key,
+        kind: 'addon',
+        moduleTitle: moduleTitle,
+        block: block,
+        title: moduleTitle + ' · ' + block.title
+      });
+    });
+  });
+
+  return {
+    mainKey: mainKey,
+    mainTitle: TITLES[mainKey] || order.product,
+    addonKeys: Object.keys(seen).filter(function (k) {
+      return k !== mainKey;
+    }),
+    steps: plan
+  };
+}
+
+function orderHasAddons(order) {
+  return Array.isArray(order && order.addons) && order.addons.length > 0;
+}
+
 module.exports = {
   PRODUCT_MAP,
   TITLES,
@@ -207,6 +329,8 @@ module.exports = {
   parseBlocks,
   buildUserContext,
   productsForOrder,
+  buildMergedPlan,
+  orderHasAddons,
   blockRequest,
   jsonFullRequest
 };

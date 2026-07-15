@@ -1,0 +1,120 @@
+# SoulMetrica — https://soulmetrica.com
+# RFC 9309 robots + Content Signals (https://contentsignals.org/)
+
+User-agent: *
+Allow: /
+Allow: /offer
+Allow: /privacy
+Allow: /docs/
+Allow: /llms.txt
+Allow: /auth.md
+Allow: /openapi.json
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+# --- AI search / citation crawlers (GEO) ---
+User-agent: GPTBot
+Allow: /
+Allow: /offer
+Allow: /privacy
+Allow: /llms.txt
+Allow: /docs/
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: OAI-SearchBot
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: Claude-Web
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: Applebot-Extended
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+User-agent: Amazonbot
+Allow: /
+Allow: /llms.txt
+Disallow: /admin
+Disallow: /api/
+Disallow: /profile
+Disallow: /reading
+Content-Signal: search=yes, ai-train=no, ai-input=yes
+
+# Training-oriented scrapers
+User-agent: CCBot
+Disallow: /
+Content-Signal: search=no, ai-train=no, ai-input=no
+
+User-agent: Bytespider
+Disallow: /
+Content-Signal: search=no, ai-train=no, ai-input=no
+
+Sitemap: https://soulmetrica.com/sitemap.xml
