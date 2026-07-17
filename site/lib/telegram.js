@@ -185,34 +185,43 @@ function uploadDocumentBuffer(chatId, buffer, filename, caption) {
   });
 }
 
-function readingMenuKeyboard(readingId, siteUrl, premium) {
+function readingMenuKeyboard(readingId, siteUrl, premium, language) {
   var id = String(readingId);
+  var en = language === 'en';
   var rows = [];
   if (siteUrl) {
-    rows.push([{ text: '🌐 Открыть на сайте', url: siteUrl }]);
+    rows.push([{ text: en ? '🌐 Open on website' : '🌐 Открыть на сайте', url: siteUrl }]);
   }
   rows.push([
-    { text: '📥 Скачать HTML', callback_data: 'html:' + id },
-    { text: '📄 Скачать PDF', callback_data: 'pdf:' + id }
+    { text: en ? '📥 Download HTML' : '📥 Скачать HTML', callback_data: 'html:' + id },
+    { text: en ? '📄 Download PDF' : '📄 Скачать PDF', callback_data: 'pdf:' + id }
   ]);
   rows.push([
-    { text: '📖 Читать по главам', callback_data: 'page:' + id + ':1' },
-    { text: '📝 Весь текст', callback_data: 'text:' + id }
+    { text: en ? '📖 Read by chapter' : '📖 Читать по главам', callback_data: 'page:' + id + ':1' },
+    { text: en ? '📝 Full text' : '📝 Весь текст', callback_data: 'text:' + id }
   ]);
   return { inline_keyboard: rows };
 }
 
 function readingDeliveryText(reading, opts) {
   opts = opts || {};
-  var title = (reading && reading.title) || 'Разбор';
+  var en = opts.language === 'en';
+  var title = (reading && reading.title) || (en ? 'Reading' : 'Разбор');
   var premium = !!opts.premium;
-  var lines = ['✨ «' + title + '» готов'];
+  var lines = ['✨ “' + title + '” ' + (en ? 'is ready' : 'готов')];
 
-  if (opts.orderId) lines.push('Заказ: ' + opts.orderId);
-  if (opts.chapters) lines.push('Глав: ' + opts.chapters);
+  if (opts.orderId) lines.push((en ? 'Order: ' : 'Заказ: ') + opts.orderId);
+  if (opts.chapters) lines.push((en ? 'Chapters: ' : 'Глав: ') + opts.chapters);
 
   lines.push('');
-  if (premium) {
+  if (en && premium) {
+    lines.push('🌐 Open on the website — profile and premium layout');
+    lines.push('📥 Download HTML · 📄 Download PDF');
+    lines.push('📖 Read by chapter · 📝 Full text — buttons below');
+  } else if (en) {
+    lines.push('🌐 Open on the website · 📥 HTML · 📄 PDF');
+    lines.push('📖 Read by chapter · 📝 Full text — buttons below');
+  } else if (premium) {
     lines.push('🌐 Открыть на сайте — профиль и premium-вёрстка');
     lines.push('📥 Скачать HTML · 📄 Скачать PDF');
     lines.push('📖 По главам · 📝 Весь текст — кнопки ниже');
@@ -224,18 +233,19 @@ function readingDeliveryText(reading, opts) {
   return lines.join('\n');
 }
 
-function pageKeyboard(readingId, page, total) {
+function pageKeyboard(readingId, page, total, language) {
   var id = String(readingId);
+  var en = language === 'en';
   var row = [];
-  if (page > 1) row.push({ text: '← Назад', callback_data: 'page:' + id + ':' + (page - 1) });
+  if (page > 1) row.push({ text: en ? '← Back' : '← Назад', callback_data: 'page:' + id + ':' + (page - 1) });
   row.push({ text: page + ' / ' + total, callback_data: 'noop' });
-  if (page < total) row.push({ text: 'Далее →', callback_data: 'page:' + id + ':' + (page + 1) });
+  if (page < total) row.push({ text: en ? 'Next →' : 'Далее →', callback_data: 'page:' + id + ':' + (page + 1) });
   return {
     inline_keyboard: [
       row,
       [
         { text: '📄 PDF', callback_data: 'pdf:' + id },
-        { text: '☰ Меню', callback_data: 'menu:' + id }
+        { text: en ? '☰ Menu' : '☰ Меню', callback_data: 'menu:' + id }
       ]
     ]
   };

@@ -77,13 +77,47 @@
     '</div>';
   document.body.appendChild(overlay);
 
+  function localizedSys(i) {
+    var base = SYS[i];
+    if (!window.VelunaI18n || !window.VelunaI18n.t) return base;
+    return {
+      ic: base.ic,
+      name: window.VelunaI18n.t('sys.' + i + '.name'),
+      cat: window.VelunaI18n.t('sys.' + i + '.cat'),
+      txt: window.VelunaI18n.t('sys.' + i + '.txt')
+    };
+  }
+
+  function refreshCardLabels() {
+    document.querySelectorAll('[data-sys]').forEach(function (el) {
+      var i = parseInt(el.getAttribute('data-sys'), 10);
+      if (isNaN(i) || !SYS[i]) return;
+      var s = localizedSys(i);
+      var h3 = el.querySelector('h3');
+      var cat = el.querySelector('header span');
+      var foot = el.querySelector('footer');
+      if (h3) h3.textContent = s.name;
+      if (cat) cat.textContent = s.cat;
+      if (foot && window.VelunaI18n) {
+        var img = foot.querySelector('img');
+        foot.textContent = window.VelunaI18n.t('systems.open') + ' ';
+        if (img) foot.appendChild(img);
+      }
+    });
+  }
+
   var cur = 0;
   var N = SYS.length;
 
   function fill(i) {
-    var s = SYS[i];
+    var s = localizedSys(i);
     document.getElementById('sysDetailIc').textContent = s.ic;
-    document.getElementById('sysDetailKick').textContent = 'СИСТЕМА ' + (i + 1) + ' ИЗ 9';
+    document.getElementById('sysDetailKick').textContent =
+      (window.VelunaI18n ? window.VelunaI18n.getLang() : 'ru') === 'en'
+        ? 'SYSTEM ' + (i + 1) + ' OF 9'
+        : (window.VelunaI18n && window.VelunaI18n.getLang() === 'kk'
+            ? 'ЖҮЙЕ ' + (i + 1) + ' / 9'
+            : 'СИСТЕМА ' + (i + 1) + ' ИЗ 9');
     document.getElementById('sysDetailName').textContent = s.name;
     document.getElementById('sysDetailTxt').textContent = s.txt;
     var dots = document.getElementById('sysDetailDots');
@@ -162,4 +196,12 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && overlay.classList.contains('on')) close();
   });
+
+  refreshCardLabels();
+  if (window.VelunaI18n && window.VelunaI18n.onChange) {
+    window.VelunaI18n.onChange(function () {
+      refreshCardLabels();
+      if (overlay.classList.contains('on')) fill(cur);
+    });
+  }
 })();

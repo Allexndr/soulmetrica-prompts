@@ -103,6 +103,20 @@
     22: { arch: 'Мастер-строитель', str: 'Масштаб и созидание', lesson: 'Доверять процессу', rare: '~2%', blurb: 'ты гасишь собственный масштаб из страха ответственности' },
     33: { arch: 'Учитель', str: 'Сострадание и сила', lesson: 'Беречь себя', rare: '~1%', blurb: 'ты отдаёшь так много, что забываешь о собственном ресурсе' }
   };
+  var LIFE_TRAITS_EN = {
+    1: { arch: 'Pioneer', str: 'Leadership and courage', lesson: 'Accepting help', rare: '~11%', blurb: 'you stop your own money one step before the goal' },
+    2: { arch: 'Harmonizer', str: 'Intuition and diplomacy', lesson: 'Keeping your own center', rare: '~13%', blurb: 'your fear of conflict costs more than it seems' },
+    3: { arch: 'Creator', str: 'Charisma and expression', lesson: 'Following through', rare: '~10%', blurb: 'you scatter your energy when you are closest to a breakthrough' },
+    4: { arch: 'Builder', str: 'Reliability and structure', lesson: 'Releasing control', rare: '~9%', blurb: 'rigid structure blocks the flow of money' },
+    5: { arch: 'Explorer', str: 'Freedom and adaptability', lesson: 'Finishing what you start', rare: '~12%', blurb: 'inconsistency weakens your financial foundation before you notice it' },
+    6: { arch: 'Guardian', str: 'Love and care', lesson: 'Choosing yourself too', rare: '~14%', blurb: 'you give resources away before allowing yourself to build them' },
+    7: { arch: 'Sage', str: 'Depth and analysis', lesson: 'Trusting life', rare: '~8%', blurb: 'you cut money off just as it is ready to arrive' },
+    8: { arch: 'Powerhouse', str: 'Ambition and strength', lesson: 'Balancing power and contribution', rare: '~10%', blurb: 'fear of losing control blocks your financial ceiling' },
+    9: { arch: 'Enlightened One', str: 'Wisdom and generosity', lesson: 'Receiving without guilt', rare: '~13%', blurb: 'you send resources where they do not return' },
+    11: { arch: 'Master Intuitive', str: 'Heightened sensitivity', lesson: 'Grounding your gift', rare: '~3%', blurb: 'you sense more than you allow yourself to express' },
+    22: { arch: 'Master Builder', str: 'Scale and creation', lesson: 'Trusting the process', rare: '~2%', blurb: 'you reduce your own scale out of fear of responsibility' },
+    33: { arch: 'Teacher', str: 'Compassion and strength', lesson: 'Protecting your energy', rare: '~1%', blurb: 'you give so much that you forget your own resources' }
+  };
 
   var MX_ARCH = {
     1: { name: 'Лидер · Первопроходец', desc: 'Рождена прокладывать путь. Сила — в смелости и инициативе. Блок — страх остаться одной на этом пути.' },
@@ -120,6 +134,26 @@
   var MX_MONEY = { 1: 'Зарабатываешь сама, через инициативу и лидерство', 2: 'Деньги идут через партнёрства и сотрудничество', 3: 'Через творчество, публичность, контент', 4: 'Через стабильность, системность, надёжность', 5: 'Через изменения, разнообразие, движение', 6: 'Через заботу, обучение, создание уюта', 7: 'Через знания, экспертизу, глубину', 8: 'Через власть, влияние, управление', 9: 'Через щедрость, вклад, служение' };
   var MX_LOVE = { 1: 'Нужен сильный партнёр — со слабым скучно', 2: 'Ищешь союз и ощущение «мы», боишься одиночества', 3: 'Притягиваешь ярких и нестандартных', 4: 'Нужна стабильность и верность', 5: 'Притягивают свободные, сложно удерживать', 6: 'Ищешь заботу и ощущение дома', 7: 'Нужна глубина и честность', 8: 'Притягиваешь сильных — иногда токсичных', 9: 'Идеализируешь партнёра и потом разочаровываешься' };
   var MX_FAM = { 1: 'программа лидерства без поддержки', 2: 'программа жертвенности', 3: 'программа нереализованного творчества', 4: 'программа жёсткого контроля', 5: 'программа страха перемен', 6: 'программа созависимости', 7: 'программа одиночества и непонятости', 8: 'программа борьбы за власть', 9: 'программа служения без отдачи' };
+  var MX_ARCH_EN = {
+    1: { name: 'Leader · Pioneer', desc: 'You are born to make the first move. Courage and initiative are your strengths; the block is fear of walking the path alone.' },
+    2: { name: 'Harmonizer · Intuitive', desc: 'You sense people and spaces. The block appears when you give more than you receive and wait to be noticed.' },
+    3: { name: 'Creator · Communicator', desc: 'Words and images are your tools. The block is scattering your energy at the start.' },
+    4: { name: 'Builder · Practitioner', desc: 'You create stable systems. Rigid control can block money and intimacy.' },
+    5: { name: 'Explorer · Adventurer', desc: 'Freedom and variety are your nature. The block is difficulty finishing what you start.' },
+    6: { name: 'Guardian · Support', desc: 'You support others. The block is putting everyone above yourself until you burn out.' },
+    7: { name: 'Sage · Analyst', desc: 'You see deeply and search for truth. Distrust can cut you off from opportunity.' },
+    8: { name: 'Powerhouse · Transformer', desc: 'You have natural strength and ambition. Fear of losing control limits your ceiling.' },
+    9: { name: 'Enlightened · Generous', desc: 'Wisdom and breadth are your strengths. The block is accepting less than you can hold.' },
+    11: { name: 'Master Intuitive', desc: 'A master number of heightened sensitivity and seeing what others miss.' },
+    22: { name: 'Master Builder', desc: 'The ability to build at scale, with a special gift for transformation.' }
+  };
+  var MX_MONEY_EN = { 1: 'You earn through initiative and leadership', 2: 'Money comes through partnership and collaboration', 3: 'Through creativity, visibility and content', 4: 'Through stability, systems and reliability', 5: 'Through change, variety and movement', 6: 'Through care, teaching and creating comfort', 7: 'Through knowledge, expertise and depth', 8: 'Through influence, authority and management', 9: 'Through generosity, contribution and service' };
+  var MX_LOVE_EN = { 1: 'You need a strong partner', 2: 'You seek a sense of “we” and fear loneliness', 3: 'You attract bright, unconventional people', 4: 'You need stability and loyalty', 5: 'You are drawn to freedom and may struggle to stay', 6: 'You seek care and a sense of home', 7: 'You need depth and honesty', 8: 'You attract strong, sometimes toxic partners', 9: 'You idealize a partner and later feel disappointed' };
+  var MX_FAM_EN = { 1: 'a leadership-without-support pattern', 2: 'a self-sacrifice pattern', 3: 'a blocked-creativity pattern', 4: 'a rigid-control pattern', 5: 'a fear-of-change pattern', 6: 'a codependency pattern', 7: 'a loneliness and not-being-understood pattern', 8: 'a struggle-for-power pattern', 9: 'a service-without-reciprocity pattern' };
+
+  function interfaceEnglish() {
+    return window.VelunaI18n && window.VelunaI18n.getLang && window.VelunaI18n.getLang() === 'en';
+  }
 
   var lifeForm = document.getElementById('lifeForm');
   var lifeResult = document.getElementById('lifeFormResult');
@@ -136,8 +170,9 @@
         return;
       }
       var n = lifePathNumber(day, month, year);
-      var t = LIFE_TRAITS[n] || LIFE_TRAITS[9];
-      var hello = name ? name + ', твоё' : 'Твоё';
+      var en = interfaceEnglish();
+      var t = en ? LIFE_TRAITS_EN[n] || LIFE_TRAITS_EN[9] : LIFE_TRAITS[n] || LIFE_TRAITS[9];
+      var hello = en ? (name ? name + ', your' : 'Your') : (name ? name + ', твоё' : 'Твоё');
       saveLeadDraft({ name: name, day: day, month: month, year: year });
       lifeResult.hidden = false;
       lifeResult.innerHTML =
@@ -145,22 +180,28 @@
           '<div class="calc-reveal__head">' +
             '<span class="calc-reveal__num">' + n + '</span>' +
             '<div class="calc-reveal__head-text">' +
-              '<span class="calc-reveal__eyebrow">' + hello + ' число жизни</span>' +
-              '<strong class="calc-reveal__arch">Архетип «' + t.arch + '»</strong>' +
-              '<span class="calc-reveal__rare">такое число у ' + t.rare + ' людей</span>' +
+              '<span class="calc-reveal__eyebrow">' + hello + (en ? ' life-path number' : ' число жизни') + '</span>' +
+              '<strong class="calc-reveal__arch">' + (en ? 'Archetype “' : 'Архетип «') + t.arch + (en ? '”' : '»') + '</strong>' +
+              '<span class="calc-reveal__rare">' + (en ? 'this number appears in ' + t.rare + ' of people' : 'такое число у ' + t.rare + ' людей') + '</span>' +
             '</div>' +
           '</div>' +
           '<div class="calc-reveal__grid">' +
-            '<div class="calc-reveal__cell"><span>Сильная сторона</span><strong>' + t.str + '</strong></div>' +
-            '<div class="calc-reveal__cell"><span>Твой урок</span><strong>' + t.lesson + '</strong></div>' +
+            '<div class="calc-reveal__cell"><span>' + (en ? 'Strength' : 'Сильная сторона') + '</span><strong>' + t.str + '</strong></div>' +
+            '<div class="calc-reveal__cell"><span>' + (en ? 'Your lesson' : 'Твой урок') + '</span><strong>' + t.lesson + '</strong></div>' +
           '</div>' +
-          '<p class="calc-reveal__teaser">По числу ' + n + ' видно, что ' + t.blurb + '. Это не судьба — это конкретный сценарий с конкретной причиной. <span>Полная расшифровка по 9 системам — в разборе.</span></p>' +
-        '<button type="button" class="calc-reveal__cta" id="miniQuizCta">Получить мини-разбор →</button>' +
+          '<p class="calc-reveal__teaser">' +
+            (en
+              ? 'Number ' + n + ' shows that ' + t.blurb + '. This is not fate; it is a specific pattern with a specific cause. <span>The full interpretation across 9 systems is in your reading.</span>'
+              : 'По числу ' + n + ' видно, что ' + t.blurb + '. Это не судьба — это конкретный сценарий с конкретной причиной. <span>Полная расшифровка по 9 системам — в разборе.</span>') +
+          '</p>' +
+        '<button type="button" class="calc-reveal__cta" id="miniQuizCta">' + (en ? 'Get a mini reading →' : 'Получить мини-разбор →') + '</button>' +
         '</div>';
       var mq = document.getElementById('miniQuizCta');
       if (mq) mq.addEventListener('click', function () {
         saveLeadDraft({ name: name, day: day, month: month, year: year });
-        if (typeof window.vqInlineStart === 'function') {
+        if (interfaceEnglish() && typeof window.vqbStartSeeded === 'function') {
+          window.vqbStartSeeded({ name: name, d: day, m: month, y: year, num: n, arch: t.arch });
+        } else if (typeof window.vqInlineStart === 'function') {
           window.vqInlineStart({ name: name, d: day, m: month, y: year, num: n, arch: t.arch });
         }
       });
@@ -182,7 +223,8 @@
       var money = reduceTo22(day + month);
       var love = reduceTo22(month + (year % 100));
       var fam = reduceTo22(day + (year % 100));
-      var a = MX_ARCH[core] || MX_ARCH[9];
+      var en = interfaceEnglish();
+      var a = en ? MX_ARCH_EN[core] || MX_ARCH_EN[9] : MX_ARCH[core] || MX_ARCH[9];
       var mi = Math.min(money, 9), li = Math.min(love, 9), fi = Math.min(fam, 9);
       document.getElementById('matrixCore').textContent = core;
       document.getElementById('matrixMoney').textContent = money;
@@ -190,17 +232,23 @@
       var txt = document.getElementById('matrixText');
       if (txt) {
         txt.innerHTML =
-          '<strong>Ядро ' + core + ' — «' + a.name + '».</strong> ' + a.desc +
-          '<br><br><strong>Деньги (' + money + '):</strong> ' + (MX_MONEY[mi] || '') +
-          '<br><strong>Любовь (' + love + '):</strong> ' + (MX_LOVE[li] || '') +
-          '<span class="calc-reveal__teaser">По числу ' + core + ' в зоне кармы видна ' + (MX_FAM[fi] || '') + '. Механизм и три шага под конфигурацию ' + core + '/' + money + '/' + love + ' — в полном разборе.</span>';
+          '<strong>' + (en ? 'Core ' : 'Ядро ') + core + (en ? ' — “' : ' — «') + a.name + (en ? '”.' : '».') + '</strong> ' + a.desc +
+          '<br><br><strong>' + (en ? 'Money (' : 'Деньги (') + money + '):</strong> ' + ((en ? MX_MONEY_EN : MX_MONEY)[mi] || '') +
+          '<br><strong>' + (en ? 'Love (' : 'Любовь (') + love + '):</strong> ' + ((en ? MX_LOVE_EN : MX_LOVE)[li] || '') +
+          '<span class="calc-reveal__teaser">' +
+            (en
+              ? 'Number ' + core + ' reveals ' + (MX_FAM_EN[fi] || '') + ' in the karmic area. The mechanism and three steps for your ' + core + '/' + money + '/' + love + ' configuration are in the full reading.'
+              : 'По числу ' + core + ' в зоне кармы видна ' + (MX_FAM[fi] || '') + '. Механизм и три шага под конфигурацию ' + core + '/' + money + '/' + love + ' — в полном разборе.') +
+          '</span>';
       }
       matrixResults.hidden = false;
       var mq = document.getElementById('matrixMiniQuizCta');
       if (mq) {
         mq.onclick = function () {
           saveLeadDraft({ day: day, month: month, year: year });
-          if (typeof window.vqInlineStart === 'function') {
+          if (interfaceEnglish() && typeof window.vqbStartSeeded === 'function') {
+            window.vqbStartSeeded({ d: day, m: month, y: year, num: Math.min(core, 9) || 9, arch: a.name });
+          } else if (typeof window.vqInlineStart === 'function') {
             window.vqInlineStart({ d: day, m: month, y: year, num: Math.min(core, 9) || 9, arch: a.name });
           }
         };
@@ -449,10 +497,29 @@
   }
 
   function cartLabel(productName) {
-    if (!productName || productName === 'Ты — целиком' || productName === 'Полный разбор') {
-      return 'Полный разбор';
+    var name = productName || 'Полный разбор';
+    if (name === 'Ты — целиком' || name === 'Ты - целиком') name = 'Полный разбор';
+    if (window.VelunaI18n && window.VelunaI18n.productTitle) {
+      return window.VelunaI18n.productTitle(name);
     }
-    return productName;
+    return name;
+  }
+
+  function syncAddonLabels() {
+    document.querySelectorAll('.order-modal__add[data-add]').forEach(function (btn) {
+      var add = btn.getAttribute('data-add');
+      var span = btn.querySelector('span');
+      if (span && add && window.VelunaI18n) span.textContent = window.VelunaI18n.productTitle(add);
+    });
+    if (currentProduct && orderProduct) orderProduct.textContent = cartLabel(currentProduct);
+  }
+
+  if (window.VelunaI18n && window.VelunaI18n.onChange) {
+    window.VelunaI18n.onChange(function () {
+      syncAddonLabels();
+      syncDealUpgrade();
+      updateOrderTotal();
+    });
   }
 
   var DRAFT_KEY = 'veluna-lead-draft';
@@ -500,6 +567,7 @@
     basePrice = resolveBasePrice(currentProduct);
     addons = {};
     if (orderProduct) orderProduct.textContent = cartLabel(currentProduct);
+    syncAddonLabels();
     if (orderNote) {
       orderNote.hidden = true;
       orderNote.textContent = '';
@@ -981,6 +1049,10 @@
         city: orderForm.city.value.trim(),
         phone: (orderForm.phone && orderForm.phone.value.trim()) || '',
         contact: orderForm.contact.value.trim(),
+        language:
+          window.VelunaI18n && window.VelunaI18n.getLang
+            ? window.VelunaI18n.getLang()
+            : 'ru',
         at: new Date().toISOString()
       };
       saveLeadDraft({
@@ -1049,6 +1121,7 @@
         name: data.name,
         phone: data.phone,
         contact: data.contact,
+        language: data.language === 'en' ? 'en' : 'ru',
         email: '',
         provider: selectedPayProvider(),
         meta: {
@@ -1056,7 +1129,8 @@
           month: data.month,
           year: data.year,
           time: data.time,
-          city: data.city
+          city: data.city,
+          language: data.language === 'en' ? 'en' : 'ru'
         }
       };
 
@@ -1179,25 +1253,29 @@
   }
 
   var WHEEL_PKGS = {
-    destiny:  { key: 'destiny',  name: 'Число судьбы',   price: 1990,  icon: '🔢', desc: 'Первый слой — характер, сила и урок.' },
-    forecast: { key: 'forecast', name: 'Прогноз 2026',   price: 3990,  icon: '🗓', desc: 'Что несёт этот год именно тебе — по кварталам.' },
-    money:    { key: 'money',    name: 'Денежный код',   price: 3990,  icon: '💸', desc: 'Твой денежный канал, потолок и блоки — честно.' },
-    love:     { key: 'love',     name: 'Сценарий любви', price: 4990,  icon: '💔', desc: 'Почему ты выбираешь одно и то же — и как выйти.' },
-    realize:  { key: 'realize',  name: 'Реализация',     price: 3990,  icon: '🚀', desc: 'Твоя настоящая сила и путь — без чужих советов.' },
-    blocks:   { key: 'blocks',   name: 'Скрытые блоки',  price: 3990,  icon: '🔓', desc: 'Что именно тормозит тебя — в деньгах, в любви.' },
-    full:     { key: 'full',     name: 'Полный разбор',  price: 9900,  icon: '✦',  desc: 'Вся карта целиком — все сферы, PDF в Telegram.' }
+    destiny:  { key: 'destiny',  name: 'Число судьбы', en: 'Destiny Number', price: 1990, icon: '🔢', desc: 'Первый слой — характер, сила и урок.', descEn: 'The first layer: character, strength and lesson.' },
+    forecast: { key: 'forecast', name: 'Прогноз 2026', en: '2026 Forecast', price: 3990, icon: '🗓', desc: 'Что несёт этот год именно тебе — по кварталам.', descEn: 'What this year brings you, quarter by quarter.' },
+    money:    { key: 'money',    name: 'Денежный код', en: 'Money Code', price: 3990, icon: '💸', desc: 'Твой денежный канал, потолок и блоки — честно.', descEn: 'Your money channel, ceiling and blocks — honestly.' },
+    love:     { key: 'love',     name: 'Сценарий любви', en: 'Love Scenario', price: 4990, icon: '💔', desc: 'Почему ты выбираешь одно и то же — и как выйти.', descEn: 'Why you repeat the same choice — and how to change it.' },
+    realize:  { key: 'realize',  name: 'Реализация', en: 'Realization', price: 3990, icon: '🚀', desc: 'Твоя настоящая сила и путь — без чужих советов.', descEn: 'Your real strength and path — without other people’s advice.' },
+    blocks:   { key: 'blocks',   name: 'Скрытые блоки', en: 'Hidden Blocks', price: 3990, icon: '🔓', desc: 'Что именно тормозит тебя — в деньгах, в любви.', descEn: 'What holds you back in money and love.' },
+    full:     { key: 'full',     name: 'Полный разбор', en: 'Full Reading', price: 9900, icon: '✦', desc: 'Вся карта целиком — все сферы, PDF в Telegram.', descEn: 'Your complete map across every area, delivered as a PDF.' }
   };
 
   var spheres = [
-    { id: 'growth',   emoji: '🌱', name: 'Рост',        pkg: 'realize', advice: 'Выдели 20 минут в день на то, что расширяет тебя — книга, навык, разговор с тем, кто уже там, куда ты идёшь.' },
-    { id: 'health',   emoji: '💗', name: 'Здоровье',    pkg: 'blocks',  advice: 'Выбери одну опору: сон до полуночи, вода, 7 000 шагов. Тело — фундамент, на котором держатся все остальные сферы.' },
-    { id: 'finance',  emoji: '💰', name: 'Финансы',     pkg: 'money',   advice: 'Чаще дело не в доходе, а в невидимом потолке. Выпиши свои убеждения про деньги — ответ обычно прячется там.' },
-    { id: 'career',   emoji: '🏔', name: 'Карьера',     pkg: 'realize', advice: 'Честно спроси себя: это твой путь или чужие ожидания? Один прямой разговор способен развернуть весь год.' },
-    { id: 'love',     emoji: '💑', name: 'Отношения',   pkg: 'love',    advice: 'Заметь повторяющийся сценарий. То, что возвращается по кругу — это и есть то, что просит твоего внимания.' },
-    { id: 'social',   emoji: '👥', name: 'Окружение',   pkg: 'love',    advice: 'Сделай ревизию окружения: кто наполняет, а кто забирает. Глубина связей важнее их количества.' },
-    { id: 'creative', emoji: '🎨', name: 'Творчество',  pkg: 'realize', advice: 'Дай себе право на «бесполезное» творчество — без результата и оценки. Именно оно возвращает энергию.' },
-    { id: 'spirit',   emoji: '🧘', name: 'Духовность',  pkg: 'destiny', advice: 'Пять минут тишины в день без телефона. Не практика ради практики — просто возможность вернуться к себе.' }
+    { id: 'growth', emoji: '🌱', name: 'Рост', en: 'Growth', pkg: 'realize', advice: 'Выдели 20 минут в день на то, что расширяет тебя — книга, навык, разговор с тем, кто уже там, куда ты идёшь.', adviceEn: 'Spend 20 minutes a day on something that expands you: a book, a skill or a conversation with someone further along the path.' },
+    { id: 'health', emoji: '💗', name: 'Здоровье', en: 'Health', pkg: 'blocks', advice: 'Выбери одну опору: сон до полуночи, вода, 7 000 шагов. Тело — фундамент, на котором держатся все остальные сферы.', adviceEn: 'Choose one foundation: sleep before midnight, enough water or 7,000 steps. Your body supports every other area.' },
+    { id: 'finance', emoji: '💰', name: 'Финансы', en: 'Finances', pkg: 'money', advice: 'Чаще дело не в доходе, а в невидимом потолке. Выпиши свои убеждения про деньги — ответ обычно прячется там.', adviceEn: 'The issue is often not income but an invisible ceiling. Write down your beliefs about money; the answer often hides there.' },
+    { id: 'career', emoji: '🏔', name: 'Карьера', en: 'Career', pkg: 'realize', advice: 'Честно спроси себя: это твой путь или чужие ожидания? Один прямой разговор способен развернуть весь год.', adviceEn: 'Ask yourself honestly: is this your path or someone else’s expectation? One direct conversation can change the year.' },
+    { id: 'love', emoji: '💑', name: 'Отношения', en: 'Relationships', pkg: 'love', advice: 'Заметь повторяющийся сценарий. То, что возвращается по кругу — это и есть то, что просит твоего внимания.', adviceEn: 'Notice the repeating pattern. What keeps returning is asking for your attention.' },
+    { id: 'social', emoji: '👥', name: 'Окружение', en: 'Social circle', pkg: 'love', advice: 'Сделай ревизию окружения: кто наполняет, а кто забирает. Глубина связей важнее их количества.', adviceEn: 'Review your circle: who restores you and who drains you? The depth of a connection matters more than the number of connections.' },
+    { id: 'creative', emoji: '🎨', name: 'Творчество', en: 'Creativity', pkg: 'realize', advice: 'Дай себе право на «бесполезное» творчество — без результата и оценки. Именно оно возвращает энергию.', adviceEn: 'Give yourself permission for “unproductive” creativity, without outcomes or judgment. It restores your energy.' },
+    { id: 'spirit', emoji: '🧘', name: 'Духовность', en: 'Spirituality', pkg: 'destiny', advice: 'Пять минут тишины в день без телефона. Не практика ради практики — просто возможность вернуться к себе.', adviceEn: 'Take five quiet minutes a day without your phone. It is simply a way to return to yourself.' }
   ];
+
+  function wheelEnglish() {
+    return window.VelunaI18n && window.VelunaI18n.getLang && window.VelunaI18n.getLang() === 'en';
+  }
 
   var values = spheres.map(function () { return 5; });
   // Canvas angles clockwise from top — match Figma Desktop-15 labels
@@ -1248,6 +1326,23 @@
 
   function wheelInsightHtml() {
     var v = valsById();
+    if (wheelEnglish()) {
+      var rulesEn = [
+        { c: function () { return v.finance >= 7 && v.career >= 7; }, t: '<strong>Money and career are strong</strong> — your energy flows there. Check whether health or intimacy is paying the price.' },
+        { c: function () { return v.love >= 7 && v.social >= 7; }, t: '<strong>Relationships and your social circle are strong</strong> — connection matters to you. The question is whether these connections are truly yours.' },
+        { c: function () { return v.spirit >= 7 && v.creative >= 7; }, t: '<strong>Spirituality and creativity are high</strong> — you are inwardly rich. People with this pattern often undervalue themselves financially.' },
+        { c: function () { return v.health <= 4; }, t: '<strong>Health is below 4</strong> — your body is saying something important. Make it the first priority.' },
+        { c: function () { return v.finance <= 4; }, t: '<strong>Finances are in the red zone</strong> — the issue is probably not skill, but a specific block.' },
+        { c: function () { return v.love <= 4; }, t: '<strong>Relationships are low</strong> — this may be a healthy pause, or a pattern repeating itself.' }
+      ];
+      for (var e = 0; e < rulesEn.length; e++) {
+        if (rulesEn[e].c()) return rulesEn[e].t;
+      }
+      var avgEn = values.reduce(function (a, b) { return a + b; }, 0) / values.length;
+      if (avgEn >= 7) return 'Overall, your map is <strong>balanced and strong</strong>. The weakest link is where the next shift begins.';
+      if (avgEn <= 4) return '<strong>Several areas are in the red at once</strong>. Start with the one that can lift the rest.';
+      return 'Interesting picture. <strong>Move the sliders</strong> — I’ll show you what I see.';
+    }
     var rules = [
       { c: function () { return v.finance >= 7 && v.career >= 7; }, t: '<strong>Деньги и карьера сильные</strong> — энергия идёт туда. Проверь: не за счёт ли здоровья или близости?' },
       { c: function () { return v.love >= 7 && v.social >= 7; }, t: '<strong>Отношения и окружение развиты</strong> — ты человек связей. Вопрос лишь: твои ли это связи?' },
@@ -1277,8 +1372,8 @@
       row.className = 'wheel__slider-row';
       row.innerHTML =
         '<span class="wheel__slider-emoji">' + sphere.emoji + '</span>' +
-        '<span class="wheel__slider-name">' + sphere.name + '</span>' +
-        '<input type="range" min="1" max="10" value="' + values[i] + '" data-index="' + i + '" aria-label="' + sphere.name + '">' +
+        '<span class="wheel__slider-name">' + (wheelEnglish() ? sphere.en : sphere.name) + '</span>' +
+        '<input type="range" min="1" max="10" value="' + values[i] + '" data-index="' + i + '" aria-label="' + (wheelEnglish() ? sphere.en : sphere.name) + '">' +
         '<span class="wheel__slider-value" data-value="' + i + '">' + values[i] + '</span>';
       slidersRoot.appendChild(row);
     });
@@ -1388,10 +1483,11 @@
     var scored = spheres.map(function (s, i) {
       return {
         id: s.id,
-        name: s.name,
+        name: wheelEnglish() ? s.en : s.name,
+        rawName: s.name,
         emoji: s.emoji,
         pkg: s.pkg,
-        advice: s.advice,
+        advice: wheelEnglish() ? s.adviceEn : s.advice,
         val: values[i]
       };
     });
@@ -1403,7 +1499,13 @@
     var lowCount = scored.filter(function (x) { return x.val <= 4; }).length;
 
     var ovl;
-    if (avg >= 8) ovl = 'Сильная, наполненная карта';
+    if (wheelEnglish()) {
+      if (avg >= 8) ovl = 'A strong, full map';
+      else if (avg >= 6.5) ovl = 'Stable overall';
+      else if (avg >= 5) ovl = 'Clear room for growth';
+      else if (avg >= 3.5) ovl = 'Several areas need support';
+      else ovl = 'Almost every area is in the red';
+    } else if (avg >= 8) ovl = 'Сильная, наполненная карта';
     else if (avg >= 6.5) ovl = 'В целом устойчиво';
     else if (avg >= 5) ovl = 'Есть куда расти';
     else if (avg >= 3.5) ovl = 'Много сфер просело';
@@ -1424,7 +1526,11 @@
     sec = sec.slice(0, 2);
 
     var primary = WHEEL_PKGS[primaryKey];
-    var reason = primaryKey === 'full'
+    var reason = wheelEnglish()
+      ? primaryKey === 'full'
+        ? 'Several areas are in the red at once. The Full Reading shows the complete map and where to begin.'
+        : 'Your lowest area is “' + weakest.name + '”. “' + primary.en + '” focuses directly on this block, so it is the best place to start.'
+      : primaryKey === 'full'
       ? 'Сразу несколько сфер в красной зоне — по одной их не вытянуть. «Полный разбор» показывает всю карту целиком и подсказывает, за какую ниточку тянуть первой.'
       : 'Твоя самая просевшая сфера — «' + weakest.name + '». «' + primary.name + '» смотрит ровно в этот блок — с него и стоит начать.';
 
@@ -1449,46 +1555,58 @@
       var q = WHEEL_PKGS[k];
       return '<button type="button" class="wheel-result__sec-card" data-wheel-buy="' + q.name + '">' +
         '<div class="icon">' + q.icon + '</div>' +
-        '<strong>' + q.name + '</strong>' +
-        '<p>' + q.desc + '</p>' +
-        '<div class="row">' + formatTenge(q.price) + '<span>Взять →</span></div>' +
+        '<strong>' + (wheelEnglish() ? q.en : q.name) + '</strong>' +
+        '<p>' + (wheelEnglish() ? q.descEn : q.desc) + '</p>' +
+        '<div class="row">' + formatTenge(q.price) + '<span>' + (wheelEnglish() ? 'Choose →' : 'Взять →') + '</span></div>' +
       '</button>';
     }).join('');
 
     wheelResultInner.innerHTML =
-      '<p class="wheel-result__eyebrow">твоя карта на сегодня</p>' +
-      '<h2 class="wheel-result__title">Вот что видно в <em>твоём балансе</em></h2>' +
+      '<p class="wheel-result__eyebrow">' + (wheelEnglish() ? 'your map today' : 'твоя карта на сегодня') + '</p>' +
+      '<h2 class="wheel-result__title">' +
+        (wheelEnglish() ? 'What your <em>balance reveals</em>' : 'Вот что видно в <em>твоём балансе</em>') +
+      '</h2>' +
       '<div class="wheel-result__summary">' +
         '<div class="wheel-result__score">' +
           '<svg viewBox="0 0 132 132" aria-hidden="true">' +
             '<circle cx="66" cy="66" r="52" fill="none" stroke="' + trackStroke + '" stroke-width="11"></circle>' +
             '<circle cx="66" cy="66" r="52" fill="none" stroke="' + theme.accent + '" stroke-width="11" stroke-linecap="round" stroke-dasharray="' + circ + '" stroke-dashoffset="' + off + '"></circle>' +
           '</svg>' +
-          '<div class="wheel-result__score-num">' + avg.toFixed(1) + '<span>из 10</span></div>' +
+          '<div class="wheel-result__score-num">' + avg.toFixed(1) + '<span>' + (wheelEnglish() ? 'of 10' : 'из 10') + '</span></div>' +
         '</div>' +
         '<div>' +
           '<h3>' + ovl + '</h3>' +
-          '<p>Сильнее всего — <strong>' + strongest.name + '</strong> (' + strongest.val + '/10). Самая просевшая — <strong>' + weakest.name + '</strong> (' + weakest.val + '/10). Разрыв между ними и есть твой настоящий дисбаланс.</p>' +
+          '<p>' +
+            (wheelEnglish()
+              ? 'Your strongest area is <strong>' + strongest.name + '</strong> (' + strongest.val + '/10). Your lowest is <strong>' + weakest.name + '</strong> (' + weakest.val + '/10). The gap between them is your real imbalance.'
+              : 'Сильнее всего — <strong>' + strongest.name + '</strong> (' + strongest.val + '/10). Самая просевшая — <strong>' + weakest.name + '</strong> (' + weakest.val + '/10). Разрыв между ними и есть твой настоящий дисбаланс.') +
+          '</p>' +
         '</div>' +
       '</div>' +
-      '<h3 class="wheel-result__section-title">Точки роста <span>— куда смотреть в первую очередь</span></h3>' +
+      '<h3 class="wheel-result__section-title">' +
+        (wheelEnglish() ? 'Growth points <span>— where to look first</span>' : 'Точки роста <span>— куда смотреть в первую очередь</span>') +
+      '</h3>' +
       '<div class="wheel-result__growth">' + growthHtml + '</div>' +
-      '<h3 class="wheel-result__section-title">Что тебе подойдёт</h3>' +
+      '<h3 class="wheel-result__section-title">' + (wheelEnglish() ? 'What suits you' : 'Что тебе подойдёт') + '</h3>' +
       '<div class="wheel-result__primary">' +
-        '<p class="wheel-result__primary-label">рекомендую начать с этого</p>' +
+        '<p class="wheel-result__primary-label">' + (wheelEnglish() ? 'recommended starting point' : 'рекомендую начать с этого') + '</p>' +
         '<div class="wheel-result__primary-row">' +
           '<span class="icon">' + primary.icon + '</span>' +
-          '<div><h4>' + primary.name + '</h4><p class="desc">' + primary.desc + '</p></div>' +
+          '<div><h4>' + (wheelEnglish() ? primary.en : primary.name) + '</h4><p class="desc">' + (wheelEnglish() ? primary.descEn : primary.desc) + '</p></div>' +
           '<div class="price">' + formatTenge(primary.price) + '</div>' +
         '</div>' +
         '<p class="reason">' + reason + '</p>' +
-        '<button type="button" class="wheel-result__buy" data-wheel-buy="' + primary.name + '">Взять «' + primary.name + '» →</button>' +
+        '<button type="button" class="wheel-result__buy" data-wheel-buy="' + primary.name + '">' +
+          (wheelEnglish() ? 'Choose “' + primary.en + '” →' : 'Взять «' + primary.name + '» →') +
+        '</button>' +
       '</div>' +
-      (secHtml ? '<p class="wheel-result__also">А ещё под твою карту подходит:</p><div class="wheel-result__sec">' + secHtml + '</div>' : '') +
-      '<button type="button" class="wheel-result__again" id="wheelAgain">← изменить оценки</button>';
+      (secHtml
+        ? '<p class="wheel-result__also">' + (wheelEnglish() ? 'Also suited to your map:' : 'А ещё под твою карту подходит:') + '</p><div class="wheel-result__sec">' + secHtml + '</div>'
+        : '') +
+      '<button type="button" class="wheel-result__again" id="wheelAgain">' + (wheelEnglish() ? '← change ratings' : '← изменить оценки') + '</button>';
 
     wheelResult.hidden = false;
-    if (wheelGo) wheelGo.textContent = 'Обновить результат ✦';
+    if (wheelGo) wheelGo.textContent = wheelEnglish() ? 'Update result ✦' : 'Обновить результат ✦';
 
     wheelResultInner.querySelectorAll('[data-wheel-buy]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -1533,6 +1651,13 @@
   buildSliders();
   drawRadar();
   updateWheelHint();
+  if (window.VelunaI18n && window.VelunaI18n.onChange) {
+    window.VelunaI18n.onChange(function () {
+      buildSliders();
+      updateWheelHint();
+      if (wheelResult && !wheelResult.hidden) showWheelResult();
+    });
+  }
   window.velunaRedrawWheel = function () {
     drawRadar();
   };

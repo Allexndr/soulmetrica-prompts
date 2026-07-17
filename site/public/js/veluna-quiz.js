@@ -79,6 +79,7 @@
   .vqb-timer b{font-family:'Playfair Display',serif;font-size:16px;color:#0E7A50;font-variant-numeric:tabular-nums;}
   .vqb-cta{display:block;width:100%;padding:14px;border-radius:14px;cursor:pointer;font-family:inherit;font-size:15px;font-weight:800;transition:transform .15s,filter .15s;}
   .vqb-trust{font-size:12px;color:#857A92;text-align:center;margin-top:9px;}
+  html[lang="en"] .vqb-x::before{content:'Hide';}
 
   @media (max-width:720px){
     .vqb-panel,.vqb-panel.vqb-center,.vqb-panel.vqb-center.on{
@@ -89,6 +90,7 @@
     }
     .vqb-panel.on,.vqb-panel.vqb-center.on{transform:translate3d(0,0,0)!important;}
     .vqb-x::before{content:'Скрыть';}
+    html[lang="en"] .vqb-x::before{content:'Hide';}
     .vqb-launch-bubble{max-width:170px;font-size:13px;}
     .vqb-av{width:54px;height:54px;font-size:23px;}
   }
@@ -213,7 +215,76 @@
   }
   function hideTyping() { var t = document.getElementById('vqb-tmp-typing'); if (t) t.remove(); }
 
+  function englishMode() {
+    return window.VelunaI18n && window.VelunaI18n.getLang && window.VelunaI18n.getLang() === 'en';
+  }
+
+  function startEnglish() {
+    body.innerHTML = ''; clearOpts();
+    bot('Hi 🤍 I’m SoulMetrica.', function () {
+      bot('A birth date can reveal a lot. What feels most important to you right now?', function () {
+        opts([
+          { label: '💸 Money and financial blocks', fn: function () { englishPick('money', '💸 Money'); } },
+          { label: '💔 Love and repeating patterns', fn: function () { englishPick('love', '💔 Love'); } },
+          { label: '🚀 Purpose and realization', fn: function () { englishPick('realize', '🚀 Realization'); } },
+          { label: '🤍 Understanding myself', fn: function () { englishPick('self', '🤍 Understanding myself'); } }
+        ]);
+      });
+    });
+  }
+
+  function englishPick(sphere, label) {
+    state.sphere = sphere;
+    me(label);
+    clearOpts();
+    bot('Thank you. Would you like a focused first step or the complete picture?', function () {
+      opts([
+        {
+          label: 'A focused reading',
+          cls: 'vqb-prime',
+          fn: function () {
+            var product = sphere === 'self' ? P.self : P[sphere] || P.full;
+            me('A focused reading');
+            englishRecommendation(product);
+          }
+        },
+        {
+          label: 'The complete reading',
+          fn: function () {
+            me('The complete reading');
+            englishRecommendation(P.full);
+          }
+        },
+        { label: 'Show all readings', cls: 'vqb-ghost', fn: gotoProducts }
+      ]);
+    });
+  }
+
+  function englishRecommendation(product) {
+    clearOpts();
+    var title =
+      window.VelunaI18n && window.VelunaI18n.productTitle
+        ? window.VelunaI18n.productTitle(product.prod, 'en')
+        : product.prod;
+    bot('I recommend <b>' + title + '</b>. It is prepared personally from your birth data and delivered as a PDF in Telegram within 2–3 hours.', function () {
+      opts([
+        {
+          label: 'Order this reading →',
+          cls: 'vqb-prime',
+          fn: function () {
+            openCheckout(product);
+          }
+        },
+        { label: 'Show all readings', cls: 'vqb-ghost', fn: gotoProducts }
+      ]);
+    });
+  }
+
   function start() {
+    if (englishMode()) {
+      startEnglish();
+      return;
+    }
     body.innerHTML = ''; clearOpts();
     bot('Привет, моя хорошая 🤍 Я SoulMetrica.', function () {
       bot('По одной дате видно многое — будто чужой дневник, а там про тебя. Дай пару честных ответов, и я покажу, что ты <b>давно чувствуешь</b>. Идёт?', function () {
@@ -266,6 +337,10 @@
   }
 
   function startSeeded() {
+    if (englishMode()) {
+      startEnglish();
+      return;
+    }
     body.innerHTML = ''; clearOpts();
     var hi = state.name ? (state.name + ', это снова я 🤍 ') : 'Привет, моя хорошая 🤍 ';
     bot(hi + 'Я уже вижу твою дату — карта совсем не пустая. Дай пару штрихов про себя — и покажу то, от чего обычно мурашки.', function () {
@@ -464,6 +539,12 @@
   });
 
   window.velunaOpenBot = openPanel;
+  if (window.VelunaI18n && window.VelunaI18n.onChange) {
+    window.VelunaI18n.onChange(function () {
+      if (panel.classList.contains('on')) start();
+      else started = false;
+    });
+  }
 
   window.vqbStartSeeded = function (seed) {
     seed = seed || {};

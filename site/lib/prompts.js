@@ -47,6 +47,47 @@ var TITLES = {
   A09: 'Детский разбор'
 };
 
+var TITLES_EN = {
+  A01: 'Personal Express Reading',
+  A02: 'Money Code',
+  A03: 'Love Scenario',
+  A04: 'Realization',
+  A05: 'Hidden Blocks',
+  A06: 'Couple Compatibility',
+  A07: 'Full Personality Reading',
+  A08: '2026 Forecast',
+  A09: 'Child Reading'
+};
+
+var BLOCK_TITLES_EN = {
+  A01: ['Cover', 'Introduction', 'Core Personality', 'Strengths', 'Hidden Block', 'Money Scenario', 'Intimacy Scenario', 'Final Insight and Choice Point'],
+  A02: ['Cover', 'Introduction', 'Money Archetype', 'How Money Reaches You', 'Money Roles', 'Fields and Directions', 'Money Ceiling', 'Hidden Money Blocks', 'Your Money Year: 2026', 'Activation and Choice Point'],
+  A03: ['Cover', 'Introduction', 'Intimacy Scenario', 'The Magnet: Who Draws You In', 'The Match: Who Suits You', 'Relationship Phases', 'What You Unconsciously Do With Intimacy', 'Emotional and Sexual Scenario', 'The Relationship Lesson', 'Activation and Choice Point'],
+  A04: ['Cover', 'Introduction', 'Realization Archetype', 'Zone of Genius', 'Three Precise Niches', 'Your Role and Work Style', 'The Environment That Helps You Grow', 'Growth Map: 5 / 10 / 20 Years', 'What Blocks Your Realization', 'Activation and Choice Point'],
+  A05: ['Cover', 'Introduction', 'The Main Family Pattern', 'Four Key Blocks by Life Area', 'Self-Sabotage', 'Activation Triggers', 'The Ages When the Pattern Formed', 'The Core Lesson', 'How to Switch the Pattern Off', 'Activation and Choice Point'],
+  A06: ['Couple Cover', 'Introduction', 'Your Couple Type', 'Dynamics: Who Leads and Who Follows', 'Points of Attraction', 'Points of Friction', 'Emotional and Sexual Compatibility', 'Money and Daily Life as a Couple', 'The Couple Forecast: 1–3 Years', 'Activation and Choice Point'],
+  A07: ['Cover', 'Expanded Introduction', 'Core Personality', 'Talents and Zone of Genius', 'Full Money Map', 'Full Love Map', 'Map of Hidden Blocks', 'Life Cycles: Four Peaks', 'Age Map', '2026 Forecast', 'Five-Year Horizon', 'Life Mission and Choice Point'],
+  A08: ['Cover', 'Introduction', 'Your 2026 Year Type', 'Forecast by Phases of the Year', 'Money in 2026', 'Love and Relationships in 2026', 'Work and Realization in 2026', 'The Main Window of the Year', 'The Main Risk and Turning Point', 'Choice Point and What 2026 Sets in Motion'],
+  A09: ['Cover', 'Introduction', 'The Child’s Nature', 'Inborn Talents', 'How the Child Learns and Thinks', 'Emotional World and What the Child Needs', 'Challenges and Growth Areas', 'The Main Parenting Mistakes to Avoid', 'Age Development Map', 'The Child’s Nature and Your Role']
+};
+
+function orderLanguage(order) {
+  return order &&
+    (order.language === 'en' || (order.payment_meta && order.payment_meta.language === 'en'))
+    ? 'en'
+    : 'ru';
+}
+
+function titleForKey(key, language) {
+  return language === 'en' ? TITLES_EN[key] || TITLES[key] : TITLES[key];
+}
+
+function blockTitleFor(key, block, language) {
+  if (language !== 'en') return block.title;
+  var titles = BLOCK_TITLES_EN[key] || [];
+  return titles[Math.max(0, Number(block.num || 1) - 1)] || 'Chapter ' + Number(block.num || 1);
+}
+
 function normalizeProduct(name) {
   return String(name || '')
     .toLowerCase()
@@ -161,11 +202,34 @@ function formatDate(order) {
   var d = order.birth_day;
   var mo = order.birth_month;
   var y = order.birth_year;
-  if (!d || !mo || !y) return 'не указана';
+  if (!d || !mo || !y) return orderLanguage(order) === 'en' ? 'not provided' : 'не указана';
   return String(d).padStart(2, '0') + '.' + String(mo).padStart(2, '0') + '.' + y;
 }
 
 function buildUserContext(order) {
+  var language = orderLanguage(order);
+  if (language === 'en') {
+    var genderEn =
+      order.gender === 'male' ? 'male' : order.gender === 'female' ? 'female' : 'not provided';
+    var timeEn = order.birth_time || 'not provided';
+    var placeEn = order.birth_city || 'not provided';
+    return (
+      'OUTPUT LANGUAGE: ENGLISH ONLY. Translate all concepts and chapter content into natural English. ' +
+      'Do not use Russian or mix languages.\n' +
+      'Client data: Name ' +
+      (order.customer_name || 'Client') +
+      ' — birth date ' +
+      formatDate(order) +
+      ' — gender ' +
+      genderEn +
+      ' — birth time ' +
+      timeEn +
+      ' — birth place ' +
+      placeEn +
+      '.\nIf birth time or place is missing, follow the v12 data-degradation rule. Do not invent an Ascendant or Human Design data.\n' +
+      (order.contact ? 'Contact: ' + order.contact + '\n' : '')
+    );
+  }
   var gender =
     order.gender === 'male' ? 'мужской' : order.gender === 'female' ? 'женский' : 'не указан';
   var time = order.birth_time ? order.birth_time : 'не указано';
@@ -187,7 +251,23 @@ function buildUserContext(order) {
   );
 }
 
-function blockRequest(systemPrompt, userContext, block) {
+function blockRequest(systemPrompt, userContext, block, language) {
+  if (language === 'en') {
+    return (
+      userContext +
+      '\n\nGenerate ONLY this chapter of the v12 reading.\n' +
+      'STRICT FORMAT RULES:\n' +
+      '1) English only. No Russian words and no mixed language.\n' +
+      '2) No markdown: no # ## ### ** __ ` or ---.\n' +
+      '3) Do not repeat the chapter heading or chapter number.\n' +
+      '4) No placeholders. Use the client name exactly as provided.\n' +
+      '5) Style: clear, dense, direct and warm. Address the reader as “you”. Use short paragraphs.\n' +
+      '6) Do not name source systems or expose calculations. Do not invent Ascendant/Human Design data.\n' +
+      '7) End with one anchor sentence in quotation marks, without a label.\n' +
+      '8) The source specification below is in Russian; follow its meaning but write the entire response in fluent English.\n\n' +
+      block.body
+    );
+  }
   return (
     userContext +
     '\n\nСгенерируй ТОЛЬКО этот блок разбора (v12).\n' +
@@ -203,8 +283,17 @@ function blockRequest(systemPrompt, userContext, block) {
   );
 }
 
-function jsonFullRequest(userContext) {
+function jsonFullRequest(userContext, language) {
   var readingJson = require('./reading-json');
+  if (language === 'en') {
+    return (
+      userContext +
+      '\n\nGenerate the COMPLETE A07 reading in ENGLISH ONLY.\n' +
+      readingJson.JSON_OUTPUT_WRAPPER +
+      '\n\nReturn valid JSON only. Every user-visible field must be natural English: cover title, subtitle, epigraph, eyebrow, chapter title, lead, paragraphs, anchor, bridge and captions. ' +
+      'The blocks array contains 11 body chapters. Keep diagram identifiers unchanged: arc, radar, triad, forces, money, null, axis, life, ages, year, null, map.'
+    );
+  }
   return (
     userContext +
     '\n\nСгенерируй ПОЛНЫЙ разбор A07 целиком.\n' +
@@ -239,6 +328,7 @@ function productsForOrder(order) {
  */
 function buildMergedPlan(order) {
   var mainKey = resolveProductKey(order.product);
+  var language = orderLanguage(order);
   var plan = [];
   var displayNum = 0;
 
@@ -260,7 +350,7 @@ function buildMergedPlan(order) {
       productKey: mainKey,
       kind: 'main',
       block: block,
-      title: block.title
+      title: blockTitleFor(mainKey, block, language)
     });
   });
 
@@ -275,7 +365,7 @@ function buildMergedPlan(order) {
     if (mainKey === 'A07' && key === 'A01') return;
     seen[key] = true;
 
-    var moduleTitle = String(addon || '').trim() || TITLES[key] || key;
+    var moduleTitle = titleForKey(key, language) || String(addon || '').trim() || key;
     var blocks = parseBlocks(loadPromptFile(key));
     // Cover + intro already exist in the main doc — glue only depth chapters
     var contentBlocks = blocks.filter(function (b) {
@@ -289,10 +379,10 @@ function buildMergedPlan(order) {
       moduleTitle: moduleTitle,
       block: {
         num: 0,
-        title: 'Модуль · ' + moduleTitle,
+        title: (language === 'en' ? 'Module · ' : 'Модуль · ') + moduleTitle,
         body: ''
       },
-      title: 'Модуль · ' + moduleTitle
+      title: (language === 'en' ? 'Module · ' : 'Модуль · ') + moduleTitle
     });
 
     contentBlocks.forEach(function (block) {
@@ -301,14 +391,14 @@ function buildMergedPlan(order) {
         kind: 'addon',
         moduleTitle: moduleTitle,
         block: block,
-        title: moduleTitle + ' · ' + block.title
+        title: moduleTitle + ' · ' + blockTitleFor(key, block, language)
       });
     });
   });
 
   return {
     mainKey: mainKey,
-    mainTitle: TITLES[mainKey] || order.product,
+    mainTitle: titleForKey(mainKey, language) || order.product,
     addonKeys: Object.keys(seen).filter(function (k) {
       return k !== mainKey;
     }),
@@ -323,6 +413,9 @@ function orderHasAddons(order) {
 module.exports = {
   PRODUCT_MAP,
   TITLES,
+  TITLES_EN,
+  orderLanguage,
+  titleForKey,
   resolveProductKey,
   loadPromptFile,
   extractSystemPrompt,

@@ -375,32 +375,130 @@ function diagramMap(caption) {
   return figureWrap('Карта слоёв · связки вокруг ядра', svg, caption);
 }
 
+var EN_DIAGRAM_TEXT = {
+  'Личностный рост': 'Personal growth',
+  'Здоровье': 'Health',
+  'Финансы': 'Finances',
+  'Карьера и дело': 'Career & work',
+  'Отношения': 'Relationships',
+  'Окружение': 'Social circle',
+  'Творчество': 'Creativity',
+  'Эмоции': 'Emotions',
+  'Дом и комфорт': 'Home & comfort',
+  'Духовность': 'Spirituality',
+  'Узнавание': 'Recognition',
+  'Дискомфорт': 'Discomfort',
+  'Энергия действия': 'Energy for action',
+  'Характер': 'Character',
+  'Блоки · циклы': 'Blocks · cycles',
+  'Миссия': 'Mission',
+  'Путь разбора · три фазы': 'The reading path · three phases',
+  'Ты входишь через узнавание — и выходишь через выбор.': 'You enter through recognition — and leave through choice.',
+  'Твой контур силы · 10 сфер': 'Your strength contour · 10 areas',
+  'каким кажешься': 'how you appear',
+  'кто изнутри': 'who you are inside',
+  'кем хочешь стать': 'who you want to become',
+  'ты': 'you',
+  'Три слоя · снаружи · внутри · куда идёшь': 'Three layers · outside · inside · where you are going',
+  'Входишь и ведёшь': 'You enter and lead',
+  'главная — сила старта': 'primary — power to start',
+  'Видишь систему целиком': 'You see the whole system',
+  'поддерживающая': 'supporting',
+  'Держишь людей теплом': 'You hold people with warmth',
+  'теневая — не считаешь силой': 'shadow — a strength you overlook',
+  'Три силы · главная · опора · тень': 'Three strengths · primary · support · shadow',
+  'приход': 'inflow',
+  'потолок — «стало скучно, значит почти дошёл»': 'ceiling — “boredom means you are nearly there”',
+  'год': 'year',
+  'окно роста · весна': 'growth window · spring',
+  'окно роста · осень': 'growth window · autumn',
+  'просадка · середина лета': 'dip · midsummer',
+  'Денежный поток · потолок · окна года': 'Money flow · ceiling · windows of the year',
+  'лёгкость входа': 'ease of entry',
+  'сила': 'strength',
+  'лёгкость выхода': 'ease of exit',
+  'блок': 'block',
+  'один механизм': 'one mechanism',
+  'Одна ось · сила и блок': 'One axis · strength and block',
+  'цикл-вызов': 'challenge cycle',
+  'Юность': 'Youth',
+  'Зрелость I': 'Maturity I',
+  'Зрелость II': 'Maturity II',
+  'Поздний путь': 'Later path',
+  'Линия жизни · четыре цикла': 'Life line · four cycles',
+  'перелом': 'turning point',
+  'Точки сдвига · ±2 года': 'Turning points · ±2 years',
+  'I · разгон': 'I · momentum',
+  'II · рост': 'II · growth',
+  'III · выбор': 'III · choice',
+  'IV · сбор': 'IV · harvest',
+  'главное окно': 'main window',
+  'точка выбора года': 'choice point of the year',
+  'довёл одно → рост': 'finish one → growth',
+  'начал три → повтор петли': 'start three → repeat the loop',
+  'Год по кварталам · развилка': 'Year by quarters · the fork',
+  'ядро': 'core',
+  'СВОБОДА ↔ ОПОРА': 'FREEDOM ↔ SUPPORT',
+  'Талант': 'Talent',
+  'Деньги': 'Money',
+  'Любовь': 'Love',
+  'Реализация': 'Realization',
+  'Блоки': 'Blocks',
+  'Тело': 'Body',
+  'Циклы': 'Cycles',
+  'Карта слоёв · связки вокруг ядра': 'Layer map · links around the core'
+};
+
+function translateDiagramHtml(html) {
+  Object.keys(EN_DIAGRAM_TEXT)
+    .sort(function (a, b) {
+      return b.length - a.length;
+    })
+    .forEach(function (from) {
+      html = html.split(from).join(EN_DIAGRAM_TEXT[from]);
+    });
+  return html
+    .replace(/aria-label="[^"]*[А-Яа-яЁё][^"]*"/g, 'aria-label="Reading diagram"');
+}
+
 function renderDiagram(type, data, caption) {
   data = data || {};
+  var html = '';
   switch (type) {
     case 'arc':
-      return diagramArc(caption);
+      html = diagramArc(caption);
+      break;
     case 'radar':
-      return diagramRadar(data.spheres, caption);
+      html = diagramRadar(data.spheres, caption);
+      break;
     case 'triad':
-      return diagramTriad(caption);
+      html = diagramTriad(caption);
+      break;
     case 'forces':
-      return diagramForces(data.bars, caption);
+      html = diagramForces(data.bars, caption);
+      break;
     case 'money':
-      return diagramMoney(caption);
+      html = diagramMoney(caption);
+      break;
     case 'axis':
-      return diagramAxis(caption);
+      html = diagramAxis(caption);
+      break;
     case 'life':
-      return diagramLife(data.cycles, caption);
+      html = diagramLife(data.cycles, caption);
+      break;
     case 'ages':
-      return diagramAges(data.agePoints, data.peakAge, caption);
+      html = diagramAges(data.agePoints, data.peakAge, caption);
+      break;
     case 'year':
-      return diagramYear(caption);
+      html = diagramYear(caption);
+      break;
     case 'map':
-      return diagramMap(caption);
+      html = diagramMap(caption);
+      break;
     default:
       return '';
   }
+  return data.language === 'en' ? translateDiagramHtml(html) : html;
 }
 
 module.exports = {

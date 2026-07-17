@@ -49,6 +49,7 @@ async function handler(req, res) {
     var product = String(body.product || 'Разбор').slice(0, 60);
     var ip = sec.clientIp(req);
     var addons = Array.isArray(body.addons) ? body.addons : [];
+    var language = body.language === 'en' || (body.meta && body.meta.language === 'en') ? 'en' : 'ru';
     var checkout = await adminLib.getCheckoutSettings();
     var charged = await adminLib.resolveChargeAmount(product, addons, body.sum || body.total || 0);
     var sum = charged.amount;
@@ -130,6 +131,8 @@ async function handler(req, res) {
       birthTime: meta.time,
       birthCity: meta.city,
       gender: meta.gender || 'unknown',
+      language: language,
+      paymentMeta: { language: language },
       paymentProvider: provider
     });
 

@@ -373,18 +373,70 @@ function dualSelfSvg() {
   );
 }
 
+var EN_TEXT = {
+  'Сильные и зоны роста в сферах жизни': 'Strengths and growth areas across life',
+  'КАРТА СФЕР · ПО ТВОИМ ДАННЫМ': 'LIFE-AREA MAP · FROM YOUR DATA',
+  'Сильные стороны': 'Strengths',
+  'Зоны роста': 'Growth areas',
+  'День': 'Day',
+  'Месяц': 'Month',
+  'Год': 'Year',
+  'Судьба': 'Destiny',
+  'Комфорт': 'Comfort',
+  'центр ': 'center ',
+  'ПРЕДНАЗНАЧЕНИЕ': 'PURPOSE',
+  'общее в этой жизни': 'overall in this life',
+  'личное · социальное': 'personal · social',
+  'планетарное': 'planetary',
+  'Матрица судьбы': 'Destiny matrix',
+  'МАТРИЦА СУДЬБЫ': 'DESTINY MATRIX',
+  'Самооценка': 'Self-esteem',
+  'Деньги': 'Money',
+  'Талант': 'Talent',
+  'Цель': 'Goal',
+  'Семья': 'Family',
+  'Стабильность': 'Stability',
+  'Психоматрица': 'Psychomatrix',
+  'ПСИХОМАТРИЦА ДАТЫ': 'DATE PSYCHOMATRIX',
+  'Два слоя одной личности': 'Two layers of one personality',
+  'Снаружи': 'Outside',
+  'форма · роль': 'form · role',
+  'Внутри': 'Inside',
+  'мотив · конфликт': 'motive · conflict',
+  'стык': 'the junction'
+};
+
+function localizeDiagram(html, order) {
+  if (
+    !order ||
+    (order.language !== 'en' && (!order.payment_meta || order.payment_meta.language !== 'en'))
+  ) {
+    return html;
+  }
+  Object.keys(EN_TEXT)
+    .sort(function (a, b) {
+      return b.length - a.length;
+    })
+    .forEach(function (from) {
+      html = html.split(from).join(EN_TEXT[from]);
+    });
+  return html.replace(/aria-label="[^"]*[А-Яа-яЁё][^"]*"/g, 'aria-label="Personal reading diagram"');
+}
+
 function forIntro(order) {
-  return lifeWheelSvg(order);
+  return localizeDiagram(lifeWheelSvg(order), order);
 }
 
 function forChapter(title, order) {
   var t = String(title || '').toLowerCase();
-  if (/введен|с чего/.test(t)) return lifeWheelSvg(order);
-  if (/ядр|личност/.test(t)) return destinyMatrixSvg(order) + dualSelfSvg();
-  if (/талант|гени/.test(t)) return '';
-  if (/денеж|деньг/.test(t)) return '';
-  if (/люб|отношен/.test(t)) return '';
-  if (/блок/.test(t)) return matrixSvg(order);
+  if (/введен|с чего|introduction/.test(t)) return localizeDiagram(lifeWheelSvg(order), order);
+  if (/ядр|личност|core personality/.test(t)) {
+    return localizeDiagram(destinyMatrixSvg(order) + dualSelfSvg(), order);
+  }
+  if (/талант|гени|talent|genius/.test(t)) return '';
+  if (/денеж|деньг|money/.test(t)) return '';
+  if (/люб|отношен|love|relationship/.test(t)) return '';
+  if (/блок|block/.test(t)) return localizeDiagram(matrixSvg(order), order);
   return '';
 }
 

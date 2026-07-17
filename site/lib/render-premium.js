@@ -3,6 +3,13 @@
 var format = require('./format-reading');
 var diagramKit = require('./diagram-kit');
 
+function isEnglishOrder(order) {
+  return !!(
+    order &&
+    (order.language === 'en' || (order.payment_meta && order.payment_meta.language === 'en'))
+  );
+}
+
 function esc(s) {
   return format.escapeHtml(s);
 }
@@ -127,6 +134,7 @@ function mandalaSvg() {
 }
 
 function renderCover(cover, order) {
+  var isEn = isEnglishOrder(order);
   var dateStr = '';
   if (order && order.birth_day && order.birth_month && order.birth_year) {
     dateStr =
@@ -145,7 +153,9 @@ function renderCover(cover, order) {
     '<div class="cover-inner">' +
     '<div class="mark">SoulMetrica</div>' +
     '<h1>' +
-    esc(cover.title || 'Полный разбор личности и жизни').replace(/\s+и\s+/, '<br>и ') +
+    esc(cover.title || (isEn ? 'Full Personality and Life Reading' : 'Полный разбор личности и жизни'))
+      .replace(/\s+и\s+/, '<br>и ')
+      .replace(/\s+and\s+/, '<br>and ') +
     '</h1>' +
     (who ? '<div class="who">' + esc(who) + '</div>' : '') +
     '<p class="sub">' +
@@ -160,27 +170,35 @@ function renderCover(cover, order) {
         '</p>'
       : '') +
     '</div>' +
-    '<div class="scroll-cue">листай вниз ↓</div>' +
+    '<div class="scroll-cue">' + (isEn ? 'scroll down ↓' : 'листай вниз ↓') + '</div>' +
     '</section>'
   );
 }
 
 function renderSpheresSection(data) {
+  var isEn = data && data.language === 'en';
   return (
     '<section class="chapter">' +
-    '<div class="eyebrow"><span class="num">Карта сфер</span></div>' +
-    '<h2>Сильные и слабые стороны в сферах жизни</h2>' +
-    '<p class="lead">Сначала — картина целиком. Потом — словами.</p>' +
-    diagramKit.renderDiagram('radar', { spheres: data.spheres }, data.radarCaption) +
+    '<div class="eyebrow"><span class="num">' + (isEn ? 'Life-area map' : 'Карта сфер') + '</span></div>' +
+    '<h2>' + (isEn ? 'Strengths and growth areas across your life' : 'Сильные и слабые стороны в сферах жизни') + '</h2>' +
+    '<p class="lead">' + (isEn ? 'First, the whole picture. Then, the words.' : 'Сначала — картина целиком. Потом — словами.') + '</p>' +
+    diagramKit.renderDiagram(
+      'radar',
+      { spheres: data.spheres, language: data.language },
+      data.radarCaption
+    ) +
     '</section>'
   );
 }
 
 function renderBlock(block, data) {
+  var isEn = data && data.language === 'en';
   var html = '';
   html += '<section class="chapter">';
   html +=
-    '<div class="eyebrow"><span class="num">' + esc(block.eyebrow || 'Глава ' + block.num) + '</span></div>';
+    '<div class="eyebrow"><span class="num">' +
+    esc(block.eyebrow || (isEn ? 'Chapter ' : 'Глава ') + block.num) +
+    '</span></div>';
   html += '<h2>' + esc(block.title) + '</h2>';
 
   if (block.lead) {
@@ -188,6 +206,7 @@ function renderBlock(block, data) {
   }
 
   var diagramData = {
+    language: data.language,
     spheres: data.spheres,
     cycles: data.cycles,
     agePoints: data.agePoints,
@@ -215,10 +234,11 @@ function renderBlock(block, data) {
 function buildPremiumHtml(data, order) {
   data = data || {};
   order = order || {};
+  var isEn = isEnglishOrder(order);
 
   var introIdx = -1;
   (data.blocks || []).forEach(function (b, i) {
-    if (introIdx === -1 && /введен/i.test(b.title || '')) introIdx = i;
+    if (introIdx === -1 && /введен|introduction/i.test(b.title || '')) introIdx = i;
   });
 
   var blocksHtml = '';
@@ -234,10 +254,10 @@ function buildPremiumHtml(data, order) {
   }
 
   return (
-    '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">' +
+    '<!DOCTYPE html><html lang="' + (isEn ? 'en' : 'ru') + '"><head><meta charset="UTF-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<title>' +
-    esc(data.cover && data.cover.title ? data.cover.title : 'Полный разбор') +
+    esc(data.cover && data.cover.title ? data.cover.title : isEn ? 'Full Reading' : 'Полный разбор') +
     ' · SoulMetrica</title><style>' +
     premiumCss() +
     '</style></head><body>' +
@@ -248,7 +268,7 @@ function buildPremiumHtml(data, order) {
     '<div class="page">' +
     blocksHtml +
     '</div>' +
-    '<div class="end">SoulMetrica · полный разбор</div>' +
+    '<div class="end">SoulMetrica · ' + (isEn ? 'full reading' : 'полный разбор') + '</div>' +
     '</div></body></html>'
   );
 }

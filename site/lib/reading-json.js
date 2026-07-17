@@ -5,6 +5,13 @@ var format = require('./format-reading');
 var chartCalc = require('./chart-calc');
 var diagramKit = require('./diagram-kit');
 
+function isEnglishOrder(order) {
+  return !!(
+    order &&
+    (order.language === 'en' || (order.payment_meta && order.payment_meta.language === 'en'))
+  );
+}
+
 var ROMAN = [
   '',
   'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X',
@@ -68,17 +75,17 @@ function reduceNum(n) {
 }
 
 var DIAGRAM_BY_TITLE = [
-  { re: /введен/i, diagram: 'arc' },
-  { re: /ядро/i, diagram: 'triad' },
-  { re: /талант|гени/i, diagram: 'forces' },
-  { re: /денеж|деньг/i, diagram: 'money' },
-  { re: /любов/i, diagram: null },
-  { re: /блок/i, diagram: 'axis' },
-  { re: /цикл/i, diagram: 'life' },
-  { re: /возраст/i, diagram: 'ages' },
-  { re: /прогноз|2026/i, diagram: 'year' },
-  { re: /горизонт|5 лет|пять лет/i, diagram: null },
-  { re: /мисси|точк/i, diagram: 'map' }
+  { re: /введен|introduction/i, diagram: 'arc' },
+  { re: /ядро|core personality/i, diagram: 'triad' },
+  { re: /талант|гени|talent|genius/i, diagram: 'forces' },
+  { re: /денеж|деньг|money/i, diagram: 'money' },
+  { re: /любов|love/i, diagram: null },
+  { re: /блок|block/i, diagram: 'axis' },
+  { re: /цикл|cycle/i, diagram: 'life' },
+  { re: /возраст|age map/i, diagram: 'ages' },
+  { re: /прогноз|forecast|2026/i, diagram: 'year' },
+  { re: /горизонт|5 лет|пять лет|horizon|five.year/i, diagram: null },
+  { re: /мисси|точк|mission|choice point/i, diagram: 'map' }
 ];
 
 var DEFAULT_CAPTIONS = {
@@ -92,6 +99,19 @@ var DEFAULT_CAPTIONS = {
   ages: 'В переломном возрасте громче всего звучит то, от чего ты бежишь.',
   year: 'В этом году выигрывает не тот, кто начал, а тот, кто довёл.',
   map: 'Деньги, любовь и дело — не три темы. Это один механизм в трёх костюмах.'
+};
+
+var DEFAULT_CAPTIONS_EN = {
+  arc: 'You enter through recognition — and leave through choice.',
+  radar: 'Your contour is strongest where there is movement and novelty, and softer where staying is required.',
+  triad: 'Outside: weight and ease. Inside: an analyst who never fully switches off.',
+  forces: 'The third strength works without your awareness — and it is what people remember.',
+  money: 'Money follows where you are real, not where you are merely correct.',
+  axis: 'You stop one step before the finish with the same ease you use to begin.',
+  life: 'Your hardest cycle is the one that teaches you to stay.',
+  ages: 'At a turning age, what you run from speaks the loudest.',
+  year: 'This year rewards the person who finishes, not merely the person who starts.',
+  map: 'Money, love and work are not three topics. They are one mechanism in three forms.'
 };
 
 function roman(n) {
@@ -164,11 +184,23 @@ function diagramForTitle(title) {
 
 function spheresFromOrder(order) {
   var scored = chartCalc.sphereScores(order || {});
+  var labelsEn = {
+    growth: 'Personal growth',
+    health: 'Health',
+    finance: 'Finances',
+    career: 'Career & work',
+    relations: 'Relationships',
+    circle: 'Social circle',
+    creativity: 'Creativity',
+    emotions: 'Emotions',
+    home: 'Home & comfort',
+    spirit: 'Spirituality'
+  };
   return diagramKit.SPHERE_META.map(function (meta, i) {
     var src = scored.spheres[i] || {};
     return {
       key: meta.key,
-      label: meta.label || src.label,
+      label: isEnglishOrder(order) ? labelsEn[meta.key] : meta.label || src.label,
       value: Math.round(scored.strong[i] || 5)
     };
   });
@@ -223,13 +255,19 @@ function talentBars(order) {
 }
 
 function extractCover(chapters, order) {
+  var en = isEnglishOrder(order);
   var cover = chapters.find(function (c) {
-    return c.num === 1 || /облож/i.test(c.title);
+    return c.num === 1 || /облож|cover/i.test(c.title);
   });
   var name = (order && order.customer_name) || '';
-  var who = name ? 'для ' + name : '';
-  var subtitle = 'Карта из двенадцати слоёв твоей жизни — характер, талант, деньги, любовь, блоки, циклы, миссия — и то, как они держат друг друга.';
-  var epigraph = '«Читай медленно. Там, где захочется спорить — обычно самое точное.»';
+  var who = name ? (en ? 'For ' : 'для ') + name : '';
+  var defaultSubtitle = en
+    ? 'A twelve-layer map of your life — character, talent, money, love, blocks, cycles and mission — and how they support one another.'
+    : 'Карта из двенадцати слоёв твоей жизни — характер, талант, деньги, любовь, блоки, циклы, миссия — и то, как они держат друг друга.';
+  var subtitle = defaultSubtitle;
+  var epigraph = en
+    ? '“Read slowly. The part you want to argue with is often the most precise.”'
+    : '«Читай медленно. Там, где захочется спорить — обычно самое точное.»';
 
   if (cover && cover.text) {
     var parts = String(cover.text)
@@ -239,8 +277,8 @@ function extractCover(chapters, order) {
       })
       .filter(Boolean);
     parts.forEach(function (p) {
-      if (/^[«"]/.test(p) && epigraph.indexOf('«') === 0) epigraph = p;
-      else if (!subtitle || subtitle.indexOf('Карта из') === 0) {
+      if (/^[«"“]/.test(p) && (epigraph.indexOf('«') === 0 || epigraph.indexOf('“') === 0)) epigraph = p;
+      else if (!subtitle || subtitle === defaultSubtitle) {
         if (p.length > 24 && p.length < 200 && !/^[«"]/.test(p)) subtitle = p;
       }
     });
@@ -249,7 +287,7 @@ function extractCover(chapters, order) {
   }
 
   return {
-    title: 'Полный разбор личности и жизни',
+    title: en ? 'Full Personality and Life Reading' : 'Полный разбор личности и жизни',
     who: who,
     subtitle: scrubName(subtitle, name),
     epigraph: scrubName(epigraph, name)
@@ -257,7 +295,7 @@ function extractCover(chapters, order) {
 }
 
 function isCoverChapter(ch) {
-  return ch.num === 1 || /облож/i.test(ch.title || '');
+  return ch.num === 1 || /облож|cover/i.test(ch.title || '');
 }
 
 function assembleFromReading(reading, order) {
@@ -281,18 +319,22 @@ function assembleFromReading(reading, order) {
     var diagram = diagramForTitle(ch.title);
     return {
       num: roman(idx + 1),
-      eyebrow: 'Глава ' + roman(idx + 1),
+      eyebrow: (isEnglishOrder(order) ? 'Chapter ' : 'Глава ') + roman(idx + 1),
       title: scrubName(ch.title, name),
       paragraphs: parsed.paragraphs,
       lead: parsed.lead,
       anchor: parsed.anchor,
       bridge: parsed.bridge,
       diagram: diagram,
-      diagramCaption: diagram ? DEFAULT_CAPTIONS[diagram] || null : null
+      diagramCaption:
+        diagram
+          ? (isEnglishOrder(order) ? DEFAULT_CAPTIONS_EN : DEFAULT_CAPTIONS)[diagram] || null
+          : null
     };
   });
 
   return {
+    language: isEnglishOrder(order) ? 'en' : 'ru',
     cover: cover,
     spheres: spheres,
     cycles: cycles,
@@ -367,6 +409,7 @@ function jsonToBlocks(data) {
 
 function mergeJsonWithOrder(data, order) {
   data = data || {};
+  data.language = isEnglishOrder(order) ? 'en' : 'ru';
   if (!data.spheres || data.spheres.length !== 10) {
     data.spheres = spheresFromOrder(order);
   }
@@ -383,7 +426,8 @@ function mergeJsonWithOrder(data, order) {
   (data.blocks || []).forEach(function (b) {
     if (!b.diagram) b.diagram = diagramForTitle(b.title);
     if (b.diagram && !b.diagramCaption) {
-      b.diagramCaption = DEFAULT_CAPTIONS[b.diagram] || null;
+      b.diagramCaption =
+        (isEnglishOrder(order) ? DEFAULT_CAPTIONS_EN : DEFAULT_CAPTIONS)[b.diagram] || null;
     }
   });
   return data;

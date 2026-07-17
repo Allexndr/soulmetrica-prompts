@@ -7,7 +7,6 @@ var llm = require('./llm');
 var telegram = require('./telegram');
 var orders = require('./orders');
 var format = require('./format-reading');
-var pdfReading = require('./pdf-reading');
 var htmlToPdf = require('./html-to-pdf');
 var htmlReading = require('./html-reading');
 var readingJson = require('./reading-json');
@@ -109,7 +108,8 @@ async function processA07Json(reading) {
 
   var md = prompts.loadPromptFile(reading.product_key);
   var system = prompts.extractSystemPrompt(md);
-  var userPrompt = prompts.jsonFullRequest(prompts.buildUserContext(order));
+  var language = prompts.orderLanguage(order);
+  var userPrompt = prompts.jsonFullRequest(prompts.buildUserContext(order), language);
 
   await db
     .from('readings')
@@ -171,6 +171,7 @@ async function processOneBlock(reading) {
 
   var plan = prompts.buildMergedPlan(order);
   var steps = plan.steps;
+  var language = prompts.orderLanguage(order);
   var userContext = prompts.buildUserContext(order);
 
   if (reading.blocks_done >= steps.length) {
@@ -194,22 +195,29 @@ async function processOneBlock(reading) {
 
   if (step.kind === 'divider') {
     text = format.cleanText(
-      'Дальше — расширение «' +
-        (step.moduleTitle || title) +
-        '». Это отдельный глубокий слой по теме, который ты добавил к основному разбору. Читай как продолжение одной карты, а не как второй файл.'
+      language === 'en'
+        ? 'Next comes the “' +
+            (step.moduleTitle || title) +
+            '” extension. This is a deeper layer added to your main reading. Read it as the continuation of one map, not as a separate document.'
+        : 'Дальше — расширение «' +
+            (step.moduleTitle || title) +
+            '». Это отдельный глубокий слой по теме, который ты добавил к основному разбору. Читай как продолжение одной карты, а не как второй файл.'
     );
   } else {
     var md = prompts.loadPromptFile(step.productKey);
     var system = prompts.extractSystemPrompt(md);
     var blockForLlm = Object.assign({}, step.block, { title: step.title });
-    var userPrompt = prompts.blockRequest(system, userContext, blockForLlm);
+    var userPrompt = prompts.blockRequest(system, userContext, blockForLlm, language);
     if (step.kind === 'addon') {
-      userPrompt +=
-        '\n\nКОНТЕКСТ СКЛЕЙКИ: это модуль «' +
-        step.moduleTitle +
-        '», который дописывается в основной документ клиента. ' +
-        'Не пиши отдельную обложку и не повторяй введение «кто ты». Сразу дай содержание главы. ' +
-        'Согласуй тон с уже собранным полным разбором.';
+      userPrompt += language === 'en'
+        ? '\n\nMERGE CONTEXT: this is the “' +
+          step.moduleTitle +
+          '” module appended to the client’s main document. Do not write a separate cover or repeat the general introduction. Start directly with the chapter content and keep the tone consistent with the full reading.'
+        : '\n\nКОНТЕКСТ СКЛЕЙКИ: это модуль «' +
+          step.moduleTitle +
+          '», который дописывается в основной документ клиента. ' +
+          'Не пиши отдельную обложку и не повторяй введение «кто ты». Сразу дай содержание главы. ' +
+          'Согласуй тон с уже собранным полным разбором.';
     }
     text = format.cleanText(await llm.callOpenAI(system, userPrompt, order, step.block));
   }
@@ -338,14 +346,16 @@ async function deliverToTelegram(reading, order) {
   var chapters = format.getChapters(reading);
   var premium = isPremiumReading(reading);
   var siteUrl = await siteReadingUrl(reading.id, order);
+  var language = prompts.orderLanguage(order);
   var intro = telegram.readingDeliveryText(reading, {
     orderId: reading.order_id,
     chapters: chapters.length,
-    premium: premium
+    premium: premium,
+    language: language
   });
 
   await telegram.sendMessage(chatId, intro, {
-    reply_markup: telegram.readingMenuKeyboard(reading.id, siteUrl, premium)
+    reply_markup: telegram.readingMenuKeyboard(reading.id, siteUrl, premium, language)
   });
 
   var db = getDb();
@@ -362,7 +372,7 @@ async function deliverToTelegram(reading, order) {
   );
 }
 
-function pageBody(chapter, total, maxLen) {
+function pageBody(chapter, total, maxLen, language) {
   var head = chapter.num + ' / ' + total + ' · ' + chapter.title;
   var body = String(chapter.text || '').trim();
   var limit = maxLen || 3500;
@@ -371,7 +381,11 @@ function pageBody(chapter, total, maxLen) {
     body = body.slice(0, Math.max(0, room - 60));
     var cut = Math.max(body.lastIndexOf('\n\n'), body.lastIndexOf('. '), body.lastIndexOf(' '));
     if (cut > room * 0.5) body = body.slice(0, cut + 1);
-    body = body.trim() + '\n\n…полный текст главы — в PDF';
+    body =
+      body.trim() +
+      (language === 'en'
+        ? '\n\n…the complete chapter is available in the PDF'
+        : '\n\n…полный текст главы — в PDF');
   }
   return head + '\n\n' + body;
 }
@@ -395,15 +409,22 @@ async function sendReadingMenu(chatId, readingId, messageId) {
     return;
   }
   var order = await orders.getOrder(reading.order_id);
+  var language = prompts.orderLanguage(order);
   var chapters = format.getChapters(reading);
   var siteUrl = await siteReadingUrl(reading.id, order || {});
   var text = telegram.readingDeliveryText(reading, {
     orderId: reading.order_id,
     chapters: chapters.length,
-    premium: isPremiumReading(reading)
+    premium: isPremiumReading(reading),
+    language: language
   });
   await sendOrEdit(chatId, messageId, text, {
-    reply_markup: telegram.readingMenuKeyboard(reading.id, siteUrl, isPremiumReading(reading))
+    reply_markup: telegram.readingMenuKeyboard(
+      reading.id,
+      siteUrl,
+      isPremiumReading(reading),
+      language
+    )
   });
 }
 
@@ -414,16 +435,18 @@ async function sendReadingPage(chatId, readingId, page, messageId) {
     return;
   }
   var chapters = format.getChapters(reading);
+  var order = await orders.getOrder(reading.order_id);
+  var language = prompts.orderLanguage(order);
   if (!chapters.length) {
-    await sendOrEdit(chatId, messageId, 'В разборе пока нет текста.');
+    await sendOrEdit(chatId, messageId, language === 'en' ? 'The reading has no text yet.' : 'В разборе пока нет текста.');
     return;
   }
   var total = chapters.length;
   var idx = Math.min(Math.max(+page || 1, 1), total);
   var chapter = chapters[idx - 1];
-  var text = pageBody(chapter, total, 3500);
+  var text = pageBody(chapter, total, 3500, language);
   await sendOrEdit(chatId, messageId, text, {
-    reply_markup: telegram.pageKeyboard(reading.id, idx, total)
+    reply_markup: telegram.pageKeyboard(reading.id, idx, total, language)
   });
 }
 
@@ -446,7 +469,8 @@ async function sendReadingFullText(chatId, readingId) {
     reply_markup: telegram.readingMenuKeyboard(
       reading.id,
       await siteReadingUrl(reading.id, order || {}),
-      isPremiumReading(reading)
+      isPremiumReading(reading),
+      prompts.orderLanguage(order)
     )
   });
 }
@@ -458,7 +482,10 @@ async function sendReadingHtml(chatId, readingId) {
     return;
   }
   var order = await orders.getOrder(reading.order_id);
-  await telegram.sendMessage(chatId, 'Собираю HTML…');
+  await telegram.sendMessage(
+    chatId,
+    prompts.orderLanguage(order) === 'en' ? 'Building your HTML reading…' : 'Собираю HTML…'
+  );
   var html = htmlReading.buildReadingHtml(reading, order || {});
   var fname = fileName.readingFileName(order || {}, 'html', reading.title);
   var caption = ('SoulMetrica · ' + (reading.title || 'Разбор') + ' · ' + ((order && order.customer_name) || '')).trim();
@@ -475,8 +502,13 @@ async function sendReadingPdf(chatId, readingId) {
   var fname = fileName.readingFileName(order || {}, 'pdf', reading.title);
   var caption = ('SoulMetrica · ' + (reading.title || 'Разбор') + ' · ' + ((order && order.customer_name) || '')).trim();
 
-  if (isPremiumReading(reading)) {
-    await telegram.sendMessage(chatId, 'Собираю PDF…');
+  // Render every product from the same HTML document so addons and language
+  // stay identical in HTML and PDF.
+  {
+    await telegram.sendMessage(
+      chatId,
+      prompts.orderLanguage(order) === 'en' ? 'Building your PDF…' : 'Собираю PDF…'
+    );
     var html = htmlReading.buildReadingHtml(reading, order || {});
     var pdfBuffer = await htmlToPdf.buildPremiumPdf(reading, order, html);
     if (process.env.BLOB_READ_WRITE_TOKEN) {
@@ -494,29 +526,6 @@ async function sendReadingPdf(chatId, readingId) {
     }
     return telegram.uploadDocumentBuffer(chatId, pdfBuffer, fname, caption + ' · PDF');
   }
-
-  await telegram.sendMessage(chatId, 'Собираю PDF…');
-  var pdfBuffer = await pdfReading.buildReadingPdf(reading, order || {});
-
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    try {
-      var uploaded2 = await put(
-        'readings/' + reading.order_id + '-' + reading.product_key + '.pdf',
-        pdfBuffer,
-        {
-          access: 'public',
-          contentType: 'application/pdf',
-          addRandomSuffix: true
-        }
-      );
-      var sent2 = await telegram.sendDocument(chatId, uploaded2.url, caption);
-      if (sent2 && sent2.ok) return sent2;
-    } catch (err) {
-      console.error('[readings] pdf blob', err.message);
-    }
-  }
-
-  return telegram.uploadDocumentBuffer(chatId, pdfBuffer, fname, caption);
 }
 
 async function processQueueStep() {

@@ -22,6 +22,7 @@ async function upsertPendingOrder(payload) {
     birth_time: payload.birthTime || null,
     birth_city: payload.birthCity || null,
     gender: payload.gender || 'unknown',
+    language: payload.language === 'en' ? 'en' : 'ru',
     updated_at: new Date().toISOString()
   };
   if (payload.paymentProvider) row.payment_provider = String(payload.paymentProvider).slice(0, 40);
@@ -31,11 +32,13 @@ async function upsertPendingOrder(payload) {
   }
 
   var { error } = await db.from('orders').upsert(row, { onConflict: 'id' });
-  if (error && /payment_provider|provider_payment_id|payment_meta/i.test(error.message || '')) {
-    // Columns may be missing until migration 003 — retry without them
-    delete row.payment_provider;
-    delete row.provider_payment_id;
-    delete row.payment_meta;
+  if (error && /payment_provider|provider_payment_id|payment_meta|language/i.test(error.message || '')) {
+    // Columns may be missing until migrations are applied — retry without them.
+    var missing = String(error.message || '');
+    if (/payment_provider/i.test(missing)) delete row.payment_provider;
+    if (/provider_payment_id/i.test(missing)) delete row.provider_payment_id;
+    if (/payment_meta/i.test(missing)) delete row.payment_meta;
+    if (/language/i.test(missing)) delete row.language;
     var retry = await db.from('orders').upsert(row, { onConflict: 'id' });
     error = retry.error;
   }
@@ -59,7 +62,10 @@ async function attachProviderPayment(orderId, provider, providerPaymentId, meta)
   };
   if (provider) patch.payment_provider = String(provider).slice(0, 40);
   if (providerPaymentId) patch.provider_payment_id = String(providerPaymentId).slice(0, 120);
-  if (meta && typeof meta === 'object') patch.payment_meta = meta;
+  if (meta && typeof meta === 'object') {
+    var current = await getOrder(orderId);
+    patch.payment_meta = Object.assign({}, (current && current.payment_meta) || {}, meta);
+  }
   var { data, error } = await db.from('orders').update(patch).eq('id', orderId).select('*').maybeSingle();
   if (error && /payment_provider|provider_payment_id|payment_meta/i.test(error.message || '')) {
     payLog('orders.attach_provider.skip_columns', { orderId: orderId, reason: error.message });
@@ -189,7 +195,7 @@ async function enqueueReadings(order) {
 
   var title = p.title;
   if (plan.addonKeys && plan.addonKeys.length) {
-    title = p.title + ' · с модулями';
+    title = p.title + (prompts.orderLanguage(order) === 'en' ? ' · with modules' : ' · с модулями');
   }
 
   var row = {

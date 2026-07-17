@@ -3,6 +3,13 @@
 var format = require('./format-reading');
 var crypto = require('crypto');
 var diagrams = require('./diagrams');
+function isEnglishOrder(order) {
+  return !!(
+    order &&
+    (order.language === 'en' || (order.payment_meta && order.payment_meta.language === 'en'))
+  );
+}
+
 var readingJson = require('./reading-json');
 var renderPremium = require('./render-premium');
 
@@ -100,10 +107,11 @@ function splitParts(text) {
 }
 
 function extractCoverCopy(chapters, order) {
+  var isEn = isEnglishOrder(order);
   var cover = chapters.find(function (c) {
-    return c.num === 1 || /облож/i.test(c.title);
+    return c.num === 1 || /облож|cover/i.test(c.title);
   });
-  var name = (order && order.customer_name) || 'тебя';
+  var name = (order && order.customer_name) || (isEn ? 'you' : 'тебя');
   var sub = '';
   var epi = '';
   if (cover && cover.text) {
@@ -120,10 +128,14 @@ function extractCoverCopy(chapters, order) {
     }
   }
   if (!sub) {
-    sub = 'Карта характера, денег, близости и блоков — собранная в одну рабочую формулу.';
+    sub = isEn
+      ? 'A map of character, money, intimacy and hidden blocks — gathered into one practical formula.'
+      : 'Карта характера, денег, близости и блоков — собранная в одну рабочую формулу.';
   }
   if (!epi) {
-    epi = '«Читай медленно. Там, где захочется спорить — обычно самое точное.»';
+    epi = isEn
+      ? '“Read slowly. The part you want to argue with is often the most precise.”'
+      : '«Читай медленно. Там, где захочется спорить — обычно самое точное.»';
   }
   return { name: name, sub: sub, epi: epi };
 }
@@ -213,15 +225,16 @@ function buildReadingHtml(reading, order) {
   }
 
   var chapters = format.getChapters(reading);
+  var isEn = isEnglishOrder(order);
   var coverMeta = extractCoverCopy(chapters, order || {});
   var rawName = String(coverMeta.name || '').trim();
   var showName = rawName && !/абла/i.test(rawName) ? rawName : '';
   var body = chapters.filter(function (c) {
-    return !(c.num === 1 || /облож/i.test(c.title));
+    return !(c.num === 1 || /облож|cover/i.test(c.title));
   });
   if (!body.length) body = chapters;
 
-  var title = reading.title || 'Полный разбор личности и жизни';
+  var title = reading.title || (isEn ? 'Full Personality and Life Reading' : 'Полный разбор личности и жизни');
   var dateStr = '';
   if (order && order.birth_day && order.birth_month && order.birth_year) {
     dateStr =
@@ -241,14 +254,18 @@ function buildReadingHtml(reading, order) {
   var opener =
     '<section class="chapter">' +
     '<div class="num">✶</div>' +
-    '<h2>Твоя карта сфер</h2>' +
-    '<p class="lead">Сначала — картина целиком. Потом — словами.</p>' +
+    '<h2>' + (isEn ? 'Your life-area map' : 'Твоя карта сфер') + '</h2>' +
+    '<p class="lead">' + (isEn ? 'First, the whole picture. Then, the words.' : 'Сначала — картина целиком. Потом — словами.') + '</p>' +
     diagrams.forIntro(order) +
-    '<p class="diagram-note">Колесо собрано по твоей дате через расчётный слой разбора (без «магии ради картинки»).</p>' +
+    '<p class="diagram-note">' +
+    (isEn
+      ? 'This wheel is calculated from your birth date — no decorative “magic”.'
+      : 'Колесо собрано по твоей дате через расчётный слой разбора (без «магии ради картинки»).') +
+    '</p>' +
     '</section>';
 
   return (
-    '<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">' +
+    '<!DOCTYPE html><html lang="' + (isEn ? 'en' : 'ru') + '"><head><meta charset="UTF-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
     '<title>' +
     esc(title) +
@@ -258,9 +275,9 @@ function buildReadingHtml(reading, order) {
     '<section class="cover">' +
     '<div class="mark">SoulMetrica</div>' +
     '<h1>' +
-    esc(title).replace(/\s+и\s+/, '<br>и ') +
+    esc(title).replace(/\s+и\s+/, '<br>и ').replace(/\s+and\s+/, '<br>and ') +
     '</h1>' +
-    (showName ? '<div class="who">Для ' + esc(showName) + '</div>' : '') +
+    (showName ? '<div class="who">' + (isEn ? 'For ' : 'Для ') + esc(showName) + '</div>' : '') +
     '<p class="sub">' +
     esc(scrubAblay(coverMeta.sub)) +
     '</p>' +

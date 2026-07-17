@@ -7,27 +7,31 @@
     </a>
     <div class="nav__aside">
       <nav class="nav__links" id="navLinks">
-        <a href="#systems">Темы</a>
-        <a href="#calc">Число</a>
-        <a href="#reviews">Записи</a>
-        <a href="#products">Разборы</a>
-        <a href="/profile">Профиль</a>
+        <a href="#systems" data-i18n="nav.systems">Темы</a>
+        <a href="#calc" data-i18n="nav.calc">Число</a>
+        <a href="#reviews" data-i18n="nav.reviews">Записи</a>
+        <a href="#products" data-i18n="nav.products">Разборы</a>
+        <a href="/profile" data-i18n="nav.profile">Профиль</a>
       </nav>
       <div class="nav__promo" id="navPromo" role="button" tabindex="0" aria-label="Открыть подарок со скидкой −67%">
         <img src="/assets/figma/gift-icon.svg" alt="" width="20" height="20">
-        <span>−67% в подарок ·</span>
+        <span data-i18n="nav.promo">−67% в подарок ·</span>
         <strong id="promoTimer" class="promo-timer">15:00</strong>
       </div>
-      <div class="nav__currency" role="group" aria-label="Валюта" data-currency-switch data-active="KZT">
+      <div class="nav__lang" role="group" aria-label="Language" data-lang-switch data-active="ru" data-i18n-aria="nav.lang">
+        <button type="button" class="nav__lang-btn is-active" data-lang-btn="ru" aria-pressed="true">RU</button>
+        <button type="button" class="nav__lang-btn" data-lang-btn="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="nav__currency" role="group" aria-label="Валюта" data-currency-switch data-active="KZT" data-i18n-aria="nav.currency">
         <span class="nav__currency-thumb" aria-hidden="true"></span>
         <button type="button" class="nav__currency-btn is-active" data-currency-btn="KZT" aria-pressed="true" title="Тенге">₸</button>
         <button type="button" class="nav__currency-btn" data-currency-btn="RUB" aria-pressed="false" title="Рубли">₽</button>
       </div>
-      <button class="nav__theme" id="themeToggle" type="button" aria-label="Сменить тему">
+      <button class="nav__theme" id="themeToggle" type="button" aria-label="Сменить тему" data-i18n-aria="nav.theme">
         <span class="nav__theme-icon nav__theme-icon--sun" aria-hidden="true">☀</span>
         <span class="nav__theme-icon nav__theme-icon--moon" aria-hidden="true">☽</span>
       </button>
-      <button class="nav__burger" id="navBurger" type="button" aria-label="Меню" aria-expanded="false">
+      <button class="nav__burger" id="navBurger" type="button" aria-label="Меню" aria-expanded="false" data-i18n-aria="nav.menu">
         <span class="nav__burger-lines" aria-hidden="true">
           <span></span><span></span><span></span>
         </span>
@@ -96,14 +100,14 @@
                 <span class="hero__avatar hero__avatar--cream">К</span>
                 <span class="hero__avatar hero__avatar--lilac">М</span>
               </div>
-              <span>2 100+ открыли свою страницу</span>
+              <span data-i18n="hero.badge">2 100+ открыли свою страницу</span>
             </div>
-            <h1 class="hero__title">Твоя карта личности, собранная целиком</h1>
-            <p class="hero__subtitle">Читаем тебя по 9 системам сразу — от нумерологии до Дизайна человека. Не «звёзды скажут» — точный портрет про тебя</p>
+            <h1 class="hero__title" data-i18n="hero.title">Твоя карта личности, собранная целиком</h1>
+            <p class="hero__subtitle" data-i18n="hero.sub">Читаем тебя по 9 системам сразу — от нумерологии до Дизайна человека. Не «звёзды скажут» — точный портрет про тебя</p>
           </div>
           <div class="hero__actions">
             <a class="btn btn--primary" href="#calc">
-              Открыть свою страницу
+              <span data-i18n="hero.cta">Открыть свою страницу</span>
               <img src="/assets/figma/stars-btn.svg" alt="" width="20" height="20">
             </a>
           </div>
@@ -114,18 +118,18 @@
 
         <div class="hero__photo-wrap">
           <img class="hero__photo hero__photo--dark" src="/assets/figma/hero-woman-dark.png" alt="">
-          <img class="hero__photo hero__photo--light" src="/assets/figma/hero-woman-light.png" alt="">
+          <img class="hero__photo hero__photo--light" src="/assets/figma/hero-woman-light.png?v=2" alt="">
           <img class="hero__stars-over hero__stars-over--dark" src="/assets/figma/hero/constellation-tr.svg" alt="" aria-hidden="true">
           <img class="hero__stars-over hero__stars-over--light" src="/assets/figma/light/hero/group-tr.svg" alt="" aria-hidden="true">
         </div>
 
         <div class="hero__card hero__card--reading">
-          <div class="hero__card-label">твой разбор</div>
+          <div class="hero__card-label" data-i18n="hero.card_label">твой разбор</div>
           <div class="hero__card-number">
             <span class="hero__card-num">7</span>
-            <span class="hero__card-arch">Мудрец</span>
+            <span class="hero__card-arch" data-i18n="hero.card_arch">Мудрец</span>
           </div>
-          <div class="hero__card-meta">📄 PDF в Telegram · за 2–3 ч</div>
+          <div class="hero__card-meta" data-i18n="hero.card_meta">📄 PDF в Telegram · за 2–3 ч</div>
         </div>
 
         <div class="hero__card hero__card--user hero__card--user-a">
@@ -133,10 +137,10 @@
             <span class="hero__user-avatar hero__user-avatar--violet">А</span>
             <div>
               <strong>Аружан, 28</strong>
-              <span>Астана · сегодня</span>
+              <span data-i18n="hero.user_a_meta">Астана · сегодня</span>
             </div>
           </div>
-          <p>Сценарий любви · 70%</p>
+          <p data-i18n="hero.user_a_prod">Сценарий любви · 70%</p>
           <div class="hero__progress"><span style="width:70%"></span></div>
         </div>
 
@@ -145,10 +149,10 @@
             <span class="hero__user-avatar hero__user-avatar--lilac">К</span>
             <div>
               <strong>Камила, 31</strong>
-              <span>Алматы · 2 дня назад</span>
+              <span data-i18n="hero.user_k_meta">Алматы · 2 дня назад</span>
             </div>
           </div>
-          <p>Денежный код · прочитан</p>
+          <p data-i18n="hero.user_k_prod">Денежный код · прочитан</p>
           <div class="hero__progress hero__progress--full"><span></span></div>
         </div>
       </div>
@@ -168,14 +172,14 @@
           <img class="systems__bg-bottom" src="/assets/figma/light/systems/systems-constellation-bottom.svg" alt="">
         </div>
       </div>
-      <p class="systems__eyebrow">Как мы тебя читаем</p>
-      <h2 class="systems__title">Исследуйте 9 систем самопознания в одном путешествии</h2>
+      <p class="systems__eyebrow" data-i18n="systems.eyebrow">Как мы тебя читаем</p>
+      <h2 class="systems__title" data-i18n="systems.title">Исследуйте 9 систем самопознания в одном путешествии</h2>
       <div class="systems__hint">
         <div class="systems__hint-icon"><img src="/assets/figma/cursor-click.svg" alt="" width="26" height="26"></div>
         <div class="systems__hint-text">
           <div class="systems__hint-desktop">
-            <strong>Наведи на любую карточку</strong>
-            <p>Расскажу по-человечески, что эта наука открывает про тебя</p>
+            <strong data-i18n="systems.hint_strong">Наведи на любую карточку</strong>
+            <p data-i18n="systems.hint_p">Расскажу по-человечески, что эта наука открывает про тебя</p>
           </div>
         </div>
       </div>
@@ -467,8 +471,8 @@
         <img class="reviews__zodiac reviews__zodiac--right" src="/assets/figma/reviews/zodiac-right.svg?v=2" alt="" aria-hidden="true">
         <div class="reviews__chat">
           <div class="reviews__photo" aria-hidden="true">
-            <img class="reviews__photo-img reviews__photo-img--dark" src="/assets/figma/reviews/reviews-woman-dark.png?v=3" alt="">
-            <img class="reviews__photo-img reviews__photo-img--light" src="/assets/figma/reviews/reviews-woman-light.png" alt="">
+            <img class="reviews__photo-img reviews__photo-img--dark" src="/assets/figma/reviews/reviews-woman-dark.webp?v=1" alt="" width="772" height="992" decoding="async">
+            <img class="reviews__photo-img reviews__photo-img--light" src="/assets/figma/reviews/reviews-woman-light.webp?v=1" alt="" width="683" height="876" decoding="async">
           </div>
           <img class="reviews__rainbow" src="/assets/figma/reviews/rainbow-flare.png?v=1" alt="" aria-hidden="true">
           <div class="reviews__col reviews__col--left">
@@ -491,8 +495,8 @@
         <div class="reviews__list-m">
           <div class="reviews__mstage">
             <div class="reviews__mvisual" aria-hidden="true">
-              <img class="reviews__mphoto reviews__mphoto--dark" src="/assets/figma/reviews/reviews-woman-dark.png?v=3" alt="">
-              <img class="reviews__mphoto reviews__mphoto--light" src="/assets/figma/reviews/reviews-woman-light.png" alt="">
+              <img class="reviews__mphoto reviews__mphoto--dark" src="/assets/figma/reviews/reviews-woman-dark.webp?v=1" alt="" width="772" height="992" decoding="async">
+              <img class="reviews__mphoto reviews__mphoto--light" src="/assets/figma/reviews/reviews-woman-light.webp?v=1" alt="" width="683" height="876" decoding="async">
             </div>
             <div class="reviews__mbubbles">
               <div class="reviews__bubble reviews__bubble--left reviews__bubble--emoji">😍😍😍</div>
@@ -568,122 +572,122 @@
 
     <section class="products" id="products">
       <div class="products__inner">
-        <p class="products__eyebrow">Разборы</p>
+        <p class="products__eyebrow" data-i18n="products.eyebrow">Разборы</p>
         <h2 class="products__title">
-          <span class="products__title-desk">Выбери свой вопрос — я найду ответ в твоей карте</span>
-          <span class="products__title-m-dark">Выбери свой вопрос</span>
-          <span class="products__title-m-light">Выбери свой вопрос — я найду ответ</span>
+          <span class="products__title-desk" data-i18n="products.title_desk">Выбери свой вопрос — я найду ответ в твоей карте</span>
+          <span class="products__title-m-dark" data-i18n="products.title_m_dark">Выбери свой вопрос</span>
+          <span class="products__title-m-light" data-i18n="products.title_m_light">Выбери свой вопрос — я найду ответ</span>
         </h2>
-        <p class="products__subtitle products__subtitle--desk">Каждый разбор пишется вручную под твою дату. Не шаблон — живой текст про тебя</p>
-        <p class="products__subtitle products__subtitle--m-light">Персональный PDF на 40+ страниц</p>
+        <p class="products__subtitle products__subtitle--desk" data-i18n="products.sub_desk">Каждый разбор пишется вручную под твою дату. Не шаблон — живой текст про тебя</p>
+        <p class="products__subtitle products__subtitle--m-light" data-i18n="products.sub_m">Персональный PDF на 40+ страниц</p>
         <div class="products__track-wrap">
-          <button class="products__nav products__nav--prev" type="button" aria-label="Назад" id="productsPrev">‹</button>
+          <button class="products__nav products__nav--prev" type="button" aria-label="Назад" id="productsPrev" data-i18n-aria="products.prev">‹</button>
           <div class="products__track" id="productsTrack">
             <article class="products__card" data-product="Совместимость пары">
               <div class="products__icon"><img src="/assets/figma/products/icon-heart.svg" alt=""></div>
-              <h3>Совместимость пары</h3>
-              <p>Подходите ли вы — по двум датам. Где притяжение, а где трещина и как её пройти.</p>
+              <h3 data-i18n="product.compatibility.title">Совместимость пары</h3>
+              <p data-i18n="product.compatibility.desc">Подходите ли вы — по двум датам. Где притяжение, а где трещина и как её пройти.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="6990" data-kzt-old="20970">6 990 ₸ <s>20 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Прогноз 2026">
               <div class="products__icon"><img src="/assets/figma/products/icon-calendar.svg" alt=""></div>
-              <h3>Прогноз 2026</h3>
-              <p>Что несёт этот год именно тебе — по кварталам. Твои главные задачи и возможности.</p>
+              <h3 data-i18n="product.forecast.title">Прогноз 2026</h3>
+              <p data-i18n="product.forecast.desc">Что несёт этот год именно тебе — по кварталам. Твои главные задачи и возможности.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="3990" data-kzt-old="11970">3 990 ₸ <s>11 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card products__card--featured" data-product="Ты — целиком">
               <div class="products__icon"><img src="/assets/figma/products/icon-heart.svg" alt=""></div>
-              <span class="products__best">ЛУЧШИЙ ВЫБОР</span>
-              <p class="products__label">Полный разбор</p>
-              <h3>Ты - целиком</h3>
-              <p>12 глав вручную под твою дату. Характер, деньги, любовь, блоки, прогноз 2026 и горизонт 5 лет.</p>
+              <span class="products__best" data-i18n="products.best">ЛУЧШИЙ ВЫБОР</span>
+              <p class="products__label" data-i18n="products.full_label">Полный разбор</p>
+              <h3 data-i18n="product.full.title">Ты - целиком</h3>
+              <p data-i18n="product.full.desc">12 глав вручную под твою дату. Характер, деньги, любовь, блоки, прогноз 2026 и горизонт 5 лет.</p>
               <hr class="products__rule products__rule--featured">
               <ul class="products__list">
-                <li>Ядро личности - кто ты под всеми ролями</li>
-                <li>Денежная карта - каналы, потолок и блоки</li>
-                <li>Любовная карта - сценарий и твой урок</li>
-                <li>Прогноз 2026 по кварталам + горизонт 5 лет</li>
+                <li data-i18n="product.full.li1">Ядро личности - кто ты под всеми ролями</li>
+                <li data-i18n="product.full.li2">Денежная карта - каналы, потолок и блоки</li>
+                <li data-i18n="product.full.li3">Любовная карта - сценарий и твой урок</li>
+                <li data-i18n="product.full.li4">Прогноз 2026 по кварталам + горизонт 5 лет</li>
               </ul>
               <div class="products__price">
                 <span class="price price--dark" data-kzt="9900" data-kzt-old="29700">9 900 ₸ <s>29 700 ₸</s></span>
                 <span class="price price--light" data-kzt="9900" data-kzt-old="29700">9 900 ₸ <s>29 700 ₸</s></span>
               </div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Денежный код">
               <div class="products__icon"><img src="/assets/figma/products/icon-money.svg" alt=""></div>
-              <h3>Денежный код</h3>
-              <p>Твой денежный канал, потолок и блоки — честно.</p>
+              <h3 data-i18n="product.money.title">Денежный код</h3>
+              <p data-i18n="product.money.desc">Твой денежный канал, потолок и блоки — честно.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="3990" data-kzt-old="11970">3 990 ₸ <s>11 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Реализация">
               <div class="products__icon"><img src="/assets/figma/products/icon-star.svg" alt=""></div>
-              <h3>Реализация</h3>
-              <p>Твоя настоящая сила и путь — без чужих советов.</p>
+              <h3 data-i18n="product.realization.title">Реализация</h3>
+              <p data-i18n="product.realization.desc">Твоя настоящая сила и путь — без чужих советов.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="3990" data-kzt-old="11970">3 990 ₸ <s>11 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Сценарий любви">
               <div class="products__icon"><img src="/assets/figma/products/icon-heart.svg" alt=""></div>
-              <h3>Сценарий любви</h3>
-              <p>Почему повторяется один круг — и как из него выйти по шагам.</p>
+              <h3 data-i18n="product.love.title">Сценарий любви</h3>
+              <p data-i18n="product.love.desc">Почему повторяется один круг — и как из него выйти по шагам.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="4990" data-kzt-old="14970">4 990 ₸ <s>14 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Скрытые блоки">
               <div class="products__icon"><img src="/assets/figma/products/icon-star.svg" alt=""></div>
-              <h3>Скрытые блоки</h3>
-              <p>Что именно тормозит тебя — в деньгах, в любви и в выборе.</p>
+              <h3 data-i18n="product.blocks.title">Скрытые блоки</h3>
+              <p data-i18n="product.blocks.desc">Что именно тормозит тебя — в деньгах, в любви и в выборе.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="3990" data-kzt-old="11970">3 990 ₸ <s>11 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Детский разбор">
               <div class="products__icon"><img src="/assets/figma/products/icon-calendar.svg" alt=""></div>
-              <h3>Детский разбор</h3>
-              <p>Характер, таланты и мягкие зоны роста ребёнка — по дате рождения.</p>
+              <h3 data-i18n="product.child.title">Детский разбор</h3>
+              <p data-i18n="product.child.desc">Характер, таланты и мягкие зоны роста ребёнка — по дате рождения.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="3990" data-kzt-old="11970">3 990 ₸ <s>11 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
             <article class="products__card" data-product="Число судьбы">
               <div class="products__icon"><img src="/assets/figma/products/icon-block.svg" alt=""></div>
-              <h3>Число судьбы</h3>
-              <p>Первый слой про тебя: характер, сила и урок. С него удобно начать.</p>
+              <h3 data-i18n="product.destiny.title">Число судьбы</h3>
+              <p data-i18n="product.destiny.desc">Первый слой про тебя: характер, сила и урок. С него удобно начать.</p>
               <hr class="products__rule">
               <div class="products__price" data-kzt="1990" data-kzt-old="5970">1 990 ₸ <s>5 970 ₸</s></div>
-              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> цена держится <strong class="promo-timer">14:54</strong></p>
-              <button class="products__btn" type="button"><span class="products__btn-desk">Подробнее</span><span class="products__btn-m-dark">Заказать разбор</span></button>
+              <p class="products__timer"><img src="/assets/figma/products/icon-clock.svg" alt="" width="16" height="16"> <span data-i18n="products.timer">цена держится</span> <strong class="promo-timer">14:54</strong></p>
+              <button class="products__btn" type="button"><span class="products__btn-desk" data-i18n="products.more">Подробнее</span><span class="products__btn-m-dark" data-i18n="products.order">Заказать разбор</span></button>
             </article>
           </div>
-          <button class="products__nav products__nav--next" type="button" aria-label="Вперёд" id="productsNext">›</button>
+          <button class="products__nav products__nav--next" type="button" aria-label="Вперёд" id="productsNext" data-i18n-aria="products.next">›</button>
         </div>
       </div>
     </section>
 
     <section class="pricing" id="pricing">
       <div class="pricing__inner">
-        <p class="pricing__eyebrow">оформление</p>
-        <h2 class="pricing__title">Взять <span>разбор</span></h2>
+        <p class="pricing__eyebrow" data-i18n="pricing.eyebrow">оформление</p>
+        <h2 class="pricing__title"><span data-i18n="pricing.title_a">Взять</span> <span data-i18n="pricing.title_b">разбор</span></h2>
         <div class="pricing__grid">
           <article class="pricing__card">
-            <h3>Личный разбор · Денежный код</h3>
+            <h3 data-i18n="pricing.money_h">Личный разбор · Денежный код</h3>
             <ul class="pricing__list">
               <li>Полная расшифровка числа по 9 системам</li>
               <li>Где именно твой блок и как его убрать</li>
@@ -691,17 +695,17 @@
               <li>PDF в Telegram за 2–3 часа</li>
             </ul>
             <div class="pricing__price" data-kzt="3990">3 990 ₸</div>
-            <p class="pricing__timer">цена держится <strong id="pricingTimer">14:54</strong></p>
-            <button class="btn btn--primary btn--full" type="button" data-order="Денежный код">Взять разбор →</button>
-            <p class="pricing__note">✦ Не откликнется — вернём деньги за 7 дней</p>
+            <p class="pricing__timer"><span data-i18n="pricing.timer">цена держится</span> <strong id="pricingTimer">14:54</strong></p>
+            <button class="btn btn--primary btn--full" type="button" data-order="Денежный код" data-i18n="pricing.cta_money">Взять разбор →</button>
+            <p class="pricing__note" data-i18n="pricing.note_money">✦ Не откликнется — вернём деньги за 7 дней</p>
           </article>
           <article class="pricing__card pricing__card--flagship">
-            <span class="pricing__badge">✦ флагман</span>
-            <h3>Полный разбор · Ты — целиком</h3>
-            <p class="pricing__desc">37 страниц про тебя · PDF в Telegram за 2–4 часа</p>
+            <span class="pricing__badge" data-i18n="pricing.badge">✦ флагман</span>
+            <h3 data-i18n="pricing.full_h">Полный разбор · Ты — целиком</h3>
+            <p class="pricing__desc" data-i18n="pricing.full_desc">37 страниц про тебя · PDF в Telegram за 2–4 часа</p>
             <div class="pricing__price pricing__highlight" data-kzt="9900" data-kzt-old="29700">9 900 ₸ <s>29 700 ₸</s></div>
-            <button class="btn btn--primary btn--full" type="button" data-order="Ты — целиком">Взять полный разбор →</button>
-            <p class="pricing__note">Пишем вручную — берём до 15 разборов в неделю</p>
+            <button class="btn btn--primary btn--full" type="button" data-order="Ты — целиком" data-i18n="pricing.cta_full">Взять полный разбор →</button>
+            <p class="pricing__note" data-i18n="pricing.note_full">Пишем вручную — берём до 15 разборов в неделю</p>
           </article>
         </div>
       </div>
@@ -713,36 +717,33 @@
       <div class="footer__brand">
         <a class="footer__logo" href="#top">SoulMetrica</a>
         <div class="footer__contact">
-          <p class="footer__contact-label">Телефон:</p>
+          <p class="footer__contact-label" data-i18n="footer.phone">Телефон:</p>
           <a href="tel:+77079322193">+7 (707) 932 21 93</a>
         </div>
         <div class="footer__contact">
-          <p class="footer__contact-label">Адрес:</p>
+          <p class="footer__contact-label" data-i18n="footer.address">Адрес:</p>
           <a href="https://maps.google.com/?q=%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B%2C+%D1%83%D0%BB.+%D0%90%D0%BB%D0%B8%D1%88%D0%B5%D1%80%D0%B0+%D0%9D%D0%B0%D0%B2%D0%BE%D0%B8%2C+280" target="_blank" rel="noopener noreferrer">г. Алматы, ул. Алишера Навои, 280</a>
         </div>
       </div>
 
       <div class="footer__col">
-        <h4>Навигация</h4>
-        <a href="#products">Разборы</a>
-        <a href="#systems">Темы</a>
-        <a href="#reviews">Записи</a>
-        <a href="#calc">Число судьбы</a>
-        <a href="#wheel">Колесо сфер</a>
-        <a href="/profile">Кабинет</a>
+        <h4 data-i18n="footer.nav">Навигация</h4>
+        <a href="#products" data-i18n="footer.products">Разборы</a>
+        <a href="#systems" data-i18n="footer.systems">Темы</a>
+        <a href="#reviews" data-i18n="footer.reviews">Записи</a>
+        <a href="#calc" data-i18n="footer.destiny">Число судьбы</a>
+        <a href="#wheel" data-i18n="footer.wheel">Колесо сфер</a>
+        <a href="/profile" data-i18n="footer.cabinet">Кабинет</a>
       </div>
 
       <div class="footer__col">
-        <h4>Информация</h4>
-        <a href="//offer">Договор оферты</a>
-        <a href="//privacy">Политика конфиденциальности</a>
-        <span class="footer__legal-name">ТОО «НЕЙРОКИДС»</span>
-        <span class="footer__legal-meta">БИН: 260540017173</span>
-        <span class="footer__legal-meta">г. Алматы, ул. Алишера Навои, 280</span>
+        <h4 data-i18n="footer.info">Информация</h4>
+        <a href="/offer" data-i18n="footer.offer">Договор оферты</a>
+        <a href="/privacy" data-i18n="footer.privacy">Политика конфиденциальности</a>
       </div>
 
       <div class="footer__col">
-        <h4>Мы в соцсетях</h4>
+        <h4 data-i18n="footer.social">Мы в соцсетях</h4>
         <div class="footer__social">
           <a href="https://www.instagram.com/neurokids__kz" target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href="https://www.tiktok.com/@neurokids.kz" target="_blank" rel="noopener noreferrer">TikTok</a>
@@ -751,7 +752,7 @@
       </div>
 
       <div class="footer__bottom">
-        <p class="footer__copy">© 2026 SoulMetrica. Все права защищены.</p>
+        <p class="footer__copy" data-i18n="footer.copy">© 2026 SoulMetrica. Все права защищены.</p>
         <p class="footer__made">Made by <a href="https://murdasoft.kz" target="_blank" rel="noopener noreferrer">MurdaSoft</a></p>
       </div>
     </div>
@@ -761,50 +762,50 @@
     <div class="order-modal__backdrop" data-close-order></div>
     <form class="order-modal__dialog" id="orderForm" role="dialog" aria-labelledby="orderModalTitle">
       <div class="order-modal__head">
-        <h3 id="orderModalTitle">Оформить разбор</h3>
-        <button class="order-modal__close" type="button" data-close-order aria-label="Закрыть">×</button>
+        <h3 id="orderModalTitle" data-i18n="order.title">Оформить разбор</h3>
+        <button class="order-modal__close" type="button" data-close-order aria-label="Закрыть" data-i18n-aria="order.close">×</button>
       </div>
       <div class="order-modal__body">
         <div class="order-modal__left">
           <div class="order-modal__block">
-            <p class="order-modal__label">Твой заказ</p>
+            <p class="order-modal__label" data-i18n="order.your_order">Твой заказ</p>
             <div class="order-modal__cart" id="orderCart">
               <div class="order-modal__item" data-sku="base">
                 <span id="orderModalProduct">Полный разбор</span>
                 <div class="order-modal__item-right">
                   <strong id="orderBasePrice" data-kzt-live="base">9 900 ₸</strong>
-                  <button type="button" class="order-modal__x" data-remove-base aria-label="Убрать">×</button>
+                  <button type="button" class="order-modal__x" data-remove-base aria-label="Убрать" data-i18n-aria="order.remove">×</button>
                 </div>
               </div>
             </div>
             <div class="order-modal__total">
-              <span>Итого</span>
+              <span data-i18n="order.total">Итого</span>
               <div class="order-modal__total-prices">
                 <strong id="orderTotal" data-kzt-live="total">9 900 ₸</strong>
                 <s id="orderOldPrice" data-kzt-live="old">29 700 ₸</s>
               </div>
             </div>
             <button type="button" class="order-modal__deal" id="orderDealUpgrade" aria-live="polite">
-              <span class="order-modal__deal-badge">Выгоднее всего</span>
+              <span class="order-modal__deal-badge" data-i18n="order.deal_badge">Выгоднее всего</span>
               <div class="order-modal__deal-row">
                 <div class="order-modal__deal-copy">
-                  <strong class="order-modal__deal-title">Всё в одном — Полный разбор</strong>
-                  <p class="order-modal__deal-desc">12 глав: характер, деньги, любовь, блоки, прогноз 2026 и горизонт 5 лет</p>
+                  <strong class="order-modal__deal-title" data-i18n="order.deal_title">Всё в одном — Полный разбор</strong>
+                  <p class="order-modal__deal-desc" data-i18n="order.deal_desc">12 глав: характер, деньги, любовь, блоки, прогноз 2026 и горизонт 5 лет</p>
                 </div>
                 <div class="order-modal__deal-price">
                   <strong id="orderDealPrice" data-kzt-live="deal">9 900 ₸</strong>
                   <s id="orderDealOld" data-kzt-live="deal-old">29 700 ₸</s>
-                  <span class="order-modal__deal-note">нажми — заменит заказ сверху</span>
+                  <span class="order-modal__deal-note" data-i18n="order.deal_note">нажми — заменит заказ сверху</span>
                 </div>
               </div>
             </button>
           </div>
           <label class="order-modal__field">
-            <span>Твоё имя</span>
-            <input type="text" name="name" required placeholder="Имя" autocomplete="given-name">
+            <span data-i18n="order.name">Твоё имя</span>
+            <input type="text" name="name" required placeholder="Имя" autocomplete="given-name" data-i18n-placeholder="order.name_ph">
           </label>
           <div class="order-modal__field">
-            <span>Дата рождения</span>
+            <span data-i18n="order.dob">Дата рождения</span>
             <div class="dt-field" data-dt="date">
               <div class="dt-field__shell" role="group" aria-label="Дата рождения">
                 <input class="dt-seg dt-seg--day" data-seg="day" type="text" inputmode="numeric" maxlength="2" placeholder="ДД" aria-label="День" autocomplete="bday-day" value="15">
@@ -831,7 +832,7 @@
             </div>
           </div>
           <div class="order-modal__field">
-            <span>Время и город рождения</span>
+            <span data-i18n="order.birth_extra">Время и город рождения</span>
             <div class="order-modal__birth-extra">
               <div class="dt-field dt-field--time" data-dt="time">
                 <div class="dt-field__shell" role="group" aria-label="Время рождения">
@@ -849,29 +850,29 @@
                     <span class="dt-wheels__sep" aria-hidden="true">:</span>
                     <div class="dt-wheel" data-wheel="min" role="listbox" aria-label="Минуты"></div>
                   </div>
-                  <button type="button" class="dt-pop__done" data-time-done>Готово</button>
+                  <button type="button" class="dt-pop__done" data-time-done data-i18n="order.done">Готово</button>
                 </div>
               </div>
-              <input type="text" name="city" placeholder="город (Алматы)" aria-label="Город" autocomplete="address-level2">
+              <input type="text" name="city" placeholder="город (Алматы)" aria-label="Город" autocomplete="address-level2" data-i18n-placeholder="order.city_ph">
             </div>
             <p class="order-modal__hint">Знаешь время и город — посчитаем Асцендент и Дизайн точно. Не знаешь — сделаем по дате 🤍</p>
           </div>
           <label class="order-modal__field">
-            <span>Телефон</span>
+            <span data-i18n="order.phone">Телефон</span>
             <input type="tel" name="phone" required placeholder="+7 700 000 00 00" autocomplete="tel" inputmode="tel">
           </label>
           <label class="order-modal__field">
-            <span>Telegram @ник</span>
+            <span data-i18n="order.telegram">Telegram @ник</span>
             <input type="text" name="contact" required placeholder="@username" autocomplete="username" inputmode="text">
             <p class="order-modal__hint">Обязательно. Разбор и вход — через Telegram. Телефон сохраняем для связи.</p>
           </label>
         </div>
         <aside class="order-modal__upsell is-open" aria-label="Дополнительные разборы">
           <button type="button" class="order-modal__upsell-toggle" id="orderUpsellToggle" aria-expanded="true">
-            <span>+ Добавь ещё разбор – выгоднее вместе</span>
+            <span data-i18n="order.addons">+ Добавь ещё разбор – выгоднее вместе</span>
             <i>+</i>
           </button>
-          <p class="order-modal__upsell-title"><span>+</span> Добавь ещё разбор – выгоднее вместе</p>
+          <p class="order-modal__upsell-title"><span>+</span> <span data-i18n="order.addons">Добавь ещё разбор – выгоднее вместе</span></p>
           <div class="order-modal__upsell-list" id="orderUpsell">
             <button type="button" class="order-modal__add" data-add="Денежный код" data-price="3990"><span>Денежный код</span><em>3 990 ₸</em><i>+</i></button>
             <button type="button" class="order-modal__add" data-add="Сценарий любви" data-price="4990"><span>Сценарий любви</span><em>4 990 ₸</em><i>+</i></button>
@@ -896,7 +897,7 @@
             <span>Карта · ссылка</span>
           </label>
         </div>
-        <button class="order-modal__pay" type="submit">Оплатить →</button>
+        <button class="order-modal__pay" type="submit" data-i18n="order.pay">Оплатить →</button>
         <p class="order-modal__trust"><span>Демо без оплаты</span><i></i><span>Разбор в боте</span></p>
         <p class="order-modal__note" id="orderModalNote" hidden></p>
       </div>
