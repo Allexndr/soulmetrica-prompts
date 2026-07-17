@@ -1027,6 +1027,7 @@
 
 [data-theme="light"] .reviews__photo-img--light {
   display: block;
+  filter: blur(10.6px);
 }
 
 [data-theme="light"] .reviews__photo {
