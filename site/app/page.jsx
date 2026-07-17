@@ -54,7 +54,7 @@ export default function HomePage() {
         rel="stylesheet"
       />
       <link rel="stylesheet" href="/css/veluna.css?v=73" />
-      <link rel="stylesheet" href="/css/veluna-light.css?v=73" />
+      <link rel="stylesheet" href="/css/veluna-light.css?v=74" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}

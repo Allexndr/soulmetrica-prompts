@@ -1031,7 +1031,7 @@
 
 [data-theme="light"] .reviews__photo {
   top: -120px;
-  width: min(720px, 52vw);
+  width: min(641px, 52vw);
   mix-blend-mode: normal;
 }
 
