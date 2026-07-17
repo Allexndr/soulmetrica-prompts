@@ -201,7 +201,8 @@ async function processOneBlock(reading) {
             '” extension. This is a deeper layer added to your main reading. Read it as the continuation of one map, not as a separate document.'
         : 'Дальше — расширение «' +
             (step.moduleTitle || title) +
-            '». Это отдельный глубокий слой по теме, который ты добавил к основному разбору. Читай как продолжение одной карты, а не как второй файл.'
+            '». Это отдельный глубокий слой по теме, который ты добавил к основному разбору. Читай как продолжение одной карты, а не как второй файл.',
+      language
     );
   } else {
     var md = prompts.loadPromptFile(step.productKey);
@@ -219,7 +220,7 @@ async function processOneBlock(reading) {
           'Не пиши отдельную обложку и не повторяй введение «кто ты». Сразу дай содержание главы. ' +
           'Согласуй тон с уже собранным полным разбором.';
     }
-    text = format.cleanText(await llm.callOpenAI(system, userPrompt, order, step.block));
+    text = format.cleanText(await llm.callOpenAI(system, userPrompt, order, blockForLlm), language);
   }
 
   content.push({

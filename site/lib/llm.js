@@ -35,20 +35,67 @@ var ARCH = {
   33: 'служение через ясность'
 };
 
+var ARCH_EN = {
+  1: 'forward motion and self-directed decisions',
+  2: 'fine-tuned sensitivity to people',
+  3: 'voice, imagery and self-expression',
+  4: 'structure and reliable support',
+  5: 'change and freedom of movement',
+  6: 'care and responsibility for those close to you',
+  7: 'depth, analysis and your own truth',
+  8: 'power, scale and resource',
+  9: 'meaning, giving and closing cycles',
+  11: 'seeing farther than the obvious',
+  22: 'building something large from details',
+  33: 'service through clarity'
+};
+
+function isEnglishOrder(order) {
+  return !!(
+    order &&
+    (order.language === 'en' || (order.payment_meta && order.payment_meta.language === 'en'))
+  );
+}
+
 function demoBlock(order, block) {
-  var name = order.customer_name || 'ты';
+  var en = isEnglishOrder(order);
+  var name = order.customer_name || (en ? 'you' : 'ты');
   var date =
     order.birth_day && order.birth_month && order.birth_year
       ? [order.birth_day, order.birth_month, order.birth_year].join('.')
-      : 'твоей дате';
+      : en
+        ? 'your birth date'
+        : 'твоей дате';
   var lp = digitizeDate(order.birth_day, order.birth_month, order.birth_year);
-  var core = ARCH[lp] || ARCH[7];
+  var core = (en ? ARCH_EN[lp] : ARCH[lp]) || (en ? ARCH_EN[7] : ARCH[7]);
+  var title = (block && block.title) || (en ? 'Chapter' : 'Разбор');
+  var num = (block && block.num) || 1;
+
+  if (en) {
+    return (
+      '## ' +
+      num +
+      '. ' +
+      title +
+      '\n\n' +
+      name +
+      ', this layer is built from ' +
+      date +
+      '. In your chart the core reads as ' +
+      core +
+      '.\n\n' +
+      'On the outside you keep a composed face. Inside, another conversation has been running for a long time — quieter, sharper, more honest. ' +
+      'You catch yourself returning to the same fork again and again: move at your own pace, or bend to someone else’s.\n\n' +
+      '“You are stronger where you stop apologizing for your pace.”\n\n' +
+      '(Demo mode — set TOGETHER_API_KEY or OPENAI_API_KEY for full v12 generation.)'
+    );
+  }
 
   return (
     '## ' +
-    block.num +
+    num +
     '. ' +
-    block.title +
+    title +
     '\n\n' +
     name +
     ', этот слой собран по ' +

@@ -4925,42 +4925,48 @@ a { color: inherit; text-decoration: none; }
     border-bottom: 1px solid rgba(239, 230, 213, 0.15);
   }
 
-  /* ── Reviews mobile · Figma 14:5280 mobile-7-after ── */
-  .reviews { padding: 28px 20px 72px; }
+  /* ── Reviews mobile · Figma 24:663 mobile-7-after ── */
+  .reviews { padding: 32px 20px; }
 
   .reviews__badge {
-    margin-bottom: 14px;
-    padding: 5px 14px;
-    font-size: 11px;
+    margin-bottom: 12px;
+    padding: 4px 12px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     text-transform: uppercase;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: none;
   }
 
   .reviews__title {
     font-family: var(--font-ui);
-    font-size: 34px;
+    font-size: 36px;
     font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-bottom: 14px;
+    line-height: 1;
+    letter-spacing: 0;
+    margin-bottom: 12px;
     text-align: center;
   }
 
   .reviews__highlight {
-    font-family: 'Caveat', cursive;
+    font-family: var(--font-logo);
     font-style: italic;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 700;
-    line-height: 1.35;
-    padding: 4px 18px;
-    border-radius: 10px;
+    line-height: 1.72;
+    padding: 3px 19px;
+    border-radius: 7px;
   }
 
-  .reviews__header { margin-bottom: 20px; }
+  .reviews__highlight::before,
+  .reviews__highlight::after {
+    width: 7px;
+    height: 7px;
+  }
+
+  .reviews__highlight::before { top: -4px; left: -4px; }
+  .reviews__highlight::after { right: -4px; bottom: -4px; }
+
+  .reviews__header { margin-bottom: 0; }
 
   .reviews__chat { display: none; }
   .reviews__zodiac,
@@ -4969,26 +4975,109 @@ a { color: inherit; text-decoration: none; }
   .reviews__list-m {
     display: flex;
     max-width: none;
-    margin-top: 0;
-    gap: 18px;
+    margin-top: 32px;
+    gap: 32px;
+  }
+
+  .reviews__mstage {
+    height: 657px;
   }
 
   .reviews__mvisual {
-    height: 400px;
+    width: 100%;
+    height: 360px;
+    margin-left: 0;
+    overflow: visible;
+  }
+
+  .reviews__mvisual::after {
+    left: -80px;
+    right: -65px;
+    top: 303px;
+    bottom: auto;
+    height: 618px;
+    background: linear-gradient(180deg, transparent 0%, var(--reviews-mfade, #06061a) 37%, var(--reviews-mfade, #06061a) 54%);
+    filter: blur(33px);
   }
 
   .reviews__mbubbles {
-    margin-top: -190px;
-    gap: 10px;
+    position: absolute;
+    inset: 392px 0 auto;
+    display: block;
+    height: 265px;
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .reviews__mbubbles .reviews__bubble {
+    position: absolute;
+    max-width: none;
+    box-sizing: border-box;
+    padding: 8px 13px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 13.5px;
+    line-height: 1.45;
+    box-shadow: 0 8px 12px rgba(36, 27, 46, 0.07);
+  }
+
+  .reviews__mbubbles .reviews__bubble:nth-child(1) {
+    top: 0;
+    left: 0;
+    width: 77px;
+    height: 43px;
+  }
+
+  .reviews__mbubbles .reviews__bubble:nth-child(2) {
+    top: 7px;
+    left: 93px;
+    width: 257px;
+    height: 62px;
+  }
+
+  .reviews__mbubbles .reviews__bubble:nth-child(3) {
+    top: 97px;
+    left: 4px;
+    width: 236px;
+    height: 57px;
+  }
+
+  .reviews__mbubbles .reviews__bubble:nth-child(4) {
+    top: 169px;
+    left: 150px;
+    width: 200px;
+    height: 41px;
+  }
+
+  .reviews__mbubbles .reviews__bubble:nth-child(5) {
+    top: 227px;
+    left: 0;
+    width: 162px;
+    height: 38px;
+  }
+
+  .reviews__mbubbles .reviews__bubble--emoji {
+    padding: 7px 13px;
+    font-size: 17px;
+    line-height: 1.7;
+    white-space: nowrap;
+  }
+
+  .reviews__mbubbles .reviews__bubble small {
+    position: absolute;
+    right: 10px;
+    bottom: 7px;
+    margin: 0;
   }
 
   .reviews__cta {
     width: 100%;
-    margin-top: 4px;
+    height: 58px;
+    margin-top: 0;
     padding: 18px 20px;
     border-radius: 100px;
-    background: linear-gradient(168deg, #f06e9c 0%, #d45e83 48%, #b23e66 100%);
-    box-shadow: 0 10px 22px rgba(196, 96, 122, 0.35);
+    background: #e84c8b;
+    box-shadow: 0 8px 12px rgba(226, 101, 144, 0.2);
     font-size: 16px;
     font-weight: 800;
   }

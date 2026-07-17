@@ -53,8 +53,8 @@ export default function HomePage() {
         href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap"
         rel="stylesheet"
       />
-      <link rel="stylesheet" href="/css/veluna.css?v=73" />
-      <link rel="stylesheet" href="/css/veluna-light.css?v=74" />
+      <link rel="stylesheet" href="/css/veluna.css?v=74" />
+      <link rel="stylesheet" href="/css/veluna-light.css?v=76" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
@@ -104,9 +104,9 @@ export default function HomePage() {
       <LegacyShell
         html={html}
         scripts={[
-          '/js/veluna-i18n.js?v=3',
+          '/js/veluna-i18n.js?v=4',
           '/js/veluna-currency.js?v=1',
-          '/js/veluna-systems.js?v=6',
+          '/js/veluna-systems.js?v=7',
           '/js/veluna.js?v=46',
           '/js/veluna-quiz.js?v=13',
           '/js/webmcp.js?v=2'

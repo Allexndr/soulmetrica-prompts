@@ -106,6 +106,19 @@
     });
   }
 
+  function refreshModalLabels() {
+    var en = window.VelunaI18n && window.VelunaI18n.getLang() === 'en';
+    overlay.querySelector('.sys-detail__close').setAttribute('aria-label', en ? 'Close' : 'Закрыть');
+    overlay.querySelector('.sys-detail__pitch').textContent = en
+      ? 'This is one of nine perspectives. All 9 meet at one point about you — that is the complete reading.'
+      : 'Это один из девяти взглядов. Все 9 сходятся в одной точке про тебя — это и есть полный разбор';
+    document.getElementById('sysDetailCta').textContent = en
+      ? 'Combine all 9 → Complete reading'
+      : 'Собрать все 9 → Полный разбор';
+    document.getElementById('sysDetailPrev').setAttribute('aria-label', en ? 'Previous' : 'назад');
+    document.getElementById('sysDetailNext').setAttribute('aria-label', en ? 'Next' : 'вперёд');
+  }
+
   var cur = 0;
   var N = SYS.length;
 
@@ -198,9 +211,11 @@
   });
 
   refreshCardLabels();
+  refreshModalLabels();
   if (window.VelunaI18n && window.VelunaI18n.onChange) {
     window.VelunaI18n.onChange(function () {
       refreshCardLabels();
+      refreshModalLabels();
       if (overlay.classList.contains('on')) fill(cur);
     });
   }

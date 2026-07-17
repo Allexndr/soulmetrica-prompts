@@ -47,8 +47,10 @@
 
       'systems.eyebrow': 'Как мы тебя читаем',
       'systems.title': 'Исследуйте 9 систем самопознания в одном путешествии',
+      'systems.title_mobile': 'Исследуйте 9 систем самопознания',
       'systems.hint_strong': 'Наведи на любую карточку',
       'systems.hint_p': 'Расскажу по-человечески, что эта наука открывает про тебя',
+      'systems.hint_mobile': 'Нажми на любую карточку, чтобы узнать подробнее',
       'systems.open': 'Открыть',
 
       'products.eyebrow': 'Разборы',
@@ -204,8 +206,10 @@
 
       'systems.eyebrow': 'How we read you',
       'systems.title': 'Explore 9 self-knowledge systems in one journey',
+      'systems.title_mobile': 'Explore 9 self-knowledge systems',
       'systems.hint_strong': 'Hover any card',
       'systems.hint_p': 'I’ll explain in plain words what this system reveals about you',
+      'systems.hint_mobile': 'Tap any card to learn more',
       'systems.open': 'Open',
 
       'products.eyebrow': 'Readings',
@@ -665,6 +669,7 @@
     'Язык': 'Language',
     'Валюта': 'Currency',
     'Сменить тему': 'Switch theme',
+    'Меню': 'Menu',
     'Назад': 'Previous',
     'Вперёд': 'Next'
     ,

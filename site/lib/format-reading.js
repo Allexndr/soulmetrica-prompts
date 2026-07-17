@@ -8,7 +8,7 @@ function stripEmojis(s) {
     .trim();
 }
 
-function cleanText(raw) {
+function cleanText(raw, language) {
   var text = String(raw || '');
 
   // broken glyphs / control junk that becomes □□□ in PDF
@@ -42,30 +42,37 @@ function cleanText(raw) {
   // placeholders & trash
   text = text.replace(/\{[^}]+\}/g, '');
   text = text.replace(/_or_rather_[^\s]+/gi, '');
-  text = text.replace(/QueryString/gi, 'путь');
   text = text.replace(/Mvc\s+/g, '');
-  text = text.replace(/\bthou\b/gi, 'ты');
-  text = text.replace(/\bsounds\s+как/gi, 'звучит как');
-  text = text.replace(/\bdeep\s+down\b/gi, 'в глубине');
-  text = text.replace(/\bsedimentироваться/gi, 'осесть');
-  text = text.replace(/\bquieter\b/gi, 'более тихой');
-  text = text.replace(/\brelatively\b/gi, 'относительно');
-  text = text.replace(/\bentirely\b/gi, 'полностью');
-  text = text.replace(/\bability\b/gi, 'способность');
-  text = text.replace(/\btalent\b/gi, 'талант');
-  text = text.replace(/\balive\b/gi, 'живым');
-  text = text.replace(/\blisten\b/gi, 'слушать');
   text = text.replace(/\bpessoas\b/gi, 'людьми');
   text = text.replace(/\bçeşitli\b/gi, 'разные');
   text = text.replace(/\bgibi\b/gi, '');
-  text = text.replace(/\bBegins\b/g, 'начинаешь');
-  text = text.replace(/\bBLOCK[oо]м\b/gi, 'блоком');
-  text = text.replace(/\bentry\s+в\b/gi, 'вход в');
-  text = text.replace(/character\b/gi, 'характер');
-  text = text.replace(/\bexplorar?\b/gi, 'исследовать');
   text = text.replace(/\bgerçek\b/gi, 'настоящий');
   text = text.replace(/\bavav\b/gi, 'Авав');
   text = text.replace(/\bАвав\b/g, 'Авав');
+
+  // These replacements clean mixed-language RU drafts. Never apply them to English readings.
+  var latin = (text.match(/[A-Za-z]/g) || []).length;
+  var cyr = (text.match(/[А-Яа-яЁё]/g) || []).length;
+  var englishMode = language === 'en' || (language !== 'ru' && latin > cyr * 2);
+  if (!englishMode) {
+    text = text.replace(/QueryString/gi, 'путь');
+    text = text.replace(/\bthou\b/gi, 'ты');
+    text = text.replace(/\bsounds\s+как/gi, 'звучит как');
+    text = text.replace(/\bdeep\s+down\b/gi, 'в глубине');
+    text = text.replace(/\bsedimentироваться/gi, 'осесть');
+    text = text.replace(/\bquieter\b/gi, 'более тихой');
+    text = text.replace(/\brelatively\b/gi, 'относительно');
+    text = text.replace(/\bentirely\b/gi, 'полностью');
+    text = text.replace(/\bability\b/gi, 'способность');
+    text = text.replace(/\btalent\b/gi, 'талант');
+    text = text.replace(/\balive\b/gi, 'живым');
+    text = text.replace(/\blisten\b/gi, 'слушать');
+    text = text.replace(/\bBegins\b/g, 'начинаешь');
+    text = text.replace(/\bBLOCK[oо]м\b/gi, 'блоком');
+    text = text.replace(/\bentry\s+в\b/gi, 'вход в');
+    text = text.replace(/character\b/gi, 'характер');
+    text = text.replace(/\bexplorar?\b/gi, 'исследовать');
+  }
 
   // markdown junk
   text = text.replace(/^#{1,6}\s*/gm, '');
@@ -84,6 +91,8 @@ function cleanText(raw) {
   // meta labels
   text = text.replace(/^\s*_?Якорная фраза:_?\s*/gim, '');
   text = text.replace(/^\s*Якорная фраза:\s*/gim, '');
+  text = text.replace(/^\s*_?Anchor phrase:_?\s*/gim, '');
+  text = text.replace(/^\s*Anchor phrase:\s*/gim, '');
 
   // collapse whitespace
   text = text.replace(/\r/g, '');
