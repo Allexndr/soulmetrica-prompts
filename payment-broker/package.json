@@ -1,0 +1,16 @@
+{
+  "name": "brandwars-payment-broker",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "next build"
+  },
+  "dependencies": {
+    "next": "15.5.20",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

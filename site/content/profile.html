@@ -1,0 +1,196 @@
+<div class="boot" id="boot">
+    <div class="boot__inner">
+      <div class="boot__orb"><span class="boot__ring"></span></div>
+      <div class="boot__brand">SoulMetrica</div>
+      <p class="boot__text" id="bootText">Открываем кабинет…</p>
+    </div>
+  </div>
+
+  <!-- AUTH -->
+  <div id="authStage" class="gate hidden">
+    <aside class="gate__story">
+      <a class="gate__brand" href="/">SoulMetrica<span>SoulMetrica · личный кабинет</span></a>
+      <div class="gate__hero">
+        <h1>Твои разборы — в одном месте</h1>
+        <p>Войди через Telegram: профиль, заказы и превью откроются сразу, без повторного ввода данных.</p>
+      </div>
+      <p style="color:var(--faint);font-size:.85rem"><a href="/">← На главную</a></p>
+    </aside>
+    <div class="gate__panel-wrap">
+      <section class="glass" aria-label="Вход">
+        <h2 class="glass__title" id="authTitle">Вход</h2>
+        <p class="glass__lead">Быстрый вход через Telegram — подтянутся все разборы из бота.</p>
+        <a class="tg-btn" id="tgDeepLink" href="https://telegram.me/soulmetrica_bot?start=login" target="_blank" rel="noopener">
+          Войти через Telegram
+        </a>
+        <p class="tg-note">Бот пришлёт личную ссылку входа — по ней кабинет откроется без лишних форм.</p>
+        <div class="divider">или email</div>
+        <div class="tabs" role="tablist">
+          <button type="button" class="is-active" data-tab="phone">Телефон</button>
+          <button type="button" data-tab="login">Email</button>
+          <button type="button" data-tab="register">Регистрация</button>
+        </div>
+        <form id="phoneForm">
+          <label class="field"><span>Телефон с заказа</span><input type="tel" name="phone" required autocomplete="tel" inputmode="tel" placeholder="+7 700 000 00 00"></label>
+          <p class="tg-note" style="text-align:left;margin:0 0 12px">Без SMS: откроем Telegram-бота — там подтвердим номер и выдадим вход в кабинет. Так мы убеждаемся, что Telegram настоящий.</p>
+          <button class="btn btn--solid" type="submit">Подтвердить через Telegram</button>
+        </form>
+        <form id="loginForm" class="hidden">
+          <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="email" placeholder="you@email.com"></label>
+          <label class="field"><span>Пароль</span><input type="password" name="password" required minlength="10" autocomplete="current-password" placeholder="Минимум 10 символов"></label>
+          <button class="btn btn--solid" type="submit">Войти</button>
+        </form>
+        <form id="registerForm" class="hidden">
+          <label class="field"><span>Имя</span><input type="text" name="name" maxlength="80" autocomplete="name" placeholder="Как к тебе обращаться"></label>
+          <label class="field"><span>Email</span><input type="email" name="email" required autocomplete="email" placeholder="you@email.com"></label>
+          <label class="field"><span>Пароль</span><input type="password" name="password" required minlength="10" autocomplete="new-password" placeholder="Минимум 10 символов"></label>
+          <button class="btn btn--solid" type="submit">Создать аккаунт</button>
+        </form>
+        <p class="msg" id="authMsg"></p>
+      </section>
+    </div>
+  </div>
+
+  <!-- HUB -->
+  <div id="hubStage" class="hub hidden">
+    <div class="side-scrim" id="sideScrim"></div>
+    <aside class="side" id="sidebar">
+      <div class="side__top">
+        <a class="side__logo" href="/">SoulMetrica</a>
+        <button type="button" class="side__toggle" id="sideToggle" title="Закрыть меню" aria-label="Закрыть меню">✕</button>
+      </div>
+      <nav class="side__nav" aria-label="Кабинет">
+        <div class="side__label">Кабинет</div>
+        <button type="button" class="nav-item is-active" data-view="home"><span class="nav-item__ico">✦</span><span>Обзор</span></button>
+        <button type="button" class="nav-item" data-view="readings"><span class="nav-item__ico">◎</span><span>Разборы</span></button>
+        <button type="button" class="nav-item" data-view="orders"><span class="nav-item__ico">◈</span><span>Заказы</span></button>
+        <div class="side__label">Ещё</div>
+        <button type="button" class="nav-item" data-view="services"><span class="nav-item__ico">✧</span><span>Услуги</span></button>
+        <button type="button" class="nav-item" data-view="account"><span class="nav-item__ico">◯</span><span>Аккаунт</span></button>
+      </nav>
+      <div class="side__list" id="sideReadings" hidden aria-hidden="true"></div>
+      <div class="side__foot">
+        <div class="user-chip">
+          <div class="user-chip__av" id="userAv">Y</div>
+          <div class="user-chip__txt">
+            <b id="userName">—</b>
+            <span id="userMeta">Telegram</span>
+          </div>
+        </div>
+        <a class="side__exit" href="/">← На сайт</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main__bar">
+        <div>
+          <h1 id="pageTitle">Панель кабинета</h1>
+          <p id="pageSub">Разборы, заказы и аккаунт в одном месте</p>
+        </div>
+        <div class="main__actions">
+          <button type="button" class="btn btn--ghost mobile-only" id="mobileMenuBtn">☰ Меню</button>
+          <button type="button" class="btn btn--ghost btn--theme" id="themeToggle" aria-label="Сменить тему" title="Тема как на сайте">
+            <span class="theme-ico theme-ico--sun" aria-hidden="true">☀</span>
+            <span class="theme-ico theme-ico--moon" aria-hidden="true">☽</span>
+          </button>
+          <button type="button" class="btn btn--ghost" id="logoutBtn">Выйти</button>
+          <button type="button" class="btn btn--solid hidden" id="linkOrderBtn" style="width:auto">Привязать заказ</button>
+        </div>
+      </header>
+
+      <div class="main__body">
+        <div class="main__inner">
+        <!-- HOME -->
+        <section class="view is-on" id="view-home">
+          <div class="cards">
+            <div class="card"><div class="card__label">Разборы</div><div class="card__value" id="statReadings">0</div><div class="card__hint">готовых и в работе</div></div>
+            <div class="card"><div class="card__label">Заказы</div><div class="card__value" id="statOrders">0</div><div class="card__hint">оплаченные и ожидающие</div></div>
+            <div class="card"><div class="card__label">Статус</div><div class="card__value" id="statStatus" style="font-size:1.35rem">—</div><div class="card__hint" id="statStatusHint">аккаунт</div></div>
+          </div>
+          <div class="grid-2">
+            <div class="panel">
+              <div class="panel__head"><h2>Недавние разборы</h2><button type="button" class="btn btn--ghost" data-go="readings">Все →</button></div>
+              <div class="panel__body" id="homeLatest"></div>
+            </div>
+            <div class="panel">
+              <div class="panel__head"><h2>Быстрые действия</h2></div>
+              <div class="panel__body" style="display:grid;gap:10px">
+                <button type="button" class="btn btn--pink" data-go="services" style="width:100%">Заказать услугу</button>
+                <button type="button" class="btn btn--ghost" data-go="readings" style="width:100%">Открыть разборы</button>
+                <a class="btn btn--ghost" style="width:100%" href="https://telegram.me/soulmetrica_bot" target="_blank" rel="noopener">Открыть бота</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- READINGS + PREVIEW -->
+        <section class="view" id="view-readings">
+          <div id="previewEmpty" class="empty hidden"><strong>Пока нет разборов</strong>После оплаты они появятся здесь и в Telegram.</div>
+          <div class="preview-shell" id="previewShell">
+            <aside class="preview-rail">
+              <div class="preview-rail__title">Список</div>
+              <div id="readingsRail"></div>
+            </aside>
+            <div class="preview-stage">
+              <div class="preview-tools">
+                <select id="readingSelect" aria-label="Выбор разбора"></select>
+                <button type="button" class="btn btn--ghost" id="btnOpenFull">На весь экран</button>
+                <button type="button" class="btn btn--gold" id="btnDlHtml" title="Смотреть HTML">HTML</button>
+                <button type="button" class="btn btn--ghost" id="btnDlPdf" title="Смотреть PDF">PDF</button>
+              </div>
+              <div class="preview-canvas">
+                <div class="preview-loading" id="previewLoading">
+                  <div>
+                    <div class="preview-loading__spin"></div>
+                    <div>Загружаем разбор…</div>
+                  </div>
+                </div>
+                <iframe class="preview-frame" id="previewFrame" title="Превью разбора"></iframe>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ORDERS -->
+        <section class="view" id="view-orders">
+          <div class="panel">
+            <div class="panel__head"><h2>Заказы и оплаты</h2></div>
+            <div class="panel__body" id="ordersList"></div>
+          </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="view" id="view-services">
+          <div class="panel">
+            <div class="panel__head">
+              <h2>Услуги</h2>
+              <a class="btn btn--pink" href="/#products">Оформить на сайте</a>
+            </div>
+            <div class="panel__body" id="servicesList"></div>
+          </div>
+        </section>
+
+        <!-- ACCOUNT -->
+        <section class="view" id="view-account">
+          <div class="grid-2">
+            <div class="panel">
+              <div class="panel__head"><h2>Профиль</h2></div>
+              <div class="panel__body">
+                <div class="info-list" id="accountInfo"></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel__head"><h2>Подсказки</h2></div>
+              <div class="panel__body" style="color:var(--hub-muted);line-height:1.6;font-size:.92rem">
+                Вход через Telegram привязывает все заказы с тем же chat id.
+                Разборы хранятся в кабинете и доступны с любого устройства.
+                PDF и HTML скачиваются с именем и датой из формы заказа.
+              </div>
+            </div>
+          </div>
+        </section>
+        <p class="msg" id="dashMsg"></p>
+        </div>
+      </div>
+    </main>
+  </div>

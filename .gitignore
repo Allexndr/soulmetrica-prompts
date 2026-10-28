@@ -1,0 +1,31 @@
+# Secrets
+*.p12
+*.pem
+.env
+.env.*
+!.env.example
+site/certs/
+veluna_promty_FINAL/point_*.p12
+
+# Dependencies / deploy
+node_modules/
+.vercel/
+.DS_Store
+.cursor/
+
+# Agent / local
+agent-transcripts/
+
+# Local debug / dumps
+**/audit/
+**/screenshots/
+*.zip
+_extracted_template.html
+light-check.png
+light-now.png
+*-FIXED.pdf
+*_clean.pdf
+*_styled.pdf
+*_DIAGRAMS.html
+site/.admin-credentials.local.json
+site/.admin-credentials.local.json

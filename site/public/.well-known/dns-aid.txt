@@ -1,0 +1,33 @@
+# DNS for AI Discovery (DNS-AID) — SoulMetrica
+
+Publish these records in **PS.kz → Домены → Управление DNS** for `soulmetrica.com`.
+Vercel cannot create `_agents` DNS records; this file documents the intended zone.
+
+## Recommended HTTPS / SVCB records
+
+If the panel supports **HTTPS** or **SVCB** types (RFC 9460):
+
+```
+_index._agents.soulmetrica.com.  3600  IN  HTTPS  1  soulmetrica.com. alpn="h2,http/1.1" port=443
+_a2a._agents.soulmetrica.com.    3600  IN  HTTPS  1  soulmetrica.com. alpn="h2,http/1.1" port=443
+_mcp._agents.soulmetrica.com.    3600  IN  HTTPS  1  soulmetrica.com. alpn="h2,http/1.1" port=443
+```
+
+Endpoint hints (publish as TXT if custom SvcParams unavailable):
+
+```
+_index._agents.soulmetrica.com.  3600  IN  TXT  "endpoint=https://soulmetrica.com/.well-known/api-catalog"
+_mcp._agents.soulmetrica.com.    3600  IN  TXT  "endpoint=https://soulmetrica.com/api/mcp"
+_skills._agents.soulmetrica.com. 3600  IN  TXT  "endpoint=https://soulmetrica.com/.well-known/agent-skills/index.json"
+```
+
+## DNSSEC
+
+Enable DNSSEC in PS.kz for `soulmetrica.com` when available so validating resolvers authenticate discovery data.
+
+## Fallbacks already on the site (no DNS required)
+
+- https://soulmetrica.com/.well-known/api-catalog
+- https://soulmetrica.com/.well-known/mcp/server-card.json
+- https://soulmetrica.com/.well-known/agent-skills/index.json
+- Homepage `Link` response headers (RFC 8288)

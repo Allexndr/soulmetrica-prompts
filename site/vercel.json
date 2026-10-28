@@ -1,0 +1,34 @@
+{
+  "crons": [
+    {
+      "path": "/api/readings/process",
+      "schedule": "* * * * *"
+    }
+  ],
+  "functions": {
+    "pages/api/readings/process.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/create-payment.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/unicorn-webhook.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/pay-success.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/aipay-webhook.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/aipay-status.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/telegram-bot.js": {
+      "includeFiles": "lib/prompts/**"
+    },
+    "pages/api/admin/orders.js": {
+      "includeFiles": "lib/prompts/**"
+    }
+  }
+}

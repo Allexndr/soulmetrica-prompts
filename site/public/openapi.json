@@ -1,0 +1,116 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SoulMetrica Public API",
+    "version": "3.0.0",
+    "description": "Public and documented endpoints for SoulMetrica. Private reading APIs require Telegram session cookies — see /auth.md.",
+    "contact": {
+      "name": "SoulMetrica",
+      "url": "https://t.me/soulmetrica_bot"
+    }
+  },
+  "servers": [{ "url": "https://soulmetrica.com" }],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "service": { "type": "string" },
+                    "time": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/prices": {
+      "get": {
+        "summary": "Public price catalog",
+        "parameters": [
+          {
+            "name": "public",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["1"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prices + checkout flags",
+            "content": { "application/json": { "schema": { "type": "object" } } }
+          }
+        }
+      }
+    },
+    "/api/orders/create": {
+      "post": {
+        "summary": "Create Unicorn payment link for an order",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["product", "name", "phone", "contact", "sum"],
+                "properties": {
+                  "product": { "type": "string" },
+                  "addons": { "type": "array", "items": { "type": "string" } },
+                  "sum": { "type": "number", "minimum": 30 },
+                  "name": { "type": "string" },
+                  "phone": { "type": "string" },
+                  "contact": { "type": "string", "description": "Telegram @username" },
+                  "meta": {
+                    "type": "object",
+                    "properties": {
+                      "day": { "type": "string" },
+                      "month": { "type": "string" },
+                      "year": { "type": "string" },
+                      "time": { "type": "string" },
+                      "city": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment URL created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "orderId": { "type": "string" },
+                    "payUrl": { "type": "string", "format": "uri" },
+                    "botUrl": { "type": "string", "format": "uri" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mcp": {
+      "post": {
+        "summary": "Minimal MCP JSON-RPC endpoint",
+        "responses": {
+          "200": { "description": "JSON-RPC response" }
+        }
+      }
+    }
+  }
+}

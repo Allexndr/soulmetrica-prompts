@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="xMidYMid meet" overflow="visible" style="display: block;" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon-svg">
+<path id="Vector" d="M28 50.75C40.5645 50.75 50.75 40.5645 50.75 28C50.75 15.4355 40.5645 5.25 28 5.25C15.4355 5.25 5.25 15.4355 5.25 28C5.25 40.5645 15.4355 50.75 28 50.75Z" stroke="var(--stroke-0, white)" stroke-opacity="0.9" stroke-width="2.54545"/>
+<path id="Vector_2" d="M28 42C35.732 42 42 35.732 42 28C42 20.268 35.732 14 28 14C20.268 14 14 20.268 14 28C14 35.732 20.268 42 28 42Z" stroke="var(--stroke-0, white)" stroke-opacity="0.7" stroke-width="2.54545"/>
+<path id="Vector_3" d="M28 33.25C30.8995 33.25 33.25 30.8995 33.25 28C33.25 25.1005 30.8995 22.75 28 22.75C25.1005 22.75 22.75 25.1005 22.75 28C22.75 30.8995 25.1005 33.25 28 33.25Z" fill="var(--fill-0, white)" fill-opacity="0.9"/>
+<path id="Vector_4" d="M28 3.5V10.5" stroke="var(--stroke-0, white)" stroke-opacity="0.8" stroke-width="2.54545"/>
+<path id="Vector_5" d="M28 45.5V52.5" stroke="var(--stroke-0, white)" stroke-opacity="0.8" stroke-width="2.54545"/>
+<path id="Vector_6" d="M3.5 28H10.5" stroke="var(--stroke-0, white)" stroke-opacity="0.8" stroke-width="2.54545"/>
+<path id="Vector_7" d="M45.5 28H52.5" stroke="var(--stroke-0, white)" stroke-opacity="0.8" stroke-width="2.54545"/>
+</g>
+</svg>
